@@ -4,6 +4,7 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
-  std::cout << "Hello, World!" << std::endl;
+  Lattice lattice = Lattice(10);
+  std::cout << lattice << std::endl;
   return 0;
 }

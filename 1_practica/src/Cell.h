@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iostream>
-
-class Lattice;
+#include "Lattice.h"
 
 struct Position {
   int x;
