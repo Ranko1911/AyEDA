@@ -1,15 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include <array>
+#include <vector>
 
 class Cell;
+struct Position;
 
 class Lattice {
   private:
     int size;
-    // array de tamaño size de celdas
-    std::array<Cell, 1> cells;
+    std::vector<Cell> cells;
   public:
     Lattice(const int&);
     ~Lattice();	
