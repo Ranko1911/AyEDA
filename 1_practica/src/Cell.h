@@ -5,11 +5,10 @@
 
 struct Position {
   int x;
-  int y;
 };
 
 struct State {
-  bool value;
+  int value;
 };
 
 class Cell {
@@ -20,6 +19,7 @@ class Cell {
  public:
   Cell(const Position&, const State&);
   ~Cell();
+  Position getPosition() const;
   State getState() const;
   void setState(const State&);
   int nextState(const Lattice&);

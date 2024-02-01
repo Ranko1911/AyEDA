@@ -5,9 +5,9 @@
 #include "Lattice.h"
 
 int main(int argc, char** argv) {
-  Lattice lattice = Lattice(10);
-  std::cout << lattice << std::endl;
-  std::cout << "argc:    " << argc << std::endl;
+  // Lattice lattice = Lattice(10);
+  // std::cout << lattice << std::endl;
+  // std::cout << "argc:    " << argc << std::endl;
 
   // No argumetos, no programa
   if (argc == 1) {
@@ -16,9 +16,9 @@ int main(int argc, char** argv) {
   }
 
   // Imprimir los argumentos con sus indices
-  for (int i = 0; i < argc; i++) {
-    std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
-  }
+  // for (int i = 0; i < argc; i++) {
+  //   std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
+  // }
 
   std::string file_name;
   int size;
@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
       std::cout << "  -h, --help\t\tShow this help message and exit"
                 << std::endl;
       std::cout << "  -f, --file\t\tFile of start state" << std::endl;
-    } else if (arg == "-f" || arg == "--file") {
+    } else if (arg == "-init") {
       file_name = argv[i + 1];
       i++;
       std::cout << "File Name: " << file_name << std::endl;
@@ -67,6 +67,10 @@ int main(int argc, char** argv) {
       return 1;
     }
   }
+
+
+  Lattice lattice = Lattice(size);
+  std::cout << lattice << std::endl;
 
   return 0;
 }

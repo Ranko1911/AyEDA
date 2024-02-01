@@ -26,7 +26,10 @@ void Lattice::nextGeneration() {
 
 std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   for (int i = 0; i < lattice.size; i++) {
-    os << lattice.cells[i].getState().value << " ";
+    if (lattice.cells[i].getState().value)
+      os << "X";
+    else
+      os << "O";
   }
   return os;
 }
