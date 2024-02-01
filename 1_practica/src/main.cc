@@ -47,6 +47,11 @@ int main(int argc, char** argv) {
     } else if (arg == "-b") {
       std::string b_arg = argv[i + 1];
       if (b_arg == "periodic" || b_arg == "open") {
+        if (b_arg == "periodic") {
+          b_arg = "1";
+        } else if (b_arg == "open") {
+          b_arg = "0";
+        }
         b = b_arg;
         i++;
         std::cout << "B: " << b << std::endl;
@@ -68,8 +73,11 @@ int main(int argc, char** argv) {
     }
   }
 
-
   Lattice lattice = Lattice(size);
+  std::cout << lattice << std::endl;
+
+  lattice.nextGeneration();
+
   std::cout << lattice << std::endl;
 
   return 0;

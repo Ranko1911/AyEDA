@@ -11,7 +11,7 @@ class Lattice {
     int size;
     std::vector<Cell> cells;
   public:
-    Lattice(const int&);
+    Lattice(const int& size, const int& b, const int& v = 0);
     ~Lattice();	
     const Cell& getCell(const Position&) const;
     void nextGeneration(); // update function
