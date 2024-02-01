@@ -9,6 +9,7 @@ struct Position {
 
 struct State {
   int value;
+  int nextValue;
 };
 
 class Cell {

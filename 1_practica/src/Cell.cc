@@ -31,12 +31,13 @@ int Cell::nextState(const Lattice& Lattice) {
   Cell RightNeighbour= Lattice.getCell(actual);
 
   // calcular mi siguiente estado (el de la cell actual)
-  int value = getState().value + RightNeighbour.getState().value + getState().value * RightNeighbour.getState().value + LeftNeighbour.getState().value * getState().value * RightNeighbour.getState().value;
-  value = value % 2;
-  return value; //place holder
+  getState().nextValue = getState().value + RightNeighbour.getState().value + getState().value * RightNeighbour.getState().value + LeftNeighbour.getState().value * getState().value * RightNeighbour.getState().value;
+  getState().nextValue = getState().nextValue % 2;
+  return getState().nextValue; 
 }
 
-void updateState() {
-  return; //place holder
+void Cell::updateState() {
+  State newState = {getState().nextValue, 0};
+  setState(newState);
 }
 
