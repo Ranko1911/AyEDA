@@ -1,37 +1,42 @@
+#include <atomic>
+#include <chrono>  // sleep_for
 #include <iostream>
 #include <string>
+#include <thread>  // sleep_for
 
 #include "Cell.h"
 #include "Lattice.h"
 
+// Función para verificar la entrada de teclado de manera asíncrona
+void checkKeyPress(std::atomic<bool>& stop) {
+  char key;
+  std::cin >> key;
+  stop.store(true);
+}
+
+// Opcion periodica: ./programa -size 5 -b periodic
+// Opcion open frontera caliente: ./programa -size 5 -b open 1
+// Opcion open frontera fria: ./programa -size 5 -b open 0
+
 int main(int argc, char** argv) {
-  // Lattice lattice = Lattice(10);
-  // std::cout << lattice << std::endl;
-  // std::cout << "argc:    " << argc << std::endl;
+  std::atomic<bool> stop(false);
 
   // No argumetos, no programa
   if (argc == 1) {
     std::cout << "No arguments" << std::endl;
     return 1;
   }
-
-  // Imprimir los argumentos con sus indices
-  // for (int i = 0; i < argc; i++) {
-  //   std::cout << "argv[" << i << "]: " << argv[i] << std::endl;
-  // }
-
   std::string file_name;
   int size;
   int b;
   int v;
-
   // Recorrer los argumentos y hacer algo con ellos
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
     if (arg == "-h" || arg == "--help") {
-      std::cout << "Usage: " << argv[0] << " -size 'int' -b < b [v] > [options] \n" 
-                << "b -> open (v -> 1 || 0 ) || periodic "
-                << std::endl;
+      std::cout << "Usage: " << argv[0]
+                << " -size 'int' -b < b [v] > [options] \n"
+                << "b -> open (v -> 1 || 0 ) || periodic " << std::endl;
       std::cout << "Options:" << std::endl;
       std::cout << "  -h, --help\t\tShow this help message and exit"
                 << std::endl;
@@ -66,13 +71,6 @@ int main(int argc, char** argv) {
                   << std::endl;
         return 1;
       }
-      // std::cout << " i: " << i << " argc: " << argc << std::endl;
-      // std::cout << " argv[i + 1]: " << argv[i + 1] << std::endl;
-      // if (argc > i) {
-      //   v = std::stoi(argv[i + 1]);
-      //   i++;
-      //   std::cout << "V: " << v << std::endl;
-      // }
     } else {
       std::cout << "Unknown argument: " << argc << std::endl;
       return 1;
@@ -80,12 +78,20 @@ int main(int argc, char** argv) {
   }
 
   Lattice lattice = Lattice(size, b, v);
-  for (int i = 0; i < 5; i++) {
-    std::cout << "Generation: " << i << std::endl;
+  int i = 0;
+
+  // Crear un hilo para verificar la entrada de teclado de manera asíncrona
+  std::thread inputThread(checkKeyPress, std::ref(stop));
+
+  while (!stop.load()) {
+    // std::cout << "Generation: " << i << std::endl;
     std::cout << lattice << std::endl;
     lattice.nextGeneration();
-    // std::cout << lattice << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    i++;
   }
+  // Esperar a que el hilo de entrada termine
+  inputThread.join();
 
   return 0;
 }

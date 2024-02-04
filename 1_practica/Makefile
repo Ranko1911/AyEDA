@@ -7,7 +7,7 @@ SRC_DIR = src
 all: programa
 
 programa: $(SRC_DIR)/Cell.o $(SRC_DIR)/Lattice.o $(SRC_DIR)/main.o
-	$(CXX) $(CXXFLAGS) -o programa $(SRC_DIR)/Cell.o $(SRC_DIR)/Lattice.o $(SRC_DIR)/main.o
+	$(CXX) $(CXXFLAGS) -o programa $(SRC_DIR)/Cell.o $(SRC_DIR)/Lattice.o $(SRC_DIR)/main.o -pthread
 
 $(SRC_DIR)/Cell.o: $(SRC_DIR)/Cell.cc $(SRC_DIR)/Cell.h
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/Cell.cc -o $(SRC_DIR)/Cell.o
