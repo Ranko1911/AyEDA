@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     std::cout << "No arguments" << std::endl;
     return 1;
   }
-  std::string file_name;
+  std::string file_name = "";
   int size;
   int b;
   int v;
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     } else if (arg == "-init") {
       file_name = argv[i + 1];
       i++;
-      std::cout << "File Name: " << file_name << std::endl;
+
     } else if (arg == "-size") {
       size = std::stoi(argv[i + 1]);
       i++;
@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
       if (b_arg == "periodic" || b_arg == "open") {
         if (b_arg == "periodic") {
           b_arg = "1";
+          v = 0;
         } else if (b_arg == "open") {
           b_arg = "0";
           if (argc > i) {
@@ -77,7 +78,14 @@ int main(int argc, char** argv) {
     }
   }
 
-  Lattice lattice = Lattice(size, b, v);
+  if (file_name != "") {
+    std::cout << "File Name: " << file_name << std::endl;
+  } else {
+    std::cout << "No file name given, using standard array as default\n";
+    file_name = "standard.txt";
+  }
+
+  Lattice lattice = Lattice(size, b, v, file_name);
   int i = 0;
 
   // Crear un hilo para verificar la entrada de teclado de manera asíncrona

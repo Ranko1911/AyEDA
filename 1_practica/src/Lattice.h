@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 class Cell;
 struct Position;
@@ -11,8 +12,8 @@ class Lattice {
   private:
     int size;
     int b;
-    int v;
-    std::string file_name;
+    int v = 0;
+    std::string file_name = "standard.txt";
     std::vector<Cell> cells;
   public:
     Lattice(const int& size, const int& b, const int& v = 0, const std::string& file_name = "standard.txt");
