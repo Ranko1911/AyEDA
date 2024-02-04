@@ -4,12 +4,12 @@
 #include "Lattice.h"
 
 struct Position {
-  int x;
+  int x = 0;
 };
 
 struct State {
-  int value;
-  int nextValue;
+  int value = 0;
+  int nextValue = 0;
 };
 
 class Cell {
@@ -21,6 +21,7 @@ class Cell {
   Cell(const Position&, const State&);
   ~Cell();
   Position getPosition() const;
+  void setPosition(const Position&);
   State getState() const;
   void setState(const State&);
   int nextState(const Lattice&);

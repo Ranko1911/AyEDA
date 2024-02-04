@@ -22,20 +22,21 @@ int main(int argc, char** argv) {
 
   std::string file_name;
   int size;
-  std::string b;
+  int b;
   int v;
 
   // Recorrer los argumentos y hacer algo con ellos
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
     if (arg == "-h" || arg == "--help") {
-      std::cout << "Usage: " << argv[0] << "-size 'int' -b < b [v] > [options]"
-                << "b -> open || periodic"
-                << "v -> 1 || 0" << std::endl;
+      std::cout << "Usage: " << argv[0] << " -size 'int' -b < b [v] > [options] \n" 
+                << "b -> open (v -> 1 || 0 ) || periodic "
+                << std::endl;
       std::cout << "Options:" << std::endl;
       std::cout << "  -h, --help\t\tShow this help message and exit"
                 << std::endl;
       std::cout << "  -f, --file\t\tFile of start state" << std::endl;
+      return 0;
     } else if (arg == "-init") {
       file_name = argv[i + 1];
       i++;
@@ -51,8 +52,13 @@ int main(int argc, char** argv) {
           b_arg = "1";
         } else if (b_arg == "open") {
           b_arg = "0";
+          if (argc > i) {
+            v = std::stoi(argv[i + 1]);
+            i++;
+            std::cout << "V: " << v << std::endl;
+          }
         }
-        b = b_arg;
+        b = std::stoi(b_arg);
         i++;
         std::cout << "B: " << b << std::endl;
       } else {
@@ -62,23 +68,24 @@ int main(int argc, char** argv) {
       }
       // std::cout << " i: " << i << " argc: " << argc << std::endl;
       // std::cout << " argv[i + 1]: " << argv[i + 1] << std::endl;
-      if (argc > i) {
-        v = std::stoi(argv[i + 1]);
-        i++;
-        std::cout << "V: " << v << std::endl;
-      }
+      // if (argc > i) {
+      //   v = std::stoi(argv[i + 1]);
+      //   i++;
+      //   std::cout << "V: " << v << std::endl;
+      // }
     } else {
       std::cout << "Unknown argument: " << argc << std::endl;
       return 1;
     }
   }
 
-  Lattice lattice = Lattice(size);
-  std::cout << lattice << std::endl;
-
-  lattice.nextGeneration();
-
-  std::cout << lattice << std::endl;
+  Lattice lattice = Lattice(size, b, v);
+  for (int i = 0; i < 5; i++) {
+    std::cout << "Generation: " << i << std::endl;
+    std::cout << lattice << std::endl;
+    lattice.nextGeneration();
+    // std::cout << lattice << std::endl;
+  }
 
   return 0;
 }

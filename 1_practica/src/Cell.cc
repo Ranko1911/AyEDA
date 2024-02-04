@@ -1,4 +1,5 @@
 #include "Cell.h"
+
 #include "Lattice.h"
 
 Cell::Cell(const Position& position, const State& state) {
@@ -8,39 +9,59 @@ Cell::Cell(const Position& position, const State& state) {
 
 Cell::~Cell() {}
 
-State Cell::getState() const {
-  return this->state;
-}
+State Cell::getState() const { return this->state; }
 
+void Cell::setState(const State& state) { this->state = state; }
 
-void Cell::setState(const State& state) {
-  this->state = state;
-}
+Position Cell::getPosition() const { return this->position; }
 
-Position Cell::getPosition() const {
-  return this->position;
-}
+void Cell::setPosition(const Position& position) { this->position = position; }
 
 int Cell::nextState(const Lattice& Lattice) {
-  //obtner las vecinas
   Position actual = getPosition();
-  actual.x = actual.x - 1;
-  Cell LeftNeighbour= Lattice.getCell(actual);
-  actual = getPosition();
-  actual.x = actual.x + 1;
-  Cell RightNeighbour= Lattice.getCell(actual);
-  State Right = RightNeighbour.getState();
-  State Left = LeftNeighbour.getState();
-  State actualState = getState();
+  Position LeftPosition = getPosition();
+  Position RightPosition = getPosition();
 
-  // calcular mi siguiente estado (el de la cell actual)
-  actualState.nextValue = actualState.value + Right.value + actualState.value * Right.value + Left.value * actualState.value * Right.value;
-  actualState.nextValue = actualState.nextValue % 2;
-  return actualState.nextValue; 
+  Cell LeftNeighbour = Lattice.getCell(actual);
+  Cell RightNeighbour = Lattice.getCell(actual);
+
+  if (Lattice.getB() == 1) {  // Periodic
+    // vecino izq
+    LeftPosition.x = actual.x - 1;
+    if (LeftPosition.x < 0) {
+      LeftPosition.x = Lattice.getSize() - 1;
+    }
+    LeftNeighbour = Lattice.getCell(LeftPosition);
+    // vecino der
+    // actual = getPosition();
+    RightPosition.x = actual.x + 1;
+    if (RightPosition.x > Lattice.getSize() - 1) {
+      RightPosition.x = 0;
+    }
+    RightNeighbour = Lattice.getCell(RightPosition);
+    // calcular mi siguiente estado
+    State RightState = RightNeighbour.getState();
+    State LeftState = LeftNeighbour.getState();
+    State actualState = getState();
+    int sum1 = actualState.value + RightState.value;
+    int mult1 = actualState.value * RightState.value;
+    int mult2 = LeftState.value * actualState.value * RightState.value;
+    actualState.nextValue = sum1 + mult1 + mult2;
+    actualState.nextValue = actualState.nextValue % 2;
+    // devolver mi siguiente estado
+    return actualState.nextValue;
+  } else if (Lattice.getB() == 0) {    // Open
+    std::cout << "open" << std::endl;  // place holder
+  }
+
+
+  return 0;
 }
 
 void Cell::updateState() {
-  State newState = {getState().nextValue, 0};
-  setState(newState);
+  this->state.value = this->state.nextValue;
+  this->state.nextValue = 0;
+  // State newState = {getState().value, getState().nextValue};
+  // std::cout << "newState: " << newState.value << " " << newState.nextValue <<
+  // std::endl; this->setState(newState);
 }
-
