@@ -25,6 +25,9 @@ int Cell::nextState(const Lattice& Lattice) {
   Cell LeftNeighbour = Lattice.getCell(actual);
   Cell RightNeighbour = Lattice.getCell(actual);
 
+  Cell LeftBorder = Lattice.getCell(actual);
+  Cell RightBorder = Lattice.getCell(actual);
+
   if (Lattice.getB() == 1) {  // Periodic
     // vecino izq
     LeftPosition.x = actual.x - 1;
@@ -50,10 +53,48 @@ int Cell::nextState(const Lattice& Lattice) {
     actualState.nextValue = actualState.nextValue % 2;
     // devolver mi siguiente estado
     return actualState.nextValue;
-  } else if (Lattice.getB() == 0) {    // Open
-    std::cout << "open" << std::endl;  // place holder
-  }
+  } else if (Lattice.getB() == 0) {  // Open
 
+    // std::cout << "open" << std::endl;  // place holder
+    if (Lattice.getV() == 0) {
+      RightBorder.state.value = 0;
+      LeftBorder.state.value = 0;
+    } else {
+      RightBorder.state.value = 1;
+      LeftBorder.state.value = 1;
+    }
+
+    // vecino open izq
+    LeftPosition.x = actual.x - 1;
+    if (LeftPosition.x < 0) {
+      LeftPosition.x = Lattice.getSize() - 1;
+      LeftNeighbour = LeftBorder;
+    } else {
+      LeftNeighbour = Lattice.getCell(LeftPosition);
+    }
+
+    // vecino open der
+    RightPosition.x = actual.x + 1;
+    if (RightPosition.x > Lattice.getSize() - 1) {
+      RightPosition.x = 0;
+      RightNeighbour = RightBorder;
+
+    } else {
+      RightNeighbour = Lattice.getCell(RightPosition);
+    }
+
+    // calcular mi siguiente estado
+    State RightState = RightNeighbour.getState();
+    State LeftState = LeftNeighbour.getState();
+    State actualState = getState();
+    int sum1 = actualState.value + RightState.value;
+    int mult1 = actualState.value * RightState.value;
+    int mult2 = LeftState.value * actualState.value * RightState.value;
+    actualState.nextValue = sum1 + mult1 + mult2;
+    actualState.nextValue = actualState.nextValue % 2;
+    // devolver mi siguiente estado
+    return actualState.nextValue;
+  }
 
   return 0;
 }

@@ -55,14 +55,15 @@ int main(int argc, char** argv) {
       if (b_arg == "periodic" || b_arg == "open") {
         if (b_arg == "periodic") {
           b_arg = "1";
+          i++;
           v = 0;
         } else if (b_arg == "open") {
           b_arg = "0";
+          i++;
           if (argc > i) {
+            std::cout << "V: " << argv[i + 1] << std::endl;
             v = std::stoi(argv[i + 1]);
-            i++;
-            std::cout << "V: " << v << std::endl;
-          }
+            i++;          }
         }
         b = std::stoi(b_arg);
         i++;
