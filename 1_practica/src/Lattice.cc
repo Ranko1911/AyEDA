@@ -122,7 +122,7 @@ std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
     else
       // os << "O " << lattice.cells[i].getState().value << " " <<
       // lattice.cells[i].getState().nextValue << " " << std::endl;
-      os << "O";
+      os << " ";
   }
   return os;
 }

@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
   std::string file_name = "";
   int size;
   int b;
-  int v;
+  int v = -1;
   // Recorrer los argumentos y hacer algo con ellos
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
@@ -117,16 +117,16 @@ int main(int argc, char** argv) {
 
   while (flag_stop != 'q') {
     for (int i = 0; i < 10; i++) {
-      if (v == 1) {
+      if (v == 1 && b == 0) {
         std::cout << "X";
-      } else if (v == 0) {
-        std::cout << "O";
+      } else if (v == 0 && b == 0) {
+        std::cout << " ";
       }
       std::cout << lattice;
-      if (v = 1) {
+      if (v = 1 && b == 0) {
         std::cout << "X";
-      } else if (v = 0) {
-        std::cout << "O";
+      } else if (v = 0 && b == 0) {
+        std::cout << " ";
       }
       std::cout << std::endl;
       lattice.nextGeneration();
