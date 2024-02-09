@@ -14,7 +14,7 @@ void checkKeyPress(std::atomic<bool>& stop) {
   stop.store(true);
 }
 
-// Opcion periodica: ./programa -size 5 -b periodic
+// Opcion periodica: ./programa -size 10 -b periodic
 // Opcion open frontera caliente: ./programa -size 5 -b open 1
 // Opcion open frontera fria: ./programa -size 5 -b open 0
 
@@ -63,7 +63,8 @@ int main(int argc, char** argv) {
           if (argc > i) {
             std::cout << "V: " << argv[i + 1] << std::endl;
             v = std::stoi(argv[i + 1]);
-            i++;          }
+            i++;
+          }
         }
         b = std::stoi(b_arg);
         i++;
@@ -88,19 +89,52 @@ int main(int argc, char** argv) {
 
   Lattice lattice = Lattice(size, b, v, file_name);
   int i = 0;
+  char flag_stop = ' ';
 
-  // Crear un hilo para verificar la entrada de teclado de manera asíncrona
-  std::thread inputThread(checkKeyPress, std::ref(stop));
+  // // Crear un hilo para verificar la entrada de teclado de manera asíncrona
+  // std::thread inputThread(checkKeyPress, std::ref(stop));
 
-  while (!stop.load()) {
-    // std::cout << "Generation: " << i << std::endl;
-    std::cout << lattice << std::endl;
-    lattice.nextGeneration();
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    i++;
+  // while (!stop.load()) {
+  //   // std::cout << "Generation: " << i << std::endl;
+  //   if (v == 1) {
+  //     std::cout << "X";
+  //   } else if (v == 0) {
+  //     std::cout << "O";
+  //   }
+  //   std::cout << lattice;
+  //   if (v = 1) {
+  //     std::cout << "X";
+  //   } else if (v = 0) {
+  //     std::cout << "O";
+  //   }
+  //   std::cout << std::endl;
+  //   lattice.nextGeneration();
+  //   std::this_thread::sleep_for(std::chrono::seconds(2));
+  //   i++;
+  // }
+  // // Esperar a que el hilo de entrada termine
+  // inputThread.join();
+
+  while (flag_stop != 'q') {
+    for (int i = 0; i < 10; i++) {
+      if (v == 1) {
+        std::cout << "X";
+      } else if (v == 0) {
+        std::cout << "O";
+      }
+      std::cout << lattice;
+      if (v = 1) {
+        std::cout << "X";
+      } else if (v = 0) {
+        std::cout << "O";
+      }
+      std::cout << std::endl;
+      lattice.nextGeneration();
+    }
+    std::cout << "Press q to quit" << std::endl;
+    std::cin >> flag_stop;
+    i = 0;
   }
-  // Esperar a que el hilo de entrada termine
-  inputThread.join();
 
   return 0;
 }
