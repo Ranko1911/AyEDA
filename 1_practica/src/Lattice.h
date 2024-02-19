@@ -17,6 +17,7 @@ class Lattice {
     std::vector<Cell*> cells;
   public:
     // Lattice(const int& size, const int& b, const int& v = 0, const std::string& file_name = "standard.txt");
+    Lattice(){}
     Lattice(const int& b, const int& v, const std::string& file_name = "standard.txt");
     Lattice(const int& b, const int& v, const int& size);
     ~Lattice();	

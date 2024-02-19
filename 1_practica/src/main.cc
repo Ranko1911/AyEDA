@@ -7,16 +7,16 @@
 #include "Cell.h"
 #include "Lattice.h"
 
-// Función para verificar la entrada de teclado de manera asíncrona
+// Opcion periodica: ./programa -size 10 -b periodic
+// Opcion open frontera caliente: ./programa -size 5 -b open 1
+// Opcion open frontera fria: ./programa -size 5 -b open 0
+
 void checkKeyPress(std::atomic<bool>& stop) {
   char key;
   std::cin >> key;
   stop.store(true);
 }
 
-// Opcion periodica: ./programa -size 10 -b periodic
-// Opcion open frontera caliente: ./programa -size 5 -b open 1
-// Opcion open frontera fria: ./programa -size 5 -b open 0
 
 int main(int argc, char** argv) {
   std::atomic<bool> stop(false);
@@ -36,17 +36,22 @@ int main(int argc, char** argv) {
     if (arg == "-h" || arg == "--help") {
       std::cout << "Usage: " << argv[0]
                 << " -size 'int' -b < b [v] > [options] \n"
-                << "b -> open (v -> 1 || 0 ) || periodic " << std::endl;
-      std::cout << "Options:" << std::endl;
-      std::cout << "  -h, --help\t\tShow this help message and exit"
-                << std::endl;
-      std::cout << "  -f, --file\t\tFile of start state" << std::endl;
+                << "b -> open (v -> 1 || 0 ) || periodic " << std::endl
+                << "Options:" << std::endl
+                << "  -h, --help\t\tShow this help message and exit"
+                << std::endl
+                << "  -f, --file\t\tFile of start state" << std::endl;
       return 0;
     } else if (arg == "-init") {
       file_name = argv[i + 1];
       i++;
 
     } else if (arg == "-size") {
+      // si size es 0 o menor, error
+      if (std::stoi(argv[i + 1]) <= 0) {
+        std::cout << "Error: Size must be greater than 0" << std::endl;
+        return 1;
+      }
       size = std::stoi(argv[i + 1]);
       i++;
       std::cout << "Size: " << size << std::endl;
@@ -80,61 +85,49 @@ int main(int argc, char** argv) {
     }
   }
 
-  if (file_name != "") {
-    std::cout << "File Name: " << file_name << std::endl;
+  // comprobar que size y file_name no estén definidos a la vez
+  if (file_name != "" && size != 0) {
+    std::cout << "Error: Both file and size are defined" << std::endl;
+    return 1;
+  }
+
+  Lattice* lattice_ptr = nullptr;
+
+  // si size está definido, crear un lattice con el tamaño dado
+  if (size != 0) {
+    std::cout << "Creating lattice with size: " << size << std::endl;
+    // Lattice lattice_(b, v, size);
+    lattice_ptr = new Lattice(b, v, size);
+  } else if (file_name != "") {
+    std::cout << "Creating lattice with file: " << file_name << std::endl;
+    // Lattice lattice_(b, v, file_name);
+    lattice_ptr = new Lattice(b, v, file_name);
   } else {
-    std::cout << "No file name given, using standard array as default\n";
-    file_name = "standard.txt";
+    std::cout << "Error: No size or file defined" << std::endl;
+    return 1;
   }
 
-  Lattice lattice = Lattice(size, b, v, file_name);
-  int i = 0;
-  char flag_stop = ' ';
-
-  // // Crear un hilo para verificar la entrada de teclado de manera asíncrona
-  // std::thread inputThread(checkKeyPress, std::ref(stop));
-
-  // while (!stop.load()) {
-  //   // std::cout << "Generation: " << i << std::endl;
-  //   if (v == 1) {
-  //     std::cout << "X";
-  //   } else if (v == 0) {
-  //     std::cout << "O";
-  //   }
-  //   std::cout << lattice;
-  //   if (v = 1) {
-  //     std::cout << "X";
-  //   } else if (v = 0) {
-  //     std::cout << "O";
-  //   }
-  //   std::cout << std::endl;
-  //   lattice.nextGeneration();
-  //   std::this_thread::sleep_for(std::chrono::seconds(2));
-  //   i++;
+  // for (int i = 0; i < 10; i++)
+  // {
+  //   std::cout << "Generation: " << i << std::endl;
+  //   std::cout << *lattice_ptr << std::endl;
+  //   // std::cout << *lattice_ptr << std::endl;
+  //   lattice_ptr->nextGeneration();
   // }
-  // // Esperar a que el hilo de entrada termine
-  // inputThread.join();
 
-  while (flag_stop != 'q') {
-    for (int i = 0; i < 10; i++) {
-      if (v == 1 && b == 0) {
-        std::cout << "X";
-      } else if (v == 0 && b == 0) {
-        std::cout << " ";
-      }
-      std::cout << lattice;
-      if (v = 1 && b == 0) {
-        std::cout << "X";
-      } else if (v = 0 && b == 0) {
-        std::cout << " ";
-      }
-      std::cout << std::endl;
-      lattice.nextGeneration();
-    }
-    std::cout << "Press q to quit" << std::endl;
-    std::cin >> flag_stop;
-    i = 0;
+  // Crear un hilo para verificar la entrada de teclado de manera asíncrona
+  std::thread inputThread(checkKeyPress, std::ref(stop));
+
+  while (!stop.load()) {
+    std::cout << *lattice_ptr << std::endl;
+    lattice_ptr->nextGeneration();
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
   }
+  // Esperar a que el hilo de entrada termine
+  inputThread.join();
 
+
+  lattice_ptr = nullptr;
+  delete lattice_ptr;
   return 0;
 }

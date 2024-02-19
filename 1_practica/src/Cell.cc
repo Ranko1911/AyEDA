@@ -103,15 +103,13 @@ int Cell::nextState(const Lattice& Lattice) {
 void Cell::updateState() {
   this->value = this->nextValue;
   this->nextValue = 0;
-  // State newState = {getState().value, getState().nextValue};
-  // std::cout << "newState: " << newState.value << " " << newState.nextValue <<
-  // std::endl; this->setState(newState);
+
 }
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell) {
   if (cell.getState() == 0) {
     os << " ";
-  } else {
+  } else if(cell.getState() == 1){
     os << "X";
   }
   return os;
