@@ -2,85 +2,103 @@
 
 #include "Cell.h"
 
-int count_lines(const std::string& file_name) {
-  std::ifstream file(file_name);
-  std::string line;
-  int count = 0;
-  while (std::getline(file, line)) {
-    count++;
+
+
+//   if (b == 0) {
+//     pos.x = pos.x + 1;
+//     cells.push_back(base);
+//     pos.x = pos.x + 1;
+//     cells.push_back(base);
+//     if (v == 1) {
+//       cells[0].setState(state_true);
+//       cells[1].setState(state_true);
+//     } else if (v == 0) {
+//       cells[0].setState(state_false);
+//       cells[1].setState(state_false);
+//     }
+//   }
+
+//funcion para comprobar la frontera del lattice
+void Lattice::checkBorder() {
+  if (b == 0) {
+    
   }
-  return count;
 }
 
-Lattice::Lattice(const int& size, const int& b, const int& v,
-                 const std::string& file_name) {
-  this->size = size;
+
+
+Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   this->b = b;
   this->v = v;
   this->file_name = file_name;
 
-  State state_true;
-  state_true.value = 1;
-  State state_false;
-  state_false.value = 0;
+  std::vector<std::string> lineas;
 
-  Position pos;
-  State state;
-  Cell base = Cell(pos, state);
+  std::ifstream archivo(file_name); 
 
-  std::cout << "Size: " << this->size << " B: " << this->b << " V: " << this->v
-            << " File: " << this->file_name << std::endl;
-
-  new (&cells) std::vector<Cell>(size, base);
-
-  for (int i = 0; i < size; i++) {
-    pos.x = i;
-    cells[i].setPosition(pos);
-  }
-
-  if (b == 0) {
-    pos.x = pos.x + 1;
-    cells.push_back(base);
-    pos.x = pos.x + 1;
-    cells.push_back(base);
-    if (v == 1) {
-      cells[0].setState(state_true);
-      cells[1].setState(state_true);
-    } else if (v == 0) {
-      cells[0].setState(state_false);
-      cells[1].setState(state_false);
-    }
-  }
-
-  if (file_name == "standard.txt") {
-    cells[cells.size() / 2].setState(state_true);
+  if (!archivo.is_open()) {
+    std::cerr << "Error al abrir el archivo." << std::endl;
   } else {
-    this->size = count_lines(file_name);
-    std::ifstream file(file_name);
-    std::string line;
-    int i = 0;
-    while (std::getline(file, line)) {
-      for (int j = 0; j < line.size(); j++) {
-        if (line[j] == '1') {
-          cells[i].setState(state_true);
-        } else {
-          cells[i].setState(state_false);
-        }
-        i++;
-      }
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+      lineas.push_back(linea);
     }
+
+    archivo.close();
+
+    for (int i = 0; i < lineas[0].size(); i++) {
+      cells.push_back(new Cell(i, lineas[0][i] - '0'));
+    }
+  }
+
+
+}
+
+Lattice::Lattice(const int& b, const int& v, const int& size) {
+  this->b = b;
+  this->v = v;
+  this->size = size;
+
+  int pos = 0;
+  for (pos = 0; pos < size / 2; pos++) {
+    cells.push_back(new Cell(pos, 0));
+  }
+  cells[pos] = new Cell(pos, 1);
+  for (pos = pos + 1; pos < size; pos++) {
+    cells.push_back(new Cell(pos, 0));
   }
 }
 
-Lattice::~Lattice() {}
-
-const Cell& Lattice::getCell(const Position& position) const {
-  return this->cells[position.x];
+Lattice::~Lattice() {
+  for (int i = 0; i < size; i++) {
+    delete &cells[i];
+  }
 }
 
-void Lattice::setCell(const Position& position, const State& state) {
-  this->cells[position.x].setState(state);
+const Cell& Lattice::getCell(const int& x) const {
+  //  return *cells[x]; 
+  if(b == 1){
+    if(x < 0){
+      return *cells[size - 1];
+    } else if(x > size - 1){
+      return *cells[0];
+    } else {
+      return *cells[x];
+    }
+   }else if (b == 0)
+   {
+    // if (v == )
+    // {
+    //   /* code */
+    // }
+    
+   }
+   
 }
+
+// void Lattice::setCell(const int& position, const int& state) {
+//   cells[position]->setState(state);
+// }
 
 int Lattice::getSize() const { return this->size; }
 
@@ -88,26 +106,14 @@ int Lattice::getB() const { return this->b; }
 
 int Lattice::getV() const { return this->v; }
 
-void Lattice::nextGeneration() {  // no muy seguro de que esta miedra funciona,
-                                  // pero es una primera prueba
-  // recorrer todas las celdas y calcular su proximo estado
-  State temp_state;
+void Lattice::nextGeneration() {
   for (int i = 0; i < size; i++) {
-    // std::cout << "ESTADO ANTES i: " << i << " " <<
-    // this->cells[i].getState().value << " " <<
-    // this->cells[i].getState().nextValue << std::endl;
-    temp_state.nextValue = this->cells[i].nextState(*this);
-    temp_state.value = this->cells[i].getState().value;
-    // std::cout << "ESTADO LUEGO i: " << i << " " << temp_state.value << " " <<
-    // temp_state.nextValue << std::endl;
-    this->cells[i].setState(temp_state);
-    temp_state.nextValue = 0;
-    temp_state.value = 0;
+    cells[i]->nextState(*this);
   }
 
   // actualizar todas las celdas
   for (int i = 0; i < size; i++) {
-    this->cells[i].updateState();
+    cells[i]->updateState();
   }
 
   return;
@@ -115,14 +121,7 @@ void Lattice::nextGeneration() {  // no muy seguro de que esta miedra funciona,
 
 std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   for (int i = 0; i < lattice.size; i++) {
-    if (lattice.cells[i].getState().value)
-      // os << "X " << lattice.cells[i].getState().value << " " <<
-      // lattice.cells[i].getState().nextValue << " " << std::endl;
-      os << "X";
-    else
-      // os << "O " << lattice.cells[i].getState().value << " " <<
-      // lattice.cells[i].getState().nextValue << " " << std::endl;
-      os << " ";
+    os << lattice.cells[i]->getState();
   }
   return os;
 }
