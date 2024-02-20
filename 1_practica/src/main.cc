@@ -10,6 +10,7 @@
 // Opcion periodica: ./programa -size 10 -b periodic
 // Opcion open frontera caliente: ./programa -size 5 -b open 1
 // Opcion open frontera fria: ./programa -size 5 -b open 0
+// Opcion con fichero:./programa -b periodic -init variante.txt
 
 void checkKeyPress(std::atomic<bool>& stop) {
   char key;
@@ -27,9 +28,10 @@ int main(int argc, char** argv) {
     return 1;
   }
   std::string file_name = "";
-  int size;
+  int size = 0;
   int b;
   int v = -1;
+
   // Recorrer los argumentos y hacer algo con ellos
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
@@ -43,9 +45,9 @@ int main(int argc, char** argv) {
                 << "  -f, --file\t\tFile of start state" << std::endl;
       return 0;
     } else if (arg == "-init") {
+      std::cout << "Init: " << argv[i + 1] << std::endl;
       file_name = argv[i + 1];
       i++;
-
     } else if (arg == "-size") {
       // si size es 0 o menor, error
       if (std::stoi(argv[i + 1]) <= 0) {
@@ -72,7 +74,7 @@ int main(int argc, char** argv) {
           }
         }
         b = std::stoi(b_arg);
-        i++;
+        // i++;
         std::cout << "B: " << b << std::endl;
       } else {
         std::cout << "Error: Not Valid option for b first argument: " << b_arg
