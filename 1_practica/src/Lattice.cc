@@ -1,12 +1,5 @@
 #include "Lattice.h"
-
 #include "Cell.h"
-
-// funcion para comprobar la frontera del lattice
-void Lattice::checkBorder() {
-  if (b == 0) {
-  }
-}
 
 Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   this->b = b;
@@ -19,27 +12,45 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
 
   if (!archivo.is_open()) {
     std::cerr << "Error al abrir el archivo." << std::endl;
-  } else {
-    std::string linea;
-    while (std::getline(archivo, linea)) {
-      lineas.push_back(linea);
-    }
+    return;
+  }
 
-    archivo.close();
+  std::string linea;
+  while (std::getline(archivo, linea)) {
+    lineas.push_back(linea);
+  }
 
-    // //imprimr el contenido del archivo
-    // for (int i = 0; i < lineas.size(); i++) {
-    //   for (int j = 0; j < lineas[i].size(); j++) {
-    //     std::cout << "testing: "<< lineas[i][j];
-    //   }
-    // }
+  archivo.close();
 
-    for (int i = 0; i < lineas[0].size(); i++) {
-      cells.push_back(new Cell(i, lineas[0][i]));
-      std::cout << "Cell: " << i << " State: " << lineas[0][i] << std::endl;
+  //imprimr el contenido del archivo
+  std::cout << "Contenido del archivo: " << std::endl;
+  for (int i = 0; i < lineas.size(); i++) {
+    for (int j = 0; j < lineas[i].size(); j++) {
+      std::cout << lineas[i][j];
     }
   }
+  std::cout << std::endl;
+
+  this->size = lineas[0].size();
+
+  for (int pos = 0; pos < lineas[0].size(); pos++) {
+    if (lineas[0][pos] == '0') {
+      cells.push_back(new Cell(pos, 0));
+      // std::cout << "cero" << std::endl;
+    } else if (lineas[0][pos] == '1') {
+      cells.push_back(new Cell(pos, 1));
+      // std::cout << "uno" << std::endl;
+    }
+  }
+
+  //imprimir cells, funciona
+  std::cout << "Contenido de cells: " << std::endl;
+  for (int i = 0; i < cells.size(); i++) {
+    std::cout << *cells[i];
+  }
+  std::cout << std::endl;
 }
+
 
 Lattice::Lattice(const int& b, const int& v, const int& size) {
   this->b = b;
@@ -47,9 +58,8 @@ Lattice::Lattice(const int& b, const int& v, const int& size) {
   this->size = size;
 
   int pos = 0;
-  for (pos = 0; pos < (size / 2 ); pos++) {
+  for (pos = 0; pos < (size / 2); pos++) {
     cells.push_back(new Cell(pos, 0));
-
   }
 
   cells.push_back(new Cell(pos, 1));
@@ -61,10 +71,10 @@ Lattice::Lattice(const int& b, const int& v, const int& size) {
 }
 
 Lattice::~Lattice() {
-    for (Cell* cell : cells) {
-        delete cell;
-    }
-    cells.clear();
+  for (Cell* cell : cells) {
+    delete cell;
+  }
+  cells.clear();
 }
 
 const Cell& Lattice::getCell(const int& x) const {

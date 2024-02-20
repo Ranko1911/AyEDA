@@ -13,12 +13,11 @@ class Lattice {
     int size;
     int b;
     int v = 0;
-    std::string file_name = "standard.txt";
+    std::string file_name = "";
     std::vector<Cell*> cells;
   public:
-    // Lattice(const int& size, const int& b, const int& v = 0, const std::string& file_name = "standard.txt");
     Lattice(){}
-    Lattice(const int& b, const int& v, const std::string& file_name = "standard.txt");
+    Lattice(const int& b, const int& v, const std::string& file_name);
     Lattice(const int& b, const int& v, const int& size);
     ~Lattice();	
     const Cell& getCell(const int&) const;
@@ -28,5 +27,4 @@ class Lattice {
     int getV() const;
     void nextGeneration(); // update function
     friend std::ostream& operator<<(std::ostream&, const Lattice&);
-    void checkBorder();
 };

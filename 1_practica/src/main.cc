@@ -87,27 +87,42 @@ int main(int argc, char** argv) {
     }
   }
 
+  Lattice* lattice_ptr = nullptr;
+
   // comprobar que size y file_name no estén definidos a la vez
   if (file_name != "" && size != 0) {
     std::cout << "Error: Both file and size are defined" << std::endl;
     return 1;
-  }
 
-  Lattice* lattice_ptr = nullptr;
-
-  // si size está definido, crear un lattice con el tamaño dado
-  if (size != 0) {
+  } else  if (size != 0) {  // si size está definido, crear un lattice con el tamaño dado
     std::cout << "Creating lattice with size: " << size << std::endl;
-    // Lattice lattice_(b, v, size);
     lattice_ptr = new Lattice(b, v, size);
+    std::cout << "Contenido del lattice: " << *lattice_ptr << std::endl;
+
   } else if (file_name != "") {
     std::cout << "Creating lattice with file: " << file_name << std::endl;
-    // Lattice lattice_(b, v, file_name);
     lattice_ptr = new Lattice(b, v, file_name);
+    std::cout << "Contenido del lattice: " << *lattice_ptr << std::endl;
+
+    // depurar estatico
+    // Lattice estatico(b,v,file_name);
+    // std::cout << "Size de estatico: " << estatico.getSize() << std::endl; 
+    // std::cout << "Contenido del lattice: " << estatico << std::endl;
+
+    // for(int i = 0; i < 10; i++){
+    //   std::cout << "Generation: " << i << std::endl;
+    //   std::cout << estatico << std::endl;
+    //   estatico.nextGeneration();
+    // }
+
+
+    //
   } else {
     std::cout << "Error: No size or file defined" << std::endl;
     return 1;
   }
+
+
 
   // for (int i = 0; i < 10; i++)
   // {
