@@ -35,12 +35,12 @@ int Cell::nextState(const Lattice& Lattice) {
   //   nextValue = sum1 + mult1 + mult2;
   //   nextValue = nextValue % 2;
 
-  int sum1 = getState() + Lattice.getCell(getPosition() + 2).getState();
-  int mult1 = getState() * Lattice.getCell(getPosition() + 2).getState();
-  int mult2 = Lattice.getCell(getPosition() - 2).getState() * getState() *
-              Lattice.getCell(getPosition() + 2).getState();
-  nextValue = sum1 + mult1 + mult2;
-  nextValue = nextValue % 2;
+  // int sum1 = getState() + Lattice.getCell(getPosition() + 1).getState();
+  // int mult1 = getState() * Lattice.getCell(getPosition() + 1).getState();
+  // int mult2 = Lattice.getCell(getPosition() - 1).getState() * getState() *
+  //             Lattice.getCell(getPosition() + 1).getState();
+  // nextValue = sum1 + mult1 + mult2;
+  // nextValue = nextValue % 2;
 
   return 0;
 }
