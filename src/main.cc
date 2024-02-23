@@ -30,49 +30,36 @@ void PrintOptions() {
   std::cout << "s: guarda la generacion en un archivo." << std::endl;
 }
 
-void SetCellAlive(Lattice* lattice_ptr) {
-  if (b == 1) {  // preguntar que celdas poner en estado 1
-    std::cout << "¿Desea poner alguna celda en estado 1? (s/n)" << std::endl;
-    std::cin >> option;
-    if (option == 's') {
-      std::cout << "Intrduzca cuantas celdas desea poner en estado 1: ";
-      int n;
-      std::cin >> n;
-      for (int i = 0; i < n; i++) {
-        int x, y;
-        std::cout << "Introduzca la coordenada x: ";
-        std::cin >> x;
-        std::cout << "Introduzca la coordenada y: ";
-        std::cin >> y;
-        Position pos = {x, y};
-        lattice_ptr->setCell(pos, 1);
-      }
-    }
-  }
+void SetCellAlive(Lattice* lattice_ptr, int b) {
+  // char option = ' ';
+  // if (b == 1) {  // preguntar que celdas poner en estado 1
+  //   std::cout << "¿Desea poner alguna celda en estado 1? (s/n)" << std::endl;
+  //   std::cin >> option;
+  //   if (option == 's') {
+  //     std::cout << "Intrduzca cuantas celdas desea poner en estado 1: ";
+  //     int n;
+  //     std::cin >> n;
+  //     for (int i = 0; i < n; i++) {
+  //       int x, y;
+  //       std::cout << "Introduzca la coordenada x: ";
+  //       std::cin >> x;
+  //       std::cout << "Introduzca la coordenada y: ";
+  //       std::cin >> y;
+  //       Position pos = {x, y};
+  //       lattice_ptr->setCell(pos, 1);
+  //     }
+  //   }
+  // }
 }
 
-int main(int argc, char** argv) {
-  std::atomic<bool> stop(false);
-
-  // No argumetos, no programa
-  if (argc == 1) {
-    std::cout << "No arguments" << std::endl;
-    return 1;
-  }
-  std::string file_name = "";
-  int size_N = 0;  // numero de columnas
-  int size_M = 0;  // numero de filas
-  int b;
-  int v = -1;
-
-  // Recorrer los argumentos y hacer algo con ellos
+void ArgumentsFunction( int argc, char** argv, std::string& file_name, int& size_N, int& size_M, int& b, int& v) {
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
     if (arg == "-h" || arg == "--help") {
       std::cout << "Usage: " << argv[0]
                 << " [-init file | -size M N] [-b periodic | open [V]]"
                 << std::endl;
-      return 0;
+      exit(0);
     } else if (arg == "-init") {
       std::cout << "Init: " << argv[i + 1] << std::endl;
       file_name = argv[i + 1];
@@ -81,7 +68,7 @@ int main(int argc, char** argv) {
       // si size es 0 o menor, error
       if (std::stoi(argv[i + 1]) <= 0) {
         std::cout << "Error: Size must be greater than 0" << std::endl;
-        return 1;
+        exit(1);
       }
       size_N = std::stoi(argv[i + 1]);
       i++;
@@ -114,13 +101,86 @@ int main(int argc, char** argv) {
       } else {
         std::cout << "Error: Not Valid option for b first argument: " << b_arg
                   << std::endl;
-        return 1;
+        exit(1);
       }
     } else {
       std::cout << "Unknown argument: " << argc << std::endl;
-      return 1;
+      exit(1);
     }
   }
+}
+
+int main(int argc, char** argv) {
+  std::atomic<bool> stop(false);
+
+  // No argumetos, no programa
+  if (argc == 1) {
+    std::cout << "No arguments" << std::endl;
+    return 1;
+  }
+  std::string file_name = "";
+  int size_N = 0;  // numero de columnas
+  int size_M = 0;  // numero de filas
+  int b;
+  int v = -1;
+
+  ArgumentsFunction(argc, argv, file_name, size_N, size_M, b, v);
+  // Recorrer los argumentos y hacer algo con ellos
+  // for (int i = 1; i < argc; i++) {
+  //   std::string arg = argv[i];
+  //   if (arg == "-h" || arg == "--help") {
+  //     std::cout << "Usage: " << argv[0]
+  //               << " [-init file | -size M N] [-b periodic | open [V]]"
+  //               << std::endl;
+  //     return 0;
+  //   } else if (arg == "-init") {
+  //     std::cout << "Init: " << argv[i + 1] << std::endl;
+  //     file_name = argv[i + 1];
+  //     i++;
+  //   } else if (arg == "-size") {
+  //     // si size es 0 o menor, error
+  //     if (std::stoi(argv[i + 1]) <= 0) {
+  //       std::cout << "Error: Size must be greater than 0" << std::endl;
+  //       return 1;
+  //     }
+  //     size_N = std::stoi(argv[i + 1]);
+  //     i++;
+  //     size_M = std::stoi(argv[i + 1]);
+  //     i++;
+  //     std::cout << "Size: " << size_M << "x" << size_N << std::endl;
+  //   } else if (arg == "-b") {
+  //     std::string b_arg = argv[i + 1];
+  //     if (b_arg == "periodic" || b_arg == "open" || b_arg == "noborder") {
+  //       if (b_arg == "periodic") {
+  //         b_arg = "1";
+  //         i++;
+  //         v = 0;
+  //       } else if (b_arg == "open") {
+  //         b_arg = "0";
+  //         i++;
+  //         if (argc > i) {
+  //           std::cout << "V: " << argv[i + 1] << std::endl;
+  //           v = std::stoi(argv[i + 1]);
+  //           i++;
+  //         }
+  //       } else if (b_arg == "noborder") {
+  //         b_arg = "2";
+  //         i++;
+  //         v = 0;
+  //       }
+  //       b = std::stoi(b_arg);
+  //       // i++;
+  //       std::cout << "B: " << b << std::endl;
+  //     } else {
+  //       std::cout << "Error: Not Valid option for b first argument: " << b_arg
+  //                 << std::endl;
+  //       return 1;
+  //     }
+  //   } else {
+  //     std::cout << "Unknown argument: " << argc << std::endl;
+  //     return 1;
+  //   }
+  // }
 
   Lattice* lattice_ptr = nullptr;
 
@@ -134,38 +194,42 @@ int main(int argc, char** argv) {
     std::cout << "Creating lattice with size: " << size_M << "x" << size_N
               << std::endl;
     lattice_ptr = new Lattice(b, v, size_N, size_M);
-    std::cout << "Contenido del lattice:\n " << *lattice_ptr << std::endl;
+    std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
 
   } else if (file_name != "") {
     std::cout << "Creating lattice with file: " << file_name << std::endl;
     lattice_ptr = new Lattice(b, v, file_name);
-    std::cout << "Contenido del lattice:\n " << *lattice_ptr << std::endl;
+    std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
   } else {
     std::cout << "Error: No size or file defined" << std::endl;
     return 1;
   }
 
-  // for (int i = 0; i < 10; i++)
-  // {
-  //   std::cout << "Generation: " << i << std::endl;
-  //   std::cout << *lattice_ptr << std::endl;
-  //   // std::cout << *lattice_ptr << std::endl;
-  //   lattice_ptr->nextGeneration();
-  // }
-
-  // Crear un hilo para verificar la entrada de teclado de manera asíncrona
-  // std::thread inputThread(checkKeyPress, std::ref(stop));
-
-  // while (!stop.load()) {
-  //   std::cout << *lattice_ptr << std::endl;
-  //   lattice_ptr->nextGeneration();
-  //   std::this_thread::sleep_for(std::chrono::milliseconds(200));
-  // }
-  // // Esperar a que el hilo de entrada termine
-  // inputThread.join();
 
   char option = ' ';
   bool c = false;
+
+  // SetCellAlive(lattice_ptr, b);
+
+  // char option = ' ';
+  if (b == 1) {  // preguntar que celdas poner en estado 1
+    std::cout << "¿Desea poner alguna celda en estado 1? (s/n)" << std::endl;
+    std::cin >> option;
+    if (option == 's') {
+      std::cout << "Intrduzca cuantas celdas desea poner en estado 1: ";
+      int n;
+      std::cin >> n;
+      for (int i = 0; i < n; i++) {
+        int x, y;
+        std::cout << "Introduzca la coordenada x: ";
+        std::cin >> x;
+        std::cout << "Introduzca la coordenada y: ";
+        std::cin >> y;
+        Position pos = {x, y};
+        lattice_ptr->setCell(pos, 1);
+      }
+    }
+  }
 
   while (true) {
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
