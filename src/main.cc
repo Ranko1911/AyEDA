@@ -11,6 +11,7 @@
 // Opcion open frontera caliente: ./programa -size 5 5 -b open 1
 // Opcion open frontera fria: ./programa -size 5 5 -b open 0
 // Opcion con fichero:./programa -b periodic -init variante.txt
+// Opcion sin bordes: ./programa -init variante.txt -b noborder
 
 void checkKeyPress(std::atomic<bool>& stop) {
   char key;
@@ -164,19 +165,21 @@ int main(int argc, char** argv) {
         return 0;
         break;
       case 'n':
-          std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+          // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular y mostrar la siguiente generacion
         lattice_ptr->nextGeneration();
         if (c == false) {
+          std::cout << "Generation: " << std::endl;
           std::cout << *lattice_ptr << std::endl;
+          std::cout << "despues de nextGeneration" << std::endl;
         } else {
           std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
         }
 
         break;
       case 'L':
-          std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+          // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular las siguientes 5 generaciones y mostrarlas
         for (int i = 0; i < 5; i++) {
@@ -185,7 +188,7 @@ int main(int argc, char** argv) {
           lattice_ptr->nextGeneration();
         }
         if (c == false) {
-          std::cout << "Generation: " << std::endl;
+          // std::cout << "Generation: " << std::endl;
           std::cout << *lattice_ptr << std::endl;
         } else {
           std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;

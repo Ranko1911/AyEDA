@@ -23,7 +23,7 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
 
   archivo.close();
 
-  // // imprimr el contenido del archivo
+  // imprimr el contenido del archivo
   // std::cout << "Contenido del archivo: " << std::endl;
   // for (int i = 0; i < lineas.size(); i++) {
   //   for (int j = 0; j < lineas[i].size(); j++) {
@@ -33,27 +33,48 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   // }
   // std::cout << std::endl;
 
-  // resize de cells para que tenga el mismo tamaño que el archivo
-  cells.resize(lineas.size());
-  for (int i = 0; i < lineas.size(); i++) {
-    cells[i].resize(lineas[i].size());
-  }
+  // // resize de cells para que tenga el mismo tamaño que el archivo
+  // cells.resize(lineas.size());
+  // for (int i = 0; i < lineas.size(); i++) {
+  //   cells[i].resize(lineas[i].size());
+  // }
 
   this->size_N = lineas.size();
+  this->size_M = 0;
+
   // buscar el mayor tamaño de las lineas y asignarlo a size_N
   for (int i = 0; i < lineas.size(); i++) {
-    if (lineas[i].size() > this->size_N) {
+    if (lineas[i].size() > this->size_M) {
       this->size_M = lineas[i].size();
+      // std::cout << "Mayor tamaño: " << this->size_M << std::endl;
     }
   }
+
   std::cout << "size_N: " << this->size_N << " size_M: " << this->size_M
             << std::endl;
 
   // rellenar las lineas que no están completas con celdas vacias
   for (int i = 0; i < lineas.size(); i++) {
+    // std::cout << "lineas[" << i << "].size(): " << lineas[i].size() << std::endl;
     for (int j = lineas[i].size(); j < this->size_M; j++) {
+      // std::cout << "Rellenar con 0" << std::endl;
       lineas[i].push_back('0');
     }
+  }
+
+  // imprimir lineas
+  // std::cout << "Contenido de lineas: " << std::endl;
+  // for (int i = 0; i < lineas.size(); i++) {
+  //   for (int j = 0; j < lineas[i].size(); j++) {
+  //     std::cout << lineas[i][j];
+  //   }
+  //   std::cout << std::endl;
+  // }
+
+  // resize de cells para que tenga el mismo tamaño que el archivo
+  cells.resize(lineas.size());
+  for (int i = 0; i < lineas.size(); i++) {
+    cells[i].resize(lineas[i].size());
   }
 
   // asignar el estado de las celdas
@@ -69,6 +90,13 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   }
 
   // imprimir cells
+  // std::cout << "Contenido de cells: " << std::endl;
+  // for (int i = 0; i < lineas.size(); i++) {
+  //   for (int j = 0; j < lineas[i].size(); j++) {
+  //     std::cout << *cells[i][j];
+  //   }
+  //   std::cout << std::endl;
+  // }
 }
 
 Lattice::Lattice(const int& b, const int& v, const int& size_N,
@@ -140,8 +168,16 @@ const Cell& Lattice::getCell(const Position& x) const {
       return *VIVA;
     }
   } else if (b == 2) {  // frontera dinamica b = 2
-
-    std::cout << "Frontera dinamica" << std::endl;
+    if (temporal.x < 0) {
+      return *MUERTA;
+    } else if (temporal.x >= size_N) {
+      return *MUERTA;
+    }
+    if (temporal.y < 0) {
+      return *MUERTA;
+    } else if (temporal.y >= size_M) {
+      return *MUERTA;
+    }
   }
 
   return *cells[temporal.x][temporal.y];
@@ -157,11 +193,11 @@ int Lattice::getB() const { return this->b; }
 int Lattice::getV() const { return this->v; }
 
 void Lattice::nextGeneration() {
-  std::cout << "nextGeneration" << std::endl;
+  // std::cout << "nextGeneration" << std::endl;
   Position size = getSize();
-  std::cout << "Size: " << size.x << "x" << size.y << std::endl;
+  // std::cout << "Size: " << size.x << "x" << size.y << std::endl;
   vivas = Population();
-  std::cout << "Poblacion: " << vivas << std::endl;
+  // std::cout << "Poblacion: " << vivas << std::endl;
 
   // calcular el siguiente estado de todas las celdas
   for (int i = 0; i < size.x; i++) {
@@ -170,13 +206,19 @@ void Lattice::nextGeneration() {
     }
   }
 
-  std::cout << "nextState satisfactorio " << std::endl;
+  // std::cout << "nextState satisfactorio " << std::endl;
 
   // actualizar todas las celdas
   for (int i = 0; i < size.x; i++) {
     for (int j = 0; j < size.y; j++) {
       cells[i][j]->updateState();
     }
+  }
+
+  // llamar la funcion que modifica el tamaño de la matriz si b vale 2
+  if (b == 2) {
+    // std::cout << "Aumentar tamaño" << std::endl;
+    increaseSize();
   }
 
   return;
@@ -187,7 +229,7 @@ std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   Position size = lattice.getSize();
   for (int i = 0; i < size.x; i++) {
     for (int j = 0; j < size.y; j++) {
-      os << *lattice.cells[i][j];
+      os << *lattice.cells[i][j];  // << "(" << i << "," << j << ") "
     }
     os << std::endl;
   }
@@ -227,5 +269,54 @@ void Lattice::saveToFile(const std::string& file_name) {
 
 void Lattice::setCell(const Position& pos, const int& state) {
   cells[pos.x][pos.y]->setState(state);
+  return;
+}
+
+void Lattice::increaseSize() {
+  aumentarDerecha();
+  // std::cout << "SALIDAAAAA" << std::endl;
+  // aumentarIzquierda(const Lattice& lattice);
+  // aumentarArriba(const Lattice& lattice);
+  // aumentarAbajo(const Lattice& lattice);
+
+  return;
+}
+
+void Lattice::aumentarDerecha() {
+  // imprimr el contenido de cells
+  std::cout << "Contenido de cells antes de aumentar: " << std::endl;
+  std::cout << *this << std::endl;
+
+  // aumentar el tamaño de cells
+  // for (int i = 0; i < size_M; i++) {
+  //   Position pos = {0, i};
+  //   cells[0].push_back(new Cell(pos, 0));
+  // }
+
+  //aumentar el valor de size_M
+  size_M++;
+
+  for (int i = 0; i < size_N; i++) {
+    Position pos = {0, size_M - 1};
+    cells[0].push_back(new Cell(pos, 0));
+    cells[1].push_back(new Cell(pos, 0));
+    cells[2].push_back(new Cell(pos, 0));
+    cells[3].push_back(new Cell(pos, 0));
+    cells[4].push_back(new Cell(pos, 0));
+    cells[5].push_back(new Cell(pos, 0));
+    cells[6].push_back(new Cell(pos, 0));
+    cells[7].push_back(new Cell(pos, 0));
+    cells[8].push_back(new Cell(pos, 0));
+    cells[9].push_back(new Cell(pos, 0));
+    cells[10].push_back(new Cell(pos, 0));
+  }
+
+
+  // imprimr el contenido de cells
+  std::cout << "Contenido de cells despues de aumentar: " << std::endl;
+  std::cout << *this << std::endl;
+
+  std::cout << "SALSA DE MORA" << std::endl;
+
   return;
 }

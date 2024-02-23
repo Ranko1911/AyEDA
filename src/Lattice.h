@@ -24,13 +24,18 @@ class Lattice {
   Lattice(const int& b, const int& v, const int& size_N, const int& size_M);
   ~Lattice();
   const Cell& getCell(const Position&) const;
+  void setCell(const Position&, const int&);  
   Position getSize() const;
   int getB() const;
   int getV() const;
   void nextGeneration();
-  int Population();  // no hecha
+  int Population();  
   friend std::ostream& operator<<(std::ostream&, const Lattice&);
   Cell& operator[](const Position&) const;
   void saveToFile(const std::string& file_name);
-  void setCell(const Position&, const int&);
+  void increaseSize();
+  void aumentarDerecha();
+  void aumentarIzquierda();
+  void aumentarArriba();
+  void aumentarAbajo();
 };

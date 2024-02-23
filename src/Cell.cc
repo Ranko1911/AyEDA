@@ -78,7 +78,7 @@ void Cell::updateState() {
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell) {
   if (cell.getState() == 0) {
-    os << " ";
+    os << "-";
   } else if (cell.getState() == 1) {
     os << "X";
   }
