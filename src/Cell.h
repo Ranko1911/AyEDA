@@ -3,20 +3,23 @@
 #include <iostream>
 #include "Lattice.h"
 
+struct Position {
+  int x;
+  int y;
+};
+
 class Cell {
  private:
-  int position;
-
+  Position position;
   int value;
   int nextValue;
  public:
-  Cell(const int, const int);
+  Cell(Position , const int);
   ~Cell();
-  int getPosition() const;
-
-  void setPosition(const int&);
+  Position getPosition() const;
+  void setPosition(const Position& );
   int getState() const;
-  // void setState(int );
+  void setState(int );
   int nextState(const Lattice&);
   void updateState();
   friend std::ostream& operator<<(std::ostream& os, const Cell& cell);

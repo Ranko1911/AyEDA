@@ -2,7 +2,7 @@
 
 #include "Lattice.h"
 
-Cell::Cell(int position, const int value) {
+Cell::Cell(Position position, const int value) {
   this->position = position;
   this->value = value;
   this->nextValue = 0;
@@ -12,16 +12,16 @@ Cell::~Cell() {}
 
 int Cell::getState() const { return this->value; }
 
-// void Cell::setState(int value) { this->value = value; }
+void Cell::setState(int value) { this->value = value; }
 
-int Cell::getPosition() const { return this->position; }
+Position Cell::getPosition() const { return this->position; }
 
-void Cell::setPosition(const int& position) { this->position = position; }
+void Cell::setPosition(const Position& position) { this->position = position; }
 
 int Cell::nextState(const Lattice& Lattice) {
-  int actual = getPosition();
-  int LeftPosition = getPosition();
-  int RightPosition = getPosition();
+  Position actual = getPosition();
+  Position LeftPosition = getPosition();
+  Position RightPosition = getPosition();
 
   Cell LeftNeighbour = Lattice.getCell(actual);
   Cell RightNeighbour = Lattice.getCell(actual);
@@ -29,18 +29,42 @@ int Cell::nextState(const Lattice& Lattice) {
   Cell LeftBorder = Lattice.getCell(actual);
   Cell RightBorder = Lattice.getCell(actual);
 
-  //   int sum1 = actualState + RightState;
-  //   int mult1 = actualState * RightState;
-  //   int mult2 = LeftState * actualState * RightState;
-  //   nextValue = sum1 + mult1 + mult2;
-  //   nextValue = nextValue % 2;
+  //colocar el calculo de la siguiente generacion
 
-  // int sum1 = getState() + Lattice.getCell(getPosition() + 1).getState();
-  // int mult1 = getState() * Lattice.getCell(getPosition() + 1).getState();
-  // int mult2 = Lattice.getCell(getPosition() - 1).getState() * getState() *
-  //             Lattice.getCell(getPosition() + 1).getState();
-  // nextValue = sum1 + mult1 + mult2;
-  // nextValue = nextValue % 2;
+  // contar vecinos vivos y muertos al rededor de la celda
+  int alive = 0;
+  int dead = 0;
+
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      if (i != 0 && j != 0) {
+        Position new_position = {actual.x + i, actual.y + j};
+        Cell neighbour = Lattice.getCell(new_position);
+        if (neighbour.getState() == 1) {
+          alive++;
+        } else {
+          dead++;
+        }
+      }
+    }
+  } 
+
+  //si la celda esta viva y hay 2 o 3 vecinas vivas, sigue viva , si no pasa a estado muerto
+  if (getState() == 1) {
+    if (alive == 2 || alive == 3) {
+      this->nextValue = 1;
+    } else {
+      this->nextValue = 0;
+    }
+  } else {
+    //si la celda esta muerta y hay 3 vecinas vivas, pasa a estado viva
+    if (alive == 3) {
+      this->nextValue = 1;
+    } else {
+      this->nextValue = 0;
+    }
+  }
+
 
   return 0;
 }
