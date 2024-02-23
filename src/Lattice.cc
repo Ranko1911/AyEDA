@@ -281,9 +281,24 @@ void Lattice::increaseSize() {
   //   }
   // }
   // std::cout << "SALIDAAAAA" << std::endl;
-  // aumentarIzquierda();
-  // aumentarArriba(const Lattice& lattice);
-  aumentarAbajo();
+  
+  //revisar si hay celulas vivas en el borde izquierdo
+  // for (int i = 0; i < size_N; i++) {
+  //   if (cells[i][0]->getState() == 1) {
+  //     aumentarIzquierda();
+  //     break;
+  //   }
+  // }
+
+  aumentarArriba();
+
+  //comprobar si hay celulas vivas en el borde inferior
+  // for (int i = 0; i < size_N; i++) {
+  //   if (cells[i][size_M - 1]->getState() == 1) {
+  //     aumentarAbajo();
+  //     break;
+  //   }
+  // }
 
   return;
 }
@@ -353,4 +368,51 @@ void Lattice::aumentarAbajo() {
   // std::cout << *this << std::endl;
 
   return;
+}
+
+void Lattice::aumentarIzquierda(){
+
+  //-----X--X----X--X--X-X--X--X--
+  //-------------------------X-----
+  //insertar una celula muerta en la primera columna
+  std::cout << "Insertar celdas muertas en la primera columna" << std::endl;
+  for (int i = 0; i < size_N; i++) {
+    Position pos = {0, i};
+    cells[i].insert(cells[i].begin(), new Cell(pos, 0));
+  }
+
+  //aumentar el valor de size_M
+  std::cout << "Aumentar el valor de size_M" << std::endl;
+  size_M++;
+
+  //recorre todas las filas y aumenta la coordenada x de cada celda
+  std::cout << "Aumentar la coordenada x de cada celda" << std::endl;
+  for (int i = 0; i < size_N; i++) {
+    for (int j = 0; j < size_M; j++) {
+      Position temporal = {i, j};
+      cells[i][j]->setPosition(temporal);
+    }
+  }
+
+
+}
+
+
+void Lattice::aumentarArriba(){
+
+  //crear un vector de celdas muertas
+  std::vector<Cell*> fila;
+
+  //llenar el vector de celdas muertas
+  for (int i = 0; i < size_M; i++) {
+    Position pos = {0, i};
+    fila.push_back(new Cell(pos, 0));
+  }
+
+  //insertar en el principio de cells el vector de celdas muertas
+  cells.insert(cells.begin(), fila);
+
+  //aumentar el valor de size_N
+  size_N++;
+
 }
