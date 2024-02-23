@@ -273,19 +273,25 @@ void Lattice::setCell(const Position& pos, const int& state) {
 }
 
 void Lattice::increaseSize() {
-  aumentarDerecha();
+  //revisar si hay celulas vivas en el borde derecho
+  // for (int i = 0; i < size_M; i++) {
+  //   if (cells[size_N - 1][i]->getState() == 1) {
+  //     aumentarDerecha();
+  //     break;
+  //   }
+  // }
   // std::cout << "SALIDAAAAA" << std::endl;
-  // aumentarIzquierda(const Lattice& lattice);
+  // aumentarIzquierda();
   // aumentarArriba(const Lattice& lattice);
-  // aumentarAbajo(const Lattice& lattice);
+  aumentarAbajo();
 
   return;
 }
 
 void Lattice::aumentarDerecha() {
   // imprimr el contenido de cells
-  std::cout << "Contenido de cells antes de aumentar: " << std::endl;
-  std::cout << *this << std::endl;
+  // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
 
   // aumentar el tamaño de cells
   // for (int i = 0; i < size_M; i++) {
@@ -298,25 +304,53 @@ void Lattice::aumentarDerecha() {
 
   for (int i = 0; i < size_N; i++) {
     Position pos = {0, size_M - 1};
-    cells[0].push_back(new Cell(pos, 0));
-    cells[1].push_back(new Cell(pos, 0));
-    cells[2].push_back(new Cell(pos, 0));
-    cells[3].push_back(new Cell(pos, 0));
-    cells[4].push_back(new Cell(pos, 0));
-    cells[5].push_back(new Cell(pos, 0));
-    cells[6].push_back(new Cell(pos, 0));
-    cells[7].push_back(new Cell(pos, 0));
-    cells[8].push_back(new Cell(pos, 0));
-    cells[9].push_back(new Cell(pos, 0));
-    cells[10].push_back(new Cell(pos, 0));
+    cells[i].push_back(new Cell(pos, 0));
+    // cells[0].push_back(new Cell(pos, 0));
+    // cells[1].push_back(new Cell(pos, 0));
+    // cells[2].push_back(new Cell(pos, 0));
+    // cells[3].push_back(new Cell(pos, 0));
+    // cells[4].push_back(new Cell(pos, 0));
+    // cells[5].push_back(new Cell(pos, 0));
+    // cells[6].push_back(new Cell(pos, 0));
+    // cells[7].push_back(new Cell(pos, 0));
+    // cells[8].push_back(new Cell(pos, 0));
+    // cells[9].push_back(new Cell(pos, 0));
+    // cells[10].push_back(new Cell(pos, 0));
   }
 
 
   // imprimr el contenido de cells
-  std::cout << "Contenido de cells despues de aumentar: " << std::endl;
-  std::cout << *this << std::endl;
+  // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
 
-  std::cout << "SALSA DE MORA" << std::endl;
+  // std::cout << "SALSA DE MORA" << std::endl;
+
+  return;
+}
+
+void Lattice::aumentarAbajo() {
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
+
+  //crear un vector de celdas
+  std::vector<Cell*> fila;
+
+  //llenar en vector de celulas muertas
+  for (int i = 0; i < size_M; i++) {
+    Position pos = {size_N, i};
+    fila.push_back(new Cell(pos, 0));
+  }
+
+  //agregar el vector de celdas muertas a cells
+  cells.push_back(fila);
+
+  //aumentar el valor de size_N
+  size_N++;
+
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
 
   return;
 }
