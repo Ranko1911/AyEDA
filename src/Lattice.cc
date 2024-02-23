@@ -274,31 +274,38 @@ void Lattice::setCell(const Position& pos, const int& state) {
 
 void Lattice::increaseSize() {
   //revisar si hay celulas vivas en el borde derecho
-  // for (int i = 0; i < size_M; i++) {
-  //   if (cells[size_N - 1][i]->getState() == 1) {
-  //     aumentarDerecha();
-  //     break;
-  //   }
-  // }
+  for (int i = 0; i < size_M; i++) {
+    if (cells[size_N - 1][i]->getState() == 1) {
+      aumentarDerecha();
+      break;
+    }
+  }
+  
   // std::cout << "SALIDAAAAA" << std::endl;
   
   //revisar si hay celulas vivas en el borde izquierdo
-  // for (int i = 0; i < size_N; i++) {
-  //   if (cells[i][0]->getState() == 1) {
-  //     aumentarIzquierda();
-  //     break;
-  //   }
-  // }
+  for (int i = 0; i < size_N; i++) {
+    if (cells[i][0]->getState() == 1) {
+      aumentarIzquierda();
+      break;
+    }
+  }
 
-  aumentarArriba();
+  //revisar si hay celulas vivas en el borde superior
+  for (int i = 0; i < size_M; i++) {
+    if (cells[0][i]->getState() == 1) {
+      aumentarArriba();
+      break;
+    }
+  }
 
   //comprobar si hay celulas vivas en el borde inferior
-  // for (int i = 0; i < size_N; i++) {
-  //   if (cells[i][size_M - 1]->getState() == 1) {
-  //     aumentarAbajo();
-  //     break;
-  //   }
-  // }
+  for (int i = 0; i < size_N; i++) {
+    if (cells[i][size_M - 1]->getState() == 1) {
+      aumentarAbajo();
+      break;
+    }
+  }
 
   return;
 }
