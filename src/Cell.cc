@@ -39,7 +39,9 @@ int Cell::nextState(const Lattice& Lattice) {
     for (int j = -1; j <= 1; j++) {
       if (i != 0 && j != 0) {
         Position new_position = {actual.x + i, actual.y + j};
+        // std::cout << "depurar" << std::endl;
         Cell neighbour = Lattice.getCell(new_position);
+        // std::cout << "depurar 2" << std::endl;
         if (neighbour.getState() == 1) {
           alive++;
         } else {
@@ -76,7 +78,7 @@ void Cell::updateState() {
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell) {
   if (cell.getState() == 0) {
-    os << "0";
+    os << " ";
   } else if (cell.getState() == 1) {
     os << "X";
   }

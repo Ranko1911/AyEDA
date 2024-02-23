@@ -10,8 +10,8 @@ struct State;
 
 class Lattice {
  private:
-  int size_N;
-  int size_M;
+  int size_N; // columnas
+  int size_M; // filas
   int b;
   int v = 0;
   std::string file_name = "";
