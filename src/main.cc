@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
 
   int gen = 1;
   while (true) {    
-    std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+    // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
     if(gen = 1){
       if (size_N != 0 || size_M != 0){
         std::cout << "Creating lattice with size: " << size_M << "x" << size_N << std::endl;

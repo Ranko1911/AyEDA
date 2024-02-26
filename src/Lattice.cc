@@ -72,18 +72,18 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
     // std::endl;
     for (int j = lineas[i].size(); j < this->size_M; j++) {
       // std::cout << "Rellenar con 0" << std::endl;
-      lineas[i].push_back('0');
+      lineas[i].push_back(' ');
     }
   }
 
   // imprimir lineas
-  // std::cout << "Contenido de lineas: " << std::endl;
-  // for (int i = 0; i < lineas.size(); i++) {
-  //   for (int j = 0; j < lineas[i].size(); j++) {
-  //     std::cout << lineas[i][j];
-  //   }
-  //   std::cout << std::endl;
-  // }
+  std::cout << "Contenido de lineas: " << std::endl;
+  for (int i = 0; i < lineas.size(); i++) {
+    for (int j = 0; j < lineas[i].size(); j++) {
+      std::cout << lineas[i][j];
+    }
+    std::cout << std::endl;
+  }
 
   // resize de cells para que tenga el mismo tamaño que el archivo
   cells.resize(this->size_N);
@@ -102,11 +102,11 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
       // --- " << "cells[" << i - 2 << "][" << j << "]: " << cells[i - 2][j] <<
       // " --- " << "Pos: " << pos.x << "," << pos.y << std::endl; std::cout <<
       // i - 2 << "," << j << " ";
-      if (lineas[i][j] == '0') {
+      if (lineas[i][j] == ' ') {
         cells[i - 2][j] = new Cell(pos, 0);
         // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i -
         // 2][j] << std::endl;
-      } else if (lineas[i][j] == '1') {
+      } else if (lineas[i][j] == 'X') {
         cells[i - 2][j] = new Cell(pos, 1);
         // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i -
         // 2][j] << std::endl;
@@ -290,18 +290,9 @@ int Lattice::Population() {
 }
 
 void Lattice::saveToFile(const std::string& file_name) {
+  //usar el operador << para imprimir el contenido de cells en un archivo
   std::ofstream archivo(file_name);
-  if (!archivo.is_open()) {
-    std::cerr << "Error al abrir el archivo." << std::endl;
-    return;
-  }
-  Position size = getSize();
-  for (int i = 0; i < size.x; i++) {
-    for (int j = 0; j < size.y; j++) {
-      archivo << cells[i][j]->getState();
-    }
-    archivo << std::endl;
-  }
+  archivo << *this;
   archivo.close();
 }
 
