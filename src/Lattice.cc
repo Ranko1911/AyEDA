@@ -39,22 +39,35 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   //   cells[i].resize(lineas[i].size());
   // }
 
-  this->size_N = lineas.size();
-  this->size_M = 0;
+  //primera linea es las dimensiones
+  std::string dimensiones = lineas[0];
+  std::cout << "dimensiones: " << dimensiones << std::endl;
 
-  // buscar el mayor tamaño de las lineas y asignarlo a size_N
-  for (int i = 0; i < lineas.size(); i++) {
-    if (lineas[i].size() > this->size_M) {
-      this->size_M = lineas[i].size();
-      // std::cout << "Mayor tamaño: " << this->size_M << std::endl;
-    }
-  }
+  //separar el string lineas[1] en dos strings
+  // std::cout << "Lineas[1]:"<< lineas[1] << std::endl;
+  std::string size_N_str = lineas[1].substr(0, lineas[1].find(" "));
+  // std::cout << "size_N_str: " << size_N_str << std::endl;
+  this->size_N = std::stoi(size_N_str);
+  std::string size_M_str = lineas[1].substr(lineas[1].find(" ") + 1);
+  // std::cout << "size_M_str: " << size_M_str << std::endl;
+  this->size_M = std::stoi(size_M_str);
+
+  // this->size_N = lineas.size();
+  // this->size_M = 0;
+
+  // // buscar el mayor tamaño de las lineas y asignarlo a size_N
+  // for (int i = 0; i < lineas.size(); i++) {
+  //   if (lineas[i].size() > this->size_M) {
+  //     this->size_M = lineas[i].size();
+  //     // std::cout << "Mayor tamaño: " << this->size_M << std::endl;
+  //   }
+  // }
 
   std::cout << "size_N: " << this->size_N << " size_M: " << this->size_M
             << std::endl;
 
   // rellenar las lineas que no están completas con celdas vacias
-  for (int i = 0; i < lineas.size(); i++) {
+  for (int i = 2; i < lineas.size(); i++) {
     // std::cout << "lineas[" << i << "].size(): " << lineas[i].size() << std::endl;
     for (int j = lineas[i].size(); j < this->size_M; j++) {
       // std::cout << "Rellenar con 0" << std::endl;
@@ -72,31 +85,43 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   // }
 
   // resize de cells para que tenga el mismo tamaño que el archivo
-  cells.resize(lineas.size());
-  for (int i = 0; i < lineas.size(); i++) {
-    cells[i].resize(lineas[i].size());
+  cells.resize(this->size_N);
+  // std::cout << "cells.size(): " << cells.size() << std::endl;
+  for (int i = 0; i < this->size_N; i++) {
+    cells[i].resize(this->size_M);
+    // std::cout << "cells[" << i << "].size(): " << cells[i].size() << std::endl;
   }
 
   // asignar el estado de las celdas
-  for (int i = 0; i < lineas.size(); i++) {
-    for (int j = 0; j < lineas[i].size(); j++) {
-      Position pos = {i, j};
+  for (int i = 2; i < lineas.size(); i++) {
+    for (int j = 0; j < this->size_M; j++) {
+      Position pos = {i - 2, j};
+      // std::cout << "lineas[" << i << "][" << j << "]: " << lineas[i][j] << " --- " << "cells[" << i - 2 << "][" << j << "]: " << cells[i - 2][j] << " --- " << "Pos: " << pos.x << "," << pos.y << std::endl;  
+      // std::cout << i - 2 << "," << j << " ";
       if (lineas[i][j] == '0') {
-        cells[i][j] = new Cell(pos, 0);
+        cells[i - 2][j] = new Cell(pos, 0);
+        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i - 2][j] << std::endl;
       } else if (lineas[i][j] == '1') {
-        cells[i][j] = new Cell(pos, 1);
+        cells[i - 2][j] = new Cell(pos, 1);
+        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i - 2][j] << std::endl;
       }
+
     }
+      // std::cout << std::endl;    
   }
 
   // imprimir cells
   // std::cout << "Contenido de cells: " << std::endl;
-  // for (int i = 0; i < lineas.size(); i++) {
-  //   for (int j = 0; j < lineas[i].size(); j++) {
+  // for (int i = 0; i < this->size_N; i++) {
+  //   for (int j = 0; j < this->size_M; j++) {
   //     std::cout << *cells[i][j];
   //   }
   //   std::cout << std::endl;
   // }
+  
+  //imprimir this
+  // std::cout << "Contenido de cells: " << std::endl;
+  // std::cout << *this << std::endl;
 }
 
 Lattice::Lattice(const int& b, const int& v, const int& size_N,
