@@ -17,14 +17,18 @@ class Lattice {
   std::string file_name = "";
   std::vector<std::vector<Cell*>> cells;
   int vivas;
-
+  const Cell& getCell(const Position&) const;
+  void setCell(const Position&, const int&); 
+  void aumentarDerecha();
+  void aumentarIzquierda();
+  void aumentarArriba();
+  void aumentarAbajo();
+  
  public:
   Lattice() {}
   Lattice(const int& b, const int& v, const std::string& file_name);
   Lattice(const int& b, const int& v, const int& size_N, const int& size_M);
   ~Lattice();
-  const Cell& getCell(const Position&) const;
-  void setCell(const Position&, const int&);  
   Position getSize() const;
   int getB() const;
   int getV() const;
@@ -34,8 +38,5 @@ class Lattice {
   Cell& operator[](const Position&) const;
   void saveToFile(const std::string& file_name);
   void increaseSize();
-  void aumentarDerecha();
-  void aumentarIzquierda();
-  void aumentarArriba();
-  void aumentarAbajo();
+
 };

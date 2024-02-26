@@ -39,11 +39,11 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   //   cells[i].resize(lineas[i].size());
   // }
 
-  //primera linea es las dimensiones
+  // primera linea es las dimensiones
   std::string dimensiones = lineas[0];
-  std::cout << "dimensiones: " << dimensiones << std::endl;
+  // std::cout << "dimensiones: " << dimensiones << std::endl;
 
-  //separar el string lineas[1] en dos strings
+  // separar el string lineas[1] en dos strings
   // std::cout << "Lineas[1]:"<< lineas[1] << std::endl;
   std::string size_N_str = lineas[1].substr(0, lineas[1].find(" "));
   // std::cout << "size_N_str: " << size_N_str << std::endl;
@@ -63,12 +63,13 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   //   }
   // }
 
-  std::cout << "size_N: " << this->size_N << " size_M: " << this->size_M
-            << std::endl;
+  // std::cout << "size_N: " << this->size_N << " size_M: " << this->size_M
+  //           << std::endl;
 
   // rellenar las lineas que no están completas con celdas vacias
   for (int i = 2; i < lineas.size(); i++) {
-    // std::cout << "lineas[" << i << "].size(): " << lineas[i].size() << std::endl;
+    // std::cout << "lineas[" << i << "].size(): " << lineas[i].size() <<
+    // std::endl;
     for (int j = lineas[i].size(); j < this->size_M; j++) {
       // std::cout << "Rellenar con 0" << std::endl;
       lineas[i].push_back('0');
@@ -89,25 +90,29 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   // std::cout << "cells.size(): " << cells.size() << std::endl;
   for (int i = 0; i < this->size_N; i++) {
     cells[i].resize(this->size_M);
-    // std::cout << "cells[" << i << "].size(): " << cells[i].size() << std::endl;
+    // std::cout << "cells[" << i << "].size(): " << cells[i].size() <<
+    // std::endl;
   }
 
   // asignar el estado de las celdas
   for (int i = 2; i < lineas.size(); i++) {
     for (int j = 0; j < this->size_M; j++) {
       Position pos = {i - 2, j};
-      // std::cout << "lineas[" << i << "][" << j << "]: " << lineas[i][j] << " --- " << "cells[" << i - 2 << "][" << j << "]: " << cells[i - 2][j] << " --- " << "Pos: " << pos.x << "," << pos.y << std::endl;  
-      // std::cout << i - 2 << "," << j << " ";
+      // std::cout << "lineas[" << i << "][" << j << "]: " << lineas[i][j] << "
+      // --- " << "cells[" << i - 2 << "][" << j << "]: " << cells[i - 2][j] <<
+      // " --- " << "Pos: " << pos.x << "," << pos.y << std::endl; std::cout <<
+      // i - 2 << "," << j << " ";
       if (lineas[i][j] == '0') {
         cells[i - 2][j] = new Cell(pos, 0);
-        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i - 2][j] << std::endl;
+        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i -
+        // 2][j] << std::endl;
       } else if (lineas[i][j] == '1') {
         cells[i - 2][j] = new Cell(pos, 1);
-        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i - 2][j] << std::endl;
+        // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i -
+        // 2][j] << std::endl;
       }
-
     }
-      // std::cout << std::endl;    
+    // std::cout << std::endl;
   }
 
   // imprimir cells
@@ -118,8 +123,8 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   //   }
   //   std::cout << std::endl;
   // }
-  
-  //imprimir this
+
+  // imprimir this
   // std::cout << "Contenido de cells: " << std::endl;
   // std::cout << *this << std::endl;
 }
@@ -240,6 +245,8 @@ void Lattice::nextGeneration() {
     }
   }
 
+  // std::cout << "updateState satisfactorio " << std::endl;
+
   // llamar la funcion que modifica el tamaño de la matriz si b vale 2
   if (b == 2) {
     // std::cout << "Aumentar tamaño" << std::endl;
@@ -254,7 +261,9 @@ std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   Position size = lattice.getSize();
   for (int i = 0; i < size.x; i++) {
     for (int j = 0; j < size.y; j++) {
-      os << *lattice.cells[i][j];  // << "(" << i << "," << j << ") "
+      os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
+      // os << "[ " << i << "," << j << " ]";
+      // os << "[" << lattice.cells[i][j]->getPosition().x << "," << lattice.cells[i][j]->getPosition().y << "]";
     }
     os << std::endl;
   }
@@ -262,7 +271,11 @@ std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
 }
 
 Cell& Lattice::operator[](const Position& pos) const {
-  return *cells[pos.x][pos.y];
+  // return *cells[pos.x][pos.y];
+  // return this->getCell(pos);
+
+  // usar el metodo getCell para obtener la celda
+  return *const_cast<Cell*>(&getCell(pos));
 }
 
 int Lattice::Population() {
@@ -298,17 +311,19 @@ void Lattice::setCell(const Position& pos, const int& state) {
 }
 
 void Lattice::increaseSize() {
-  //revisar si hay celulas vivas en el borde derecho
+  // revisar si hay celulas vivas en el borde derecho
+  // aumentarDerecha();
   for (int i = 0; i < size_M; i++) {
     if (cells[size_N - 1][i]->getState() == 1) {
       aumentarDerecha();
       break;
     }
   }
-  
+
   // std::cout << "SALIDAAAAA" << std::endl;
-  
-  //revisar si hay celulas vivas en el borde izquierdo
+
+  // revisar si hay celulas vivas en el borde izquierdo
+  // aumentarIzquierda();
   for (int i = 0; i < size_N; i++) {
     if (cells[i][0]->getState() == 1) {
       aumentarIzquierda();
@@ -316,7 +331,8 @@ void Lattice::increaseSize() {
     }
   }
 
-  //revisar si hay celulas vivas en el borde superior
+  // revisar si hay celulas vivas en el borde superior
+  // aumentarArriba();
   for (int i = 0; i < size_M; i++) {
     if (cells[0][i]->getState() == 1) {
       aumentarArriba();
@@ -324,9 +340,10 @@ void Lattice::increaseSize() {
     }
   }
 
-  //comprobar si hay celulas vivas en el borde inferior
-  for (int i = 0; i < size_N; i++) {
-    if (cells[i][size_M - 1]->getState() == 1) {
+  // comprobar si hay celulas vivas en el borde inferior
+  // aumentarAbajo();
+  for (int i = 0; i < size_M; i++) {
+    if (cells[size_N - 1][i]->getState() == 1) {
       aumentarAbajo();
       break;
     }
@@ -340,31 +357,13 @@ void Lattice::aumentarDerecha() {
   // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
   // std::cout << *this << std::endl;
 
-  // aumentar el tamaño de cells
-  // for (int i = 0; i < size_M; i++) {
-  //   Position pos = {0, i};
-  //   cells[0].push_back(new Cell(pos, 0));
-  // }
-
-  //aumentar el valor de size_M
+  // aumentar el valor de size_M
   size_M++;
 
   for (int i = 0; i < size_N; i++) {
     Position pos = {0, size_M - 1};
     cells[i].push_back(new Cell(pos, 0));
-    // cells[0].push_back(new Cell(pos, 0));
-    // cells[1].push_back(new Cell(pos, 0));
-    // cells[2].push_back(new Cell(pos, 0));
-    // cells[3].push_back(new Cell(pos, 0));
-    // cells[4].push_back(new Cell(pos, 0));
-    // cells[5].push_back(new Cell(pos, 0));
-    // cells[6].push_back(new Cell(pos, 0));
-    // cells[7].push_back(new Cell(pos, 0));
-    // cells[8].push_back(new Cell(pos, 0));
-    // cells[9].push_back(new Cell(pos, 0));
-    // cells[10].push_back(new Cell(pos, 0));
   }
-
 
   // imprimr el contenido de cells
   // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
@@ -380,19 +379,19 @@ void Lattice::aumentarAbajo() {
   // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
   // std::cout << *this << std::endl;
 
-  //crear un vector de celdas
+  // crear un vector de celdas
   std::vector<Cell*> fila;
 
-  //llenar en vector de celulas muertas
+  // llenar en vector de celulas muertas
   for (int i = 0; i < size_M; i++) {
     Position pos = {size_N, i};
     fila.push_back(new Cell(pos, 0));
   }
 
-  //agregar el vector de celdas muertas a cells
+  // agregar el vector de celdas muertas a cells
   cells.push_back(fila);
 
-  //aumentar el valor de size_N
+  // aumentar el valor de size_N
   size_N++;
 
   // imprimr el contenido de cells
@@ -402,49 +401,45 @@ void Lattice::aumentarAbajo() {
   return;
 }
 
-void Lattice::aumentarIzquierda(){
-
-  //-----X--X----X--X--X-X--X--X--
-  //-------------------------X-----
-  //insertar una celula muerta en la primera columna
-  std::cout << "Insertar celdas muertas en la primera columna" << std::endl;
+void Lattice::aumentarIzquierda() {
+  // insertar una celula muerta en la primera columna
+  // std::cout << "Insertar celdas muertas en la primera columna" << std::endl;
   for (int i = 0; i < size_N; i++) {
-    Position pos = {0, i};
+    Cell temp = this->getCell(Position{0, 0});
+    Position pos = {0, temp.getPosition().y - 1};
     cells[i].insert(cells[i].begin(), new Cell(pos, 0));
   }
 
-  //aumentar el valor de size_M
-  std::cout << "Aumentar el valor de size_M" << std::endl;
+  // aumentar el valor de size_M
+  // std::cout << "Aumentar el valor de size_M" << std::endl;
   size_M++;
 
-  //recorre todas las filas y aumenta la coordenada x de cada celda
-  std::cout << "Aumentar la coordenada x de cada celda" << std::endl;
-  for (int i = 0; i < size_N; i++) {
-    for (int j = 0; j < size_M; j++) {
-      Position temporal = {i, j};
-      cells[i][j]->setPosition(temporal);
-    }
-  }
-
-
+  // recorre todas las filas y aumenta la coordenada x de cada celda
+  // std::cout << "Aumentar la coordenada x de cada celda" << std::endl;
+  // for (int i = 0; i < size_N; i++) {
+  //   for (int j = 0; j < size_M; j++) {
+  //     Position temporal = {i, j};
+  //     cells[i][j]->setPosition(temporal);
+  //   }
+  // }
 }
 
+void Lattice::aumentarArriba() {  // hacer lo que dijo el profe de indices
+                                  // negativos
 
-void Lattice::aumentarArriba(){
-
-  //crear un vector de celdas muertas
+  // crear un vector de celdas muertas
   std::vector<Cell*> fila;
 
-  //llenar el vector de celdas muertas
+  // llenar el vector de celdas muertas
   for (int i = 0; i < size_M; i++) {
-    Position pos = {0, i};
+    Cell temp = this->getCell(Position{0, 0});
+    Position pos = {temp.getPosition().x - 1, i};
     fila.push_back(new Cell(pos, 0));
   }
 
-  //insertar en el principio de cells el vector de celdas muertas
+  // insertar en el principio de cells el vector de celdas muertas
   cells.insert(cells.begin(), fila);
 
-  //aumentar el valor de size_N
+  // aumentar el valor de size_N
   size_N++;
-
 }

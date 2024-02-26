@@ -113,17 +113,15 @@ int main(int argc, char** argv) {
     std::cout << "Error: Both file and size are defined" << std::endl;
     return 1;
 
-  } else if (size_N != 0 || size_M != 0) {  // si size está definido, crear un
-                                            // lattice con el tamaño dado
-    std::cout << "Creating lattice with size: " << size_M << "x" << size_N
-              << std::endl;
+  } else if (size_N != 0 || size_M != 0) {  // si size está definido, crear un lattice con el tamaño dado
+    // std::cout << "Creating lattice with size: " << size_M << "x" << size_N << std::endl;
     lattice_ptr = new Lattice(b, v, size_N, size_M);
-    std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
 
   } else if (file_name != "") {
-    std::cout << "Creating lattice with file: " << file_name << std::endl;
+    // std::cout << "Creating lattice with file: " << file_name << std::endl;
     lattice_ptr = new Lattice(b, v, file_name);
-    std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
   } else {
     std::cout << "Error: No size or file defined" << std::endl;
     return 1;
@@ -132,31 +130,27 @@ int main(int argc, char** argv) {
   char option = ' ';
   bool c = false;
 
-  // SetCellAlive(lattice_ptr, b);
+  int gen = 1;
+  while (true) {    
+    std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+    if(gen = 1){
+      if (size_N != 0 || size_M != 0){
+        std::cout << "Creating lattice with size: " << size_M << "x" << size_N << std::endl;
+        std::cout << "Contenido del lattice:\n" <<*lattice_ptr << std::endl;
+      }else if (file_name != "") {
+        std::cout << "Creating lattice with file: " << file_name << std::endl;
+        std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+      }
 
-  // char option = ' ';
-  // if (size_M != 0 || size_N != 0) {  // preguntar que celdas poner en estado
-  // 1
-  //   std::cout << "¿Desea poner alguna celda en estado 1? (s/n)" << std::endl;
-  //   std::cin >> option;
-  //   if (option == 's') {
-  //     std::cout << "Intrduzca cuantas celdas desea poner en estado 1: ";
-  //     int n;
-  //     std::cin >> n;
-  //     for (int i = 0; i < n; i++) {
-  //       int x, y;
-  //       std::cout << "Introduzca la coordenada x: ";
-  //       std::cin >> x;
-  //       std::cout << "Introduzca la coordenada y: ";
-  //       std::cin >> y;
-  //       Position pos = {x, y};
-  //       lattice_ptr->setCell(pos, 1);
-  //     }
-  //   }
-  // }
-
-  while (true) {
+    }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+
+    std::cout << "Dimensiones: " << lattice_ptr->getSize().x << "x" << lattice_ptr->getSize().y << std::endl;
+    if(c == false){
+      std::cout << "Mode: Print Lattice" << std::endl;
+    }else {
+      std::cout << "Mode: Print Population" << std::endl;
+    }
     PrintOptions();
     std::cin >> option;
     switch (option) {
@@ -168,11 +162,13 @@ int main(int argc, char** argv) {
           // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular y mostrar la siguiente generacion
+        // std::cout << "Calcular y mostrar la siguiente generacion" << std::endl;
         lattice_ptr->nextGeneration();
+        // std::cout << "Acierto despues de nextGeneration" << std::endl;
         if (c == false) {
-          std::cout << "Generation: " << std::endl;
+          std::cout << "Generation: " << gen << std::endl;
           std::cout << *lattice_ptr << std::endl;
-          std::cout << "despues de nextGeneration" << std::endl;
+          // std::cout << "despues de nextGeneration" << std::endl;
         } else {
           std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
         }
@@ -215,6 +211,7 @@ int main(int argc, char** argv) {
         std::cout << "Opcion no valida" << std::endl;
         break;
     }
+    gen++;
   }
 
   lattice_ptr = nullptr;
