@@ -7,6 +7,8 @@
 #include "Cell.h"
 #include "Lattice.h"
 
+//estructura de codificacion de Martin Fowler -> apache maven
+
 // Opcion periodica: ./programa -size 10 10 -b periodic
 // Opcion open frontera caliente: ./programa -size 5 5 -b open 1
 // Opcion open frontera fria: ./programa -size 5 5 -b open 0

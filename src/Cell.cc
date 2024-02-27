@@ -20,16 +20,25 @@ void Cell::setPosition(const Position& position) { this->position = position; }
 
 int Cell::nextState(const Lattice& Lattice) {
 
-  // crar a los 8 vecinos
-  Cell Neightbour1 = Lattice[Position{getPosition().x - 1, getPosition().y - 1}];
-  Cell Neightbour2 = Lattice[Position{getPosition().x - 1, getPosition().y}];
-  Cell Neightbour3 = Lattice[Position{getPosition().x - 1, getPosition().y + 1}];
-  Cell Neightbour4 = Lattice[Position{getPosition().x, getPosition().y - 1}];
-  Cell Neightbour5 = Lattice[Position{getPosition().x, getPosition().y + 1}];
-  Cell Neightbour6 = Lattice[Position{getPosition().x + 1, getPosition().y - 1}];
-  Cell Neightbour7 = Lattice[Position{getPosition().x + 1, getPosition().y}];
-  Cell Neightbour8 = Lattice[Position{getPosition().x + 1, getPosition().y + 1}];
+  // crar a los 8 vecinos, vecinos original
+  // Cell Neightbour1 = Lattice[Position{getPosition().x - 1, getPosition().y - 1}];
+  // Cell Neightbour2 = Lattice[Position{getPosition().x - 1, getPosition().y}];
+  // Cell Neightbour3 = Lattice[Position{getPosition().x - 1, getPosition().y + 1}];
+  // Cell Neightbour4 = Lattice[Position{getPosition().x, getPosition().y - 1}];
+  // Cell Neightbour5 = Lattice[Position{getPosition().x, getPosition().y + 1}];
+  // Cell Neightbour6 = Lattice[Position{getPosition().x + 1, getPosition().y - 1}];
+  // Cell Neightbour7 = Lattice[Position{getPosition().x + 1, getPosition().y}];
+  // Cell Neightbour8 = Lattice[Position{getPosition().x + 1, getPosition().y + 1}];
 
+  // vecinos de la modificacion
+  Cell Neightbour1 = Lattice[Position{getPosition().x - 1, getPosition().y - 1}]; //done
+  Cell Neightbour2 = Lattice[Position{getPosition().x - 2, getPosition().y}];  //done 
+  Cell Neightbour3 = Lattice[Position{getPosition().x - 2, getPosition().y + 1}]; //done
+  Cell Neightbour4 = Lattice[Position{getPosition().x, getPosition().y + 2}]; //done 
+  Cell Neightbour5 = Lattice[Position{getPosition().x + 1, getPosition().y + 1}]; //done 
+  Cell Neightbour6 = Lattice[Position{getPosition().x + 1, getPosition().y}]; //done
+  Cell Neightbour7 = Lattice[Position{getPosition().x + 1, getPosition().y - 1}];  //done
+  Cell Neightbour8 = Lattice[Position{getPosition().x, getPosition().y - 2}]; //done
   //colocar el calculo de la siguiente generacion
   int alive = Neightbour1.getState() + Neightbour2.getState() + Neightbour3.getState() + Neightbour4.getState() + Neightbour5.getState() + Neightbour6.getState() + Neightbour7.getState() + Neightbour8.getState();
 
