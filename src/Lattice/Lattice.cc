@@ -1,6 +1,6 @@
 #include "Lattice.h"
 
-#include "Cell.h"
+#include "../cell/Cell.h"
 
 Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   this->b = b;
@@ -33,12 +33,6 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   // }
   // std::cout << std::endl;
 
-  // // resize de cells para que tenga el mismo tamaño que el archivo
-  // cells.resize(lineas.size());
-  // for (int i = 0; i < lineas.size(); i++) {
-  //   cells[i].resize(lineas[i].size());
-  // }
-
   // primera linea es las dimensiones
   std::string dimensiones = lineas[0];
   // std::cout << "dimensiones: " << dimensiones << std::endl;
@@ -51,17 +45,6 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   std::string size_M_str = lineas[1].substr(lineas[1].find(" ") + 1);
   // std::cout << "size_M_str: " << size_M_str << std::endl;
   this->size_M = std::stoi(size_M_str);
-
-  // this->size_N = lineas.size();
-  // this->size_M = 0;
-
-  // // buscar el mayor tamaño de las lineas y asignarlo a size_N
-  // for (int i = 0; i < lineas.size(); i++) {
-  //   if (lineas[i].size() > this->size_M) {
-  //     this->size_M = lineas[i].size();
-  //     // std::cout << "Mayor tamaño: " << this->size_M << std::endl;
-  //   }
-  // }
 
   // std::cout << "size_N: " << this->size_N << " size_M: " << this->size_M
   //           << std::endl;
@@ -114,15 +97,6 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
     }
     // std::cout << std::endl;
   }
-
-  // imprimir cells
-  // std::cout << "Contenido de cells: " << std::endl;
-  // for (int i = 0; i < this->size_N; i++) {
-  //   for (int j = 0; j < this->size_M; j++) {
-  //     std::cout << *cells[i][j];
-  //   }
-  //   std::cout << std::endl;
-  // }
 
   // imprimir this
   // std::cout << "Contenido de cells: " << std::endl;

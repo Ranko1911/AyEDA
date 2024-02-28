@@ -4,8 +4,8 @@
 #include <string>
 #include <thread>  // sleep_for
 
-#include "Cell.h"
-#include "Lattice.h"
+#include "cell/Cell.h"
+#include "Lattice/Lattice.h"
 
 //estructura de codificacion de Martin Fowler -> apache maven
 
