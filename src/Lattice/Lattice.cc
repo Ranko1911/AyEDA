@@ -60,13 +60,13 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   }
 
   // imprimir lineas
-  std::cout << "Contenido de lineas: " << std::endl;
-  for (int i = 0; i < lineas.size(); i++) {
-    for (int j = 0; j < lineas[i].size(); j++) {
-      std::cout << lineas[i][j];
-    }
-    std::cout << std::endl;
-  }
+  // std::cout << "Contenido de lineas: " << std::endl;
+  // for (int i = 0; i < lineas.size(); i++) {
+  //   for (int j = 0; j < lineas[i].size(); j++) {
+  //     std::cout << lineas[i][j];
+  //   }
+  //   std::cout << std::endl;
+  // }
 
   // resize de cells para que tenga el mismo tamaño que el archivo
   cells.resize(this->size_N);
@@ -94,6 +94,8 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
         // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i -
         // 2][j] << std::endl;
       }
+      // std::cout << "cells[" << i - 2 << "][" << j << "]: " << *cells[i - 2][j]
+      //           << std::endl;
     }
     // std::cout << std::endl;
   }
@@ -151,39 +153,39 @@ const Cell& Lattice::getCell(const PositionDim<2>& x) const {
 
   // codigo de las diferentes fronteras
   if (b == 1) {  // frontera peridica b = 1
-    if (temporal[0] < 0) {
-      temporal[0] = size_N - 1;
-    } else if (temporal[0] >= size_N) {
-      temporal[0] = 0;
-    }
     if (temporal[1] < 0) {
-      temporal[1] = size_M - 1;
-    } else if (temporal[1] >= size_M) {
+      temporal[1] = size_N - 1;
+    } else if (temporal[1] >= size_N) {
       temporal[1] = 0;
     }
+    if (temporal[0] < 0) {
+      temporal[0] = size_M - 1;
+    } else if (temporal[0] >= size_M) {
+      temporal[0] = 0;
+    }
   } else if (b == 0 && v == 0) {  // frontera abierta fria b = 0 v = 0
-    if (temporal[0] < 0 || temporal[0] >= size_N || temporal[1] < 0 ||
-        temporal[1] >= size_M) {
+    if (temporal[1] < 0 || temporal[1] >= size_N || temporal[0] < 0 ||
+        temporal[0] >= size_M) {
       return *MUERTA;
     }
   } else if (b == 0 && v == 1) {  // frontera abierta caliente b = 0 v = 1
-    if (temporal[0] < 0 || temporal[0] >= size_N || temporal[1] < 0 ||
-        temporal[1] >= size_M) {
+    if (temporal[1] < 0 || temporal[1] >= size_N || temporal[0] < 0 ||
+        temporal[0] >= size_M) {
       return *VIVA;
     }
   } else if (b == 2) {  // frontera dinamica b = 2
-    if (temporal[0] < 0) {
-      return *MUERTA;
-    } else if (temporal[0] >= size_N) {
-      return *MUERTA;
-    }
     if (temporal[1] < 0) {
       return *MUERTA;
-    } else if (temporal[1] >= size_M) {
+    } else if (temporal[1] >= size_N) {
+      return *MUERTA;
+    }
+    if (temporal[0] < 0) {
+      return *MUERTA;
+    } else if (temporal[0] >= size_M) {
       return *MUERTA;
     }
   }
-  return *cells[temporal[0]][temporal[1]];
+  return *cells[temporal[1]][temporal[0]];
 }
 
 PositionDim<2> Lattice::getSize() const {
@@ -199,30 +201,33 @@ void Lattice::nextGeneration() {
   // std::cout << "nextGeneration" << std::endl;
   PositionDim<2> size = getSize();
   // std::cout << "Size: " << size.x << "x" << size.y << std::endl;
+  std::cout << "Size: " << size[1] << "x" << size[0] << std::endl; // filas x columnas
   vivas = Population();
   // std::cout << "Poblacion: " << vivas << std::endl;
 
+  std::cout << "Pre - nextState  " << std::endl;
+
   // calcular el siguiente estado de todas las celdas
-  for (int i = 0; i < size[0]; i++) {
-    for (int j = 0; j < size[1]; j++) {
+  for (int i = 0; i < size[1]; i++) {
+    for (int j = 0; j < size[0]; j++) {
       cells[i][j]->nextState(*this);
     }
   }
 
-  // std::cout << "nextState satisfactorio " << std::endl;
+  std::cout << "nextState satisfactorio " << std::endl;
 
   // actualizar todas las celdas
-  for (int i = 0; i < size[0]; i++) {
-    for (int j = 0; j < size[1]; j++) {
+  for (int i = 0; i < size[1]; i++) {
+    for (int j = 0; j < size[0]; j++) {
       cells[i][j]->updateState();
     }
   }
 
-  // std::cout << "updateState satisfactorio " << std::endl;
+  std::cout << "updateState satisfactorio " << std::endl;
 
   // llamar la funcion que modifica el tamaño de la matriz si b vale 2
   if (b == 2) {
-    // std::cout << "Aumentar tamaño" << std::endl;
+    std::cout << "Aumentar tamaño" << std::endl;
     increaseSize();
   }
 
@@ -232,11 +237,12 @@ void Lattice::nextGeneration() {
 std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   // limpiar la pantalla aqui o en el main?
   PositionDim<2> size = lattice.getSize();
-  for (int i = 0; i < size[0]; i++) {
-    for (int j = 0; j < size[1]; j++) {
-      os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
+  for (int i = 0; i < size[1]; i++) {
+    for (int j = 0; j < size[0]; j++) {
+      os << *lattice.cells[i][j];  // << "(" << i << "," << j << ") "
       // os << "[ " << i << "," << j << " ]";
-      // os << "[" << lattice.cells[i][j]->getPosition().x << "," << lattice.cells[i][j]->getPosition().y << "]";
+      // os << "[" << lattice.cells[i][j]->getPosition().x << "," <<
+      // lattice.cells[i][j]->getPosition().y << "]";
     }
     os << std::endl;
   }
@@ -254,8 +260,8 @@ Cell& Lattice::operator[](const PositionDim<2>& pos) const {
 int Lattice::Population() {
   int population = 0;
   PositionDim<2> size = getSize();
-  for (int i = 0; i < size[0]; i++) {
-    for (int j = 0; j < size[1]; j++) {
+  for (int i = 0; i < size[1]; i++) {
+    for (int j = 0; j < size[0]; j++) {
       population += cells[i][j]->getState();
     }
   }
@@ -263,7 +269,7 @@ int Lattice::Population() {
 }
 
 void Lattice::saveToFile(const std::string& file_name) {
-  //usar el operador << para imprimir el contenido de cells en un archivo
+  // usar el operador << para imprimir el contenido de cells en un archivo
   std::ofstream archivo(file_name);
   archivo << *this;
   archivo.close();

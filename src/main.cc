@@ -132,6 +132,10 @@ int main(int argc, char** argv) {
   char option = ' ';
   bool c = false;
 
+  // PositionDim<2> p(1, 2);
+  // std::cout << "p[0]: " << p[0] << std::endl;
+  // std::cout << "p[1]: " << p[1] << std::endl;
+
   int gen = 1;
   while (true) {    
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
@@ -147,7 +151,7 @@ int main(int argc, char** argv) {
     }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
-    std::cout << "Dimensiones: " << lattice_ptr->getSize().x << "x" << lattice_ptr->getSize().y << std::endl;
+    std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x" << lattice_ptr->getSize()[0] << std::endl; // filas x columnas
     if(c == false){
       std::cout << "Mode: Print Lattice" << std::endl;
     }else {
