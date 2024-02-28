@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../Position/Position.h"
+
 class Cell;
 // struct Position;
 class Position;
@@ -18,8 +20,9 @@ class Lattice {
   std::string file_name = "";
   std::vector<std::vector<Cell*>> cells;
   int vivas;
-  const Cell& getCell(const Position&) const;
-  void setCell(const Position&, const int&); 
+  // const Cell& getCell(const PositionDim<2>&) const;
+  const Cell& getCell(const PositionDim<2>&) const;
+  void setCell(const PositionDim<2>&, const int&); 
   void aumentarDerecha();
   void aumentarIzquierda();
   void aumentarArriba();
@@ -30,13 +33,13 @@ class Lattice {
   Lattice(const int& b, const int& v, const std::string& file_name);
   Lattice(const int& b, const int& v, const int& size_N, const int& size_M);
   ~Lattice();
-  Position getSize() const;
+  PositionDim<2> getSize() const;
   int getB() const;
   int getV() const;
   void nextGeneration();
   int Population();  
   friend std::ostream& operator<<(std::ostream&, const Lattice&);
-  Cell& operator[](const Position&) const;
+  Cell& operator[](const PositionDim<2>&) const;
   void saveToFile(const std::string& file_name);
   void increaseSize();
 

@@ -25,6 +25,4 @@ $(SRC_DIR)/main.o: $(SRC_DIR)/main.cc
 	$(CXX) $(CXXFLAGS) -c $(SRC_DIR)/main.cc -o $(SRC_DIR)/main.o
 
 clean:
-	# rm -f $(SRC_DIR)/*.o programa
-	# rm -f $(SRC_DIR)/cell/*.o $(SRC_DIR)/Lattice/*.o $(SRC_DIR)/*.o programa $(SRC_DIR)/FactoryCell/*.o $(SRC_DIR)/Position/*.o
 	rm -f $(SRC_DIR)/*/*.o $(SRC_DIR)/*.o programa

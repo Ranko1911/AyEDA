@@ -80,7 +80,7 @@ Lattice::Lattice(const int& b, const int& v, const std::string& file_name) {
   // asignar el estado de las celdas
   for (int i = 2; i < lineas.size(); i++) {
     for (int j = 0; j < this->size_M; j++) {
-      Position pos = {i - 2, j};
+      PositionDim<2> pos = {i - 2, j};
       // std::cout << "lineas[" << i << "][" << j << "]: " << lineas[i][j] << "
       // --- " << "cells[" << i - 2 << "][" << j << "]: " << cells[i - 2][j] <<
       // " --- " << "Pos: " << pos.x << "," << pos.y << std::endl; std::cout <<
@@ -114,7 +114,7 @@ Lattice::Lattice(const int& b, const int& v, const int& size_N,
   // dos bucles que ponen todas las Cell en valor 0
   for (int i = 0; i < size_M; i++) {
     for (int j = 0; j < size_N; j++) {
-      Position pos = {i, j};
+      PositionDim<2> pos = {i, j};
       // std::cout << "pos: " << pos.x << "," << pos.y << std::endl;
       cells[i].push_back(new Cell(pos, 0));
       // std::cout << "celda: " << cells[i][j] << std::endl;
@@ -129,7 +129,7 @@ Lattice::Lattice(const int& b, const int& v, const int& size_N,
     std::cin >> x;
     std::cout << "Introduzca la coordenada y: ";
     std::cin >> y;
-    Position pos = {x, y};
+    PositionDim<2> pos = {x, y};
     this->setCell(pos, 1);
   }
 }
@@ -143,52 +143,51 @@ Lattice::~Lattice() {
   cells.clear();
 }
 
-const Cell& Lattice::getCell(const Position& x) const {
-  //  return *cells[x];
-  Position temporal = {x.x, x.y};  // x, y
+const Cell& Lattice::getCell(const PositionDim<2>& x) const {
+  // PositionDim<2> temporal = x;
+  PositionDim<2> temporal = x;
   Cell* VIVA = new Cell(temporal, 1);
   Cell* MUERTA = new Cell(temporal, 0);
 
   // codigo de las diferentes fronteras
   if (b == 1) {  // frontera peridica b = 1
-    if (temporal.x < 0) {
-      temporal.x = size_N - 1;
-    } else if (temporal.x >= size_N) {
-      temporal.x = 0;
+    if (temporal[0] < 0) {
+      temporal[0] = size_N - 1;
+    } else if (temporal[0] >= size_N) {
+      temporal[0] = 0;
     }
-    if (temporal.y < 0) {
-      temporal.y = size_M - 1;
-    } else if (temporal.y >= size_M) {
-      temporal.y = 0;
+    if (temporal[1] < 0) {
+      temporal[1] = size_M - 1;
+    } else if (temporal[1] >= size_M) {
+      temporal[1] = 0;
     }
   } else if (b == 0 && v == 0) {  // frontera abierta fria b = 0 v = 0
-    if (temporal.x < 0 || temporal.x >= size_N || temporal.y < 0 ||
-        temporal.y >= size_M) {
+    if (temporal[0] < 0 || temporal[0] >= size_N || temporal[1] < 0 ||
+        temporal[1] >= size_M) {
       return *MUERTA;
     }
   } else if (b == 0 && v == 1) {  // frontera abierta caliente b = 0 v = 1
-    if (temporal.x < 0 || temporal.x >= size_N || temporal.y < 0 ||
-        temporal.y >= size_M) {
+    if (temporal[0] < 0 || temporal[0] >= size_N || temporal[1] < 0 ||
+        temporal[1] >= size_M) {
       return *VIVA;
     }
   } else if (b == 2) {  // frontera dinamica b = 2
-    if (temporal.x < 0) {
+    if (temporal[0] < 0) {
       return *MUERTA;
-    } else if (temporal.x >= size_N) {
+    } else if (temporal[0] >= size_N) {
       return *MUERTA;
     }
-    if (temporal.y < 0) {
+    if (temporal[1] < 0) {
       return *MUERTA;
-    } else if (temporal.y >= size_M) {
+    } else if (temporal[1] >= size_M) {
       return *MUERTA;
     }
   }
-
-  return *cells[temporal.x][temporal.y];
+  return *cells[temporal[0]][temporal[1]];
 }
 
-Position Lattice::getSize() const {
-  Position size = {size_N, size_M};
+PositionDim<2> Lattice::getSize() const {
+  PositionDim<2> size = {size_N, size_M};
   return size;
 }
 
@@ -198,14 +197,14 @@ int Lattice::getV() const { return this->v; }
 
 void Lattice::nextGeneration() {
   // std::cout << "nextGeneration" << std::endl;
-  Position size = getSize();
+  PositionDim<2> size = getSize();
   // std::cout << "Size: " << size.x << "x" << size.y << std::endl;
   vivas = Population();
   // std::cout << "Poblacion: " << vivas << std::endl;
 
   // calcular el siguiente estado de todas las celdas
-  for (int i = 0; i < size.x; i++) {
-    for (int j = 0; j < size.y; j++) {
+  for (int i = 0; i < size[0]; i++) {
+    for (int j = 0; j < size[1]; j++) {
       cells[i][j]->nextState(*this);
     }
   }
@@ -213,8 +212,8 @@ void Lattice::nextGeneration() {
   // std::cout << "nextState satisfactorio " << std::endl;
 
   // actualizar todas las celdas
-  for (int i = 0; i < size.x; i++) {
-    for (int j = 0; j < size.y; j++) {
+  for (int i = 0; i < size[0]; i++) {
+    for (int j = 0; j < size[1]; j++) {
       cells[i][j]->updateState();
     }
   }
@@ -232,9 +231,9 @@ void Lattice::nextGeneration() {
 
 std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   // limpiar la pantalla aqui o en el main?
-  Position size = lattice.getSize();
-  for (int i = 0; i < size.x; i++) {
-    for (int j = 0; j < size.y; j++) {
+  PositionDim<2> size = lattice.getSize();
+  for (int i = 0; i < size[0]; i++) {
+    for (int j = 0; j < size[1]; j++) {
       os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
       // os << "[ " << i << "," << j << " ]";
       // os << "[" << lattice.cells[i][j]->getPosition().x << "," << lattice.cells[i][j]->getPosition().y << "]";
@@ -244,7 +243,7 @@ std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
   return os;
 }
 
-Cell& Lattice::operator[](const Position& pos) const {
+Cell& Lattice::operator[](const PositionDim<2>& pos) const {
   // return *cells[pos.x][pos.y];
   // return this->getCell(pos);
 
@@ -254,9 +253,9 @@ Cell& Lattice::operator[](const Position& pos) const {
 
 int Lattice::Population() {
   int population = 0;
-  Position size = getSize();
-  for (int i = 0; i < size.x; i++) {
-    for (int j = 0; j < size.y; j++) {
+  PositionDim<2> size = getSize();
+  for (int i = 0; i < size[0]; i++) {
+    for (int j = 0; j < size[1]; j++) {
       population += cells[i][j]->getState();
     }
   }
@@ -270,8 +269,8 @@ void Lattice::saveToFile(const std::string& file_name) {
   archivo.close();
 }
 
-void Lattice::setCell(const Position& pos, const int& state) {
-  cells[pos.x][pos.y]->setState(state);
+void Lattice::setCell(const PositionDim<2>& pos, const int& state) {
+  cells[pos[0]][pos[1]]->setState(state);
   return;
 }
 
@@ -326,7 +325,7 @@ void Lattice::aumentarDerecha() {
   size_M++;
 
   for (int i = 0; i < size_N; i++) {
-    Position pos = {0, size_M - 1};
+    PositionDim<2> pos = {0, size_M - 1};
     cells[i].push_back(new Cell(pos, 0));
   }
 
@@ -349,7 +348,7 @@ void Lattice::aumentarAbajo() {
 
   // llenar en vector de celulas muertas
   for (int i = 0; i < size_M; i++) {
-    Position pos = {size_N, i};
+    PositionDim<2> pos = {size_N, i};
     fila.push_back(new Cell(pos, 0));
   }
 
@@ -370,8 +369,8 @@ void Lattice::aumentarIzquierda() {
   // insertar una celula muerta en la primera columna
   // std::cout << "Insertar celdas muertas en la primera columna" << std::endl;
   for (int i = 0; i < size_N; i++) {
-    Cell temp = this->getCell(Position{0, 0});
-    Position pos = {0, temp.getPosition().y - 1};
+    Cell temp = this->getCell(PositionDim<2>{0, 0});
+    PositionDim<2> pos = {0, temp.getPosition()[1] - 1};
     cells[i].insert(cells[i].begin(), new Cell(pos, 0));
   }
 
@@ -397,8 +396,8 @@ void Lattice::aumentarArriba() {  // hacer lo que dijo el profe de indices
 
   // llenar el vector de celdas muertas
   for (int i = 0; i < size_M; i++) {
-    Cell temp = this->getCell(Position{0, 0});
-    Position pos = {temp.getPosition().x - 1, i};
+    Cell temp = this->getCell(PositionDim<2>{0, 0});
+    PositionDim<2> pos = {temp.getPosition()[0] - 1, i};
     fila.push_back(new Cell(pos, 0));
   }
 
