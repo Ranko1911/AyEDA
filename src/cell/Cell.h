@@ -4,7 +4,7 @@
 #include "../Lattice/Lattice.h"
 #include "../Position/Position.h"
 
-// Modifica Cell para ser una clase plantilla
+// Cell clase plantilla
 template <typename PositionType>
 class Cell {
 protected:
