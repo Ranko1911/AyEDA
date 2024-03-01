@@ -5,8 +5,9 @@
 #include <iostream>
 #include <vector>
 
-class Cell;
-class Position;
+#include "../cell/Cell.h"
+#include "../Position/Position.h"
+// class Position;
 
 
 //clase abstracta Lattice
