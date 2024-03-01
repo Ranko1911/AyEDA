@@ -5,14 +5,13 @@
 #include <iostream>
 #include <string>
 
-#include "../Lattice/Lattice.h"
 
 typedef int Coor_t;
 
 class Position {
  public:
   // int x;
-  // int y;
+  int y;
   virtual Coor_t operator[](unsigned int) const = 0;
 };
 

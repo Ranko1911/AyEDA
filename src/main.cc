@@ -4,10 +4,10 @@
 #include <string>
 #include <thread>  // sleep_for
 
-#include "cell/Cell.h"
 #include "Lattice/Lattice.h"
+#include "cell/Cell.h"
 
-//estructura de codificacion de Martin Fowler -> apache maven
+// estructura de codificacion de Martin Fowler -> apache maven
 
 // Opcion periodica: ./programa -size 10 10 -b periodic
 // Opcion open frontera caliente: ./programa -size 5 5 -b open 1
@@ -31,6 +31,18 @@ void PrintOptions() {
                "solo muestran la población de la generación. Toogle on/off."
             << std::endl;
   std::cout << "s: guarda la generacion en un archivo." << std::endl;
+}
+
+int TooMuchArguments(std::string file_name, int size_N, int size_M) {
+  if (file_name != "" && (size_N != 0 || size_M != 0)) {
+    std::cout << "Error: Both file and size are defined" << std::endl;
+    return 1;
+
+  } else {
+    std::cout << "Error: No size or file defined" << std::endl;
+    return 1;
+  }
+  return 0;
 }
 
 void ArgumentsFunction(int argc, char** argv, std::string& file_name,
@@ -100,6 +112,7 @@ int main(int argc, char** argv) {
     std::cout << "No arguments" << std::endl;
     return 1;
   }
+
   std::string file_name = "";
   int size_N = 0;  // numero de columnas
   int size_M = 0;  // numero de filas
@@ -110,13 +123,14 @@ int main(int argc, char** argv) {
 
   Lattice* lattice_ptr = nullptr;
 
-  // comprobar que size y file_name no estén definidos a la vez
-  if (file_name != "" && (size_N != 0 || size_M != 0)) {
-    std::cout << "Error: Both file and size are defined" << std::endl;
+  if (TooMuchArguments(file_name, size_N, size_M) == 1) {
     return 1;
+  }
 
-  } else if (size_N != 0 || size_M != 0) {  // si size está definido, crear un lattice con el tamaño dado
-    // std::cout << "Creating lattice with size: " << size_M << "x" << size_N << std::endl;
+  // comprobar que size y file_name no estén definidos a la vez
+  if (size_N != 0 || size_M != 0) {  // si size está definido, crear un lattice con el tamaño dado
+    // std::cout << "Creating lattice with size: " << size_M << "x" << size_N <<
+    // std::endl;
     lattice_ptr = new Lattice(b, v, size_N, size_M);
     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
 
@@ -124,9 +138,6 @@ int main(int argc, char** argv) {
     // std::cout << "Creating lattice with file: " << file_name << std::endl;
     lattice_ptr = new Lattice(b, v, file_name);
     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
-  } else {
-    std::cout << "Error: No size or file defined" << std::endl;
-    return 1;
   }
 
   char option = ' ';
@@ -137,24 +148,25 @@ int main(int argc, char** argv) {
   // std::cout << "p[1]: " << p[1] << std::endl;
 
   int gen = 1;
-  while (true) {    
+  while (true) {
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
-    if(gen = 1){
-      if (size_N != 0 || size_M != 0){
-        std::cout << "Creating lattice with size: " << size_M << "x" << size_N << std::endl;
-        std::cout << "Contenido del lattice:\n" <<*lattice_ptr << std::endl;
-      }else if (file_name != "") {
+    if (gen = 1) {
+      if (size_N != 0 || size_M != 0) {
+        std::cout << "Creating lattice with size: " << size_M << "x" << size_N
+                  << std::endl;
+        std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+      } else if (file_name != "") {
         std::cout << "Creating lattice with file: " << file_name << std::endl;
         std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
       }
-
     }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
-    std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x" << lattice_ptr->getSize()[0] << std::endl; // filas x columnas
-    if(c == false){
+    std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x"
+              << lattice_ptr->getSize()[0] << std::endl;  // filas x columnas
+    if (c == false) {
       std::cout << "Mode: Print Lattice" << std::endl;
-    }else {
+    } else {
       std::cout << "Mode: Print Population" << std::endl;
     }
     PrintOptions();
@@ -165,10 +177,11 @@ int main(int argc, char** argv) {
         return 0;
         break;
       case 'n':
-          // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+        // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular y mostrar la siguiente generacion
-        // std::cout << "Calcular y mostrar la siguiente generacion" << std::endl;
+        // std::cout << "Calcular y mostrar la siguiente generacion" <<
+        // std::endl;
         lattice_ptr->nextGeneration();
         // std::cout << "Acierto despues de nextGeneration" << std::endl;
         if (c == false) {
@@ -181,7 +194,7 @@ int main(int argc, char** argv) {
 
         break;
       case 'L':
-          // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
+        // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular las siguientes 5 generaciones y mostrarlas
         for (int i = 0; i < 5; i++) {
