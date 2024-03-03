@@ -3,8 +3,12 @@
 #include <iostream>
 #include <string>
 #include <thread>  // sleep_for
+#include <vector>
 
 #include "Lattice/Lattice.h"
+#include "Lattice/Lattice1D.h"
+#include "Lattice/Lattice2D.h"
+#include "Position/Position.h"
 #include "cell/Cell.h"
 
 // estructura de codificacion de Martin Fowler -> apache maven
@@ -33,8 +37,8 @@ void PrintOptions() {
   std::cout << "s: guarda la generacion en un archivo." << std::endl;
 }
 
-int TooMuchArguments(std::string file_name, int size_N, int size_M) {
-  if (file_name != "" && (size_N != 0 || size_M != 0)) {
+int TooMuchArguments(std::string file_name, std::vector<int> size) {
+  if (file_name != "" && size.size() != 0) {
     std::cout << "Error: Both file and size are defined" << std::endl;
     return 1;
 
@@ -46,13 +50,24 @@ int TooMuchArguments(std::string file_name, int size_N, int size_M) {
 }
 
 void ArgumentsFunction(int argc, char** argv, std::string& file_name,
-                       int& size_N, int& size_M, int& b, int& v) {
+                       std::vector<int>& size, int& b, int& v, int& c,
+                       int& dim) {
   for (int i = 1; i < argc; i++) {
     std::string arg = argv[i];
     if (arg == "-h" || arg == "--help") {
-      std::cout << "Usage: " << argv[0]
-                << " [-init file | -size M N] [-b periodic | open [V]]"
+      std::cout << "Usage: " << argv[0] << " [options]" << std::endl;
+      std::cout << "Options:" << std::endl;
+      std::cout << "  -h, --help\t\t\tShow this help message and exit"
                 << std::endl;
+      std::cout << "  -init FILE\t\t\tFile to initialize the lattice"
+                << std::endl;
+      std::cout << "  -size N M\t\t\tSize of the lattice" << std::endl;
+      std::cout << "  -b, --border\t\t\tBorder type: periodic, open, noborder, "
+                   "reflective [v -> 0 || 1]"
+                << std::endl;
+      std::cout << "  -c\t\t\t\tCell type: ACE110, ACE30, Life23_3, Life51_346"
+                << std::endl;
+
       exit(0);
     } else if (arg == "-init") {
       std::cout << "Init: " << argv[i + 1] << std::endl;
@@ -64,14 +79,27 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
         std::cout << "Error: Size must be greater than 0" << std::endl;
         exit(1);
       }
-      size_N = std::stoi(argv[i + 1]);
-      i++;
-      size_M = std::stoi(argv[i + 1]);
-      i++;
-      std::cout << "Size: " << size_M << "x" << size_N << std::endl;
-    } else if (arg == "-b") {
+      // size_N = std::stoi(argv[i + 1]);
+      // i++;
+      // size_M = std::stoi(argv[i + 1]);
+      // i++;
+
+      // mientras el siguiente argumento no es una de las opciones , introducir
+      // en el vector
+      while (i < argc && argv[i + 1] != "-b" && argv[i + 1] != "--border" &&
+             argv[i + 1] != "-c" && argv[i + 1] != "-init" &&
+             argv[i + 1] != "-size" && argv[i + 1] != "-h" &&
+             argv[i + 1] != "--help" && argv[i + 1] != "-v" &&
+             argv[i + 1] != "-dim") {
+        size.push_back(std::stoi(argv[i + 1]));
+        i++;
+      }
+
+      // std::cout << "Size: " << size_M << "x" << size_N << std::endl;
+    } else if (arg == "-b" || arg == "--border") {
       std::string b_arg = argv[i + 1];
-      if (b_arg == "periodic" || b_arg == "open" || b_arg == "noborder") {
+      if (b_arg == "periodic" || b_arg == "open" || b_arg == "noborder" ||
+          b_arg == "reflective") {
         if (b_arg == "periodic") {
           b_arg = "1";
           i++;
@@ -88,6 +116,10 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
           b_arg = "2";
           i++;
           v = 0;
+        } else if (b_arg == "reflective") {
+          b_arg = "3";
+          i++;
+          v = 0;
         }
         b = std::stoi(b_arg);
         // i++;
@@ -97,6 +129,44 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
                   << std::endl;
         exit(1);
       }
+    } else if (arg == "-cell ") {
+      std::string c_arg = argv[i + 1];
+      if (c_arg == "ACE110" || c_arg == "ACE30" || c_arg == "Life23_3" ||
+          c_arg == "Life51_346") {
+        if (c_arg == "ACE110") {
+          c_arg = "1";
+          i++;
+        } else if (c_arg == "ACE30") {
+          c_arg = "2";
+          i++;
+        } else if (c_arg == "Life23_3") {
+          c_arg = "3";
+          i++;
+        } else if (c_arg == "Life51_346") {
+          c_arg = "4";
+          i++;
+        }
+        i++;
+        std::cout << "C: " << c << std::endl;
+      } else {
+        std::cout << "Error: Not Valid option for c first argument: " << c_arg
+                  << std::endl;
+        exit(1);
+      }
+
+    } else if (arg == "-dim") {
+      std::string dim_arg = argv[i + 1];
+
+      // si no es un numero, error
+      if (std::stoi(dim_arg) <= 0) {
+        std::cout << "Error: Dim must be greater than 0" << std::endl;
+        exit(1);
+      }
+
+      dim = std::stoi(dim_arg);
+      i++;
+      std::cout << "Dim: " << dim << std::endl;
+
     } else {
       std::cout << "Unknown argument: " << argc << std::endl;
       exit(1);
@@ -114,29 +184,49 @@ int main(int argc, char** argv) {
   }
 
   std::string file_name = "";
-  int size_N = 0;  // numero de columnas
-  int size_M = 0;  // numero de filas
+  // int size_N = 0;  // numero de columnas
+  // int size_M = 0;  // numero de filas
+  // vector de int
+  std::vector<int> size;
   int b;
   int v = -1;
+  int c = 0;
+  int dim = 1;
 
-  ArgumentsFunction(argc, argv, file_name, size_N, size_M, b, v);
+  ArgumentsFunction(argc, argv, file_name, size, b, v, c, dim);
 
-  Lattice* lattice_ptr = nullptr;
+  // Lattice* lattice_ptr = nullptr;
 
-  if (TooMuchArguments(file_name, size_N, size_M) == 1) {
+  // Lattice<PositionDim<DIM>, Cell, FactoryCell> lattice(b, v, size, file_name,
+  // c, dim);
+
+  // Crear puntero a lattice en funcion de los argumentos
+  // asignar el valor del positiontype en funcion de dim
+  // si b = 0, crear un lattice con frontera abierta
+  // si b = 1, crear un lattice con frontera periodica
+  // si b = 2, crear un lattice sin frontera
+  // si b = 3, crear un lattice con frontera reflectante
+  // si c es 1, crear un lattice con la celula ACE110
+  // si c es 2, crear un lattice con la celula ACE30
+  // si c es 3, crear un lattice con la celula Life23_3
+  // si c es 4, crear un lattice con la celula Life51_346
+
+  // comprobar que size y file_name no estén definidos a la vez
+  if (TooMuchArguments(file_name, size) == 1) {
     return 1;
   }
 
-  // comprobar que size y file_name no estén definidos a la vez
-  if (size_N != 0 || size_M != 0) {  // si size está definido, crear un lattice con el tamaño dado
-    // std::cout << "Creating lattice with size: " << size_M << "x" << size_N <<
-    // std::endl;
-    lattice_ptr = new Lattice(b, v, size_N, size_M);
+  if (file_name != "") {
+    std::cout << "Creating lattice with file: " << file_name << std::endl;
+    // lattice_ptr = new Lattice(b, v, file_name);
     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
-
-  } else if (file_name != "") {
-    // std::cout << "Creating lattice with file: " << file_name << std::endl;
-    lattice_ptr = new Lattice(b, v, file_name);
+  } else {
+    std::cout << "Creating lattice with size: ";
+    for (int i = 0; i < size.size(); i++) {
+      std::cout << size[i] << " ";
+    }
+    std::cout << std::endl;
+    // lattice_ptr = new Lattice(b, v, size_N, size_M);
     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
   }
 
@@ -151,19 +241,24 @@ int main(int argc, char** argv) {
   while (true) {
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
     if (gen = 1) {
-      if (size_N != 0 || size_M != 0) {
-        std::cout << "Creating lattice with size: " << size_M << "x" << size_N
-                  << std::endl;
-        std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
-      } else if (file_name != "") {
+      if (file_name != "") {
         std::cout << "Creating lattice with file: " << file_name << std::endl;
-        std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+        // lattice_ptr = new Lattice(b, v, file_name);
+        // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+      } else {
+        std::cout << "Creating lattice with size: ";
+        for (int i = 0; i < size.size(); i++) {
+          std::cout << size[i] << " ";
+        }
+        std::cout << std::endl;
+        // lattice_ptr = new Lattice(b, v, size_N, size_M);
+        // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
       }
     }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
-    std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x"
-              << lattice_ptr->getSize()[0] << std::endl;  // filas x columnas
+    // std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x"
+    // << lattice_ptr->getSize()[0] << std::endl;  // filas x columnas
     if (c == false) {
       std::cout << "Mode: Print Lattice" << std::endl;
     } else {
@@ -182,14 +277,15 @@ int main(int argc, char** argv) {
         // calcular y mostrar la siguiente generacion
         // std::cout << "Calcular y mostrar la siguiente generacion" <<
         // std::endl;
-        lattice_ptr->nextGeneration();
+        // lattice_ptr->nextGeneration();
         // std::cout << "Acierto despues de nextGeneration" << std::endl;
         if (c == false) {
           std::cout << "Generation: " << gen << std::endl;
-          std::cout << *lattice_ptr << std::endl;
+          // std::cout << *lattice_ptr << std::endl;
           // std::cout << "despues de nextGeneration" << std::endl;
         } else {
-          std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
+          // std::cout << "Poblacion: " << lattice_ptr->Population() <<
+          // std::endl;
         }
 
         break;
@@ -200,13 +296,14 @@ int main(int argc, char** argv) {
         for (int i = 0; i < 5; i++) {
           // std::cout << "Generation: " << i << std::endl;
           // std::cout << *lattice_ptr << std::endl;
-          lattice_ptr->nextGeneration();
+          // lattice_ptr->nextGeneration();
         }
         if (c == false) {
           // std::cout << "Generation: " << std::endl;
-          std::cout << *lattice_ptr << std::endl;
+          // std::cout << *lattice_ptr << std::endl;
         } else {
-          std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
+          // std::cout << "Poblacion: " << lattice_ptr->Population() <<
+          // std::endl;
         }
         break;
 
@@ -223,7 +320,7 @@ int main(int argc, char** argv) {
       case 's':
         // guardar la generacion en un archivo
         std::cout << "Guardando generacion en un archivo" << std::endl;
-        lattice_ptr->saveToFile("generacion.txt");
+        // lattice_ptr->saveToFile("generacion.txt");
         break;
 
       default:
@@ -233,7 +330,7 @@ int main(int argc, char** argv) {
     gen++;
   }
 
-  lattice_ptr = nullptr;
-  delete lattice_ptr;
+  // lattice_ptr = nullptr;
+  // delete lattice_ptr;
   return 0;
 }

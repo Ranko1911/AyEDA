@@ -11,7 +11,7 @@ typedef int Coor_t;
 class Position {
  public:
   // int x;
-  int y;
+  // int y;
   virtual Coor_t operator[](unsigned int) const = 0;
 };
 
@@ -47,5 +47,8 @@ class PositionDim : public Position {
 
 
 //ejemplo de uso
-//PositionDim<2> p(1, 2);
+// PositionDim<2> p(1, 2);
 //PositionDim<3> p(1, 2, 3);
+
+const int DIM = 2;
+PositionDim<DIM> p(1, 2);
