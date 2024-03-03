@@ -5,12 +5,13 @@
 #include "../Position/Position.h"
 
 // Cell clase plantilla
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class Cell {
 protected:
     PositionType position;
     int value;
     int nextValue;
+    virtual ostream& display(ostream& os) const = 0;
 
 public:
     // Constructor
@@ -25,7 +26,7 @@ public:
     void setPosition(const PositionType& pos);
     PositionType getPosition() const;
     virtual int nextState(const Lattice& lattice) = 0;
-    void updateState();
+    virtual void updateState();
     // Sobrecarga del operador de inserción como función amiga
     friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType>& cell);
 };
@@ -33,7 +34,7 @@ public:
 // Ahora PositionType puede ser cualquier tipo de posición, como PositionDim
 
 // clase cellACE hereda de Cell
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellACE : public Cell<PositionType> {
 public:
     // Constructor
@@ -47,7 +48,7 @@ public:
 };
 
 // clase cellACE110 hereda de Cell
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellACE110 : public Cell<PositionType> {
 public:
     // Constructor
@@ -61,7 +62,7 @@ public:
 };
 
 // clase cellACE30 hereda de Cell
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellACE30 : public Cell<PositionType> {
 public:
     // Constructor
@@ -75,7 +76,7 @@ public:
 };
 
 // clase CellLife hereda de Cell
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellLife : public Cell<PositionType> {
 public:
     // Constructor
@@ -89,7 +90,7 @@ public:
 };
 
 // clase CellLife23_3 hereda de CellLife
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellLife23_3 : public CellLife<PositionType> {
 public:
     // Constructor
@@ -103,7 +104,7 @@ public:
 };
 
 // clase CellLife51_346 hereda de CellLife
-template <typename PositionType>
+template <typename PositionType, typename Lattice>
 class CellLife51_346 : public CellLife<PositionType> {
 public:
     // Constructor
