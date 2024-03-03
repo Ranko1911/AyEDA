@@ -21,14 +21,14 @@ public:
     virtual ~Cell() {}
 
     // Métodos virtuales puros
-    int getState() const;
-    void setState(int val);
-    void setPosition(const PositionType& pos);
-    PositionType getPosition() const;
+    int getState() const; // hecho, no comprobado
+    void setState(int val); // hecho, no comprobado
+    void setPosition(const PositionType& pos); // hecho, no comprobado
+    PositionType getPosition() const; // hecho, no comprobado
     virtual int nextState(const Lattice& lattice) = 0;
-    virtual void updateState();
+    virtual void updateState(); 
     // Sobrecarga del operador de inserción como función amiga
-    friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType>& cell);
+    friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType>& cell); // hecho, no comprobado
 };
 
 // Ahora PositionType puede ser cualquier tipo de posición, como PositionDim
@@ -44,7 +44,7 @@ public:
     ~CellACE() {}
 
     // Implementación de nextState virtual
-    virtual int nextState(const Lattice& lattice) ;
+    virtual int nextState(const Lattice& lattice) = 0 ;
 };
 
 // clase cellACE110 hereda de Cell
@@ -58,7 +58,7 @@ public:
     ~CellACE110() {}
 
     // Implementación de nextState
-    int nextState(const Lattice& lattice) ;
+    int nextState(const Lattice& lattice) ; // hecho, no comprobado
 };
 
 // clase cellACE30 hereda de Cell
@@ -72,7 +72,7 @@ public:
     ~CellACE30() {}
 
     // Implementación de nextState
-    int nextState(const Lattice& lattice) ;
+    int nextState(const Lattice& lattice) ; // hecho, no comprobado
 };
 
 // clase CellLife hereda de Cell
@@ -86,7 +86,7 @@ public:
     ~CellLife() {}
 
     // Implementación de nextState
-    int nextState(const Lattice& lattice) ;
+    virtual int nextState(const Lattice& lattice) = 0 ;
 };
 
 // clase CellLife23_3 hereda de CellLife
@@ -100,7 +100,7 @@ public:
     ~CellLife23_3() {}
 
     // Implementación de nextState
-    int nextState(const Lattice& lattice) ;
+    int nextState(const Lattice& lattice) ; // hecho, no comprobado
 };
 
 // clase CellLife51_346 hereda de CellLife
@@ -114,5 +114,5 @@ public:
     ~CellLife51_346() {}
 
     // Implementación de nextState
-    int nextState(const Lattice& lattice) ;
+    int nextState(const Lattice& lattice) ; // hecho, no comprobado
 };

@@ -6,6 +6,7 @@
 
 class Cell;
 struct Position;
+struct State;
 
 class Lattice {
  private:

@@ -169,11 +169,13 @@ std::ostream& operator<<(std::ostream& os, const Lattice1D<PositionType, Cell, F
   return os;
 }
 
-//nextGeneration de la clase template Lattice1D_open usando el de la clase Lattice1D 
+// metodo display de la clase template Lattice1D
+// realmente solo es una llama a operator<<
 template <typename PositionType, typename Cell, typename FactoryCell>
-void Lattice1D_open<PositionType, Cell, FactoryCell>::nextGeneration() {
-  Lattice1D<PositionType, Cell, FactoryCell>::nextGeneration();
+void Lattice1D<PositionType, Cell, FactoryCell>::display() {
+  std::cout << *this;
 }
+
 
 // getCell de la clase template Lattice1D_open
 template <typename PositionType, typename Cell, typename FactoryCell>
@@ -466,26 +468,286 @@ std::ostream& operator<<(std::ostream& os, const Lattice2D<PositionType, Cell, F
   return os;
 }
 
-// nextGeneration de la clase template Lattice2D_reflective
+// nextGeneration de la clase template Lattice2D
 template <typename PositionType, typename Cell, typename FactoryCell>
-void Lattice2D_reflective<PositionType, Cell, FactoryCell>::nextGeneration() {
-  std::vector<std::vector<Cell*>> new_cells;
+void Lattice2D<PositionType, Cell, FactoryCell>::nextGeneration() {
+  PositionType size = this->getSize();
+
+  this->vivas = Population();
+
+  //bucle para nextStates
   for (int i = 0; i < size_M; i++) {
-    std::vector<Cell*> row;
     for (int j = 0; j < size_N; j++) {
-      row.push_back(cells[i][j]->nextGeneration(cells, i, j));
+      cells[i][j].nextState(*this);
     }
-    new_cells.push_back(row);
   }
-  cells = new_cells;
+
+  //bucle para updateStates
+  for (int i = 0; i < size_M; i++) {
+    for (int j = 0; j < size_N; j++) {
+      cells[i][j].updateState();
+    }
+  }
+}
+
+// metodo display de la clase template Lattice2D
+// realmente solo es una llama a operator<<
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D<PositionType, Cell, FactoryCell>::display() {
+  std::cout << *this;
+}
+
+// getCell de la clase template Lattice2D_reflective
+template <typename PositionType, typename Cell, typename FactoryCell>
+Cell& Lattice2D_reflective<PositionType, Cell, FactoryCell>::operator[](const PositionType& pos) const {
+
+  PositionType temporal = this->getSize();
+  int x = pos[0];
+  int y = pos[1];
+  int v = this->v;
+
+  // si un valor es negativo, se va al otro lado
+  if (v == 0) {
+    if (x < 0) {
+      x = -x;
+    } else if (x > size_M - 1) {
+      x = size_M - (x - size_M) - 1;
+    }
+    if (y < 0) {
+      y = -y;
+    } else if (y > size_N - 1) {
+      y = size_N - (y - size_N) - 1;
+    }
+  } else if (v == 1) {
+    if (x < 0) {
+      x = -x;
+    } else if (x > size_M - 1) {
+      x = size_M - (x - size_M) - 1;
+    }
+    if (y < 0) {
+      y = -y;
+    } else if (y > size_N - 1) {
+      y = size_N - (y - size_N) - 1;
+    }
+  }
+
+  return *cells[x][y];
+
+}
+
+// getCell se la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+Cell& Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::operator[](const PositionType& pos) const {
+  int x = pos[0];
+  int y = pos[1];
+  int v = this->v;
+
+  Cell* VIVA = factory.create(pos, 1);
+
+    // if (temporal.x < 0) {
+    //   return *MUERTA;
+    // } else if (temporal.x >= size_N) {
+    //   return *MUERTA;
+    // }
+    // if (temporal.y < 0) {
+    //   return *MUERTA;
+    // } else if (temporal.y >= size_M) {
+    //   return *MUERTA;
+    // }
+
+  if (v == 0) {
+    if (x < 0) {
+      return *MUERTA;
+    } else if (x >= size_N) {
+      return *MUERTA;
+    }
+    if (y < 0) {
+      return *MUERTA;
+    } else if (y >= size_M) {
+      return *MUERTA;
+    }
+  } else if (v == 1) {
+    if (x < 0) {
+      return *VIVA;
+    } else if (x >= size_N) {
+      return *VIVA;
+    }
+    if (y < 0) {
+      return *VIVA;
+    } else if (y >= size_M) {
+      return *VIVA;
+    }
+  }
 }
 
 
+// nextGeneration de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::nextGeneration() {
+  PositionType size = this->getSize();
 
+  this->vivas = Population();
 
+  //bucle para nextStates
+  for (int i = 0; i < size_M; i++) {
+    for (int j = 0; j < size_N; j++) {
+      cells[i][j].nextState(*this);
+    }
+  }
 
+  //bucle para updateStates
+  for (int i = 0; i < size_M; i++) {
+    for (int j = 0; j < size_N; j++) {
+      cells[i][j].updateState();
+    }
+  }
 
+  increaseSize();
+}
 
+// increaseSize de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::increaseSize() {
+// revisar si hay celulas vivas en el borde derecho
+  // aumentarDerecha();
+  for (int i = 0; i < size_M; i++) {
+    if (cells[size_N - 1][i]->getState() == 1) {
+      aumentarDerecha();
+      break;
+    }
+  }
+
+  // std::cout << "SALIDAAAAA" << std::endl;
+
+  // revisar si hay celulas vivas en el borde izquierdo
+  // aumentarIzquierda();
+  for (int i = 0; i < size_N; i++) {
+    if (cells[i][0]->getState() == 1) {
+      aumentarIzquierda();
+      break;
+    }
+  }
+
+  // revisar si hay celulas vivas en el borde superior
+  // aumentarArriba();
+  for (int i = 0; i < size_M; i++) {
+    if (cells[0][i]->getState() == 1) {
+      aumentarArriba();
+      break;
+    }
+  }
+
+  // comprobar si hay celulas vivas en el borde inferior
+  // aumentarAbajo();
+  for (int i = 0; i < size_M; i++) {
+    if (cells[size_N - 1][i]->getState() == 1) {
+      aumentarAbajo();
+      break;
+    }
+  }
+
+  return;
+}
+
+// aumentarDerecha de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::aumentarDerecha() {
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
+
+  // aumentar el valor de size_M
+  size_M++;
+
+  for (int i = 0; i < size_N; i++) {
+    PositionType pos = {0, size_M - 1};
+    Cell *c = factory.create(pos, 0);
+    cells[i].push_back(*c);
+  }
+
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
+
+  // std::cout << "SALSA DE MORA" << std::endl;
+
+  return;
+}
+
+// aumentarIzquierda de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::aumentarIzquierda() {
+  // insertar una celula muerta en la primera columna
+  // std::cout << "Insertar celdas muertas en la primera columna" << std::endl;
+  for (int i = 0; i < size_N; i++) {
+    Cell temp = this->getCell(PositionType{0, 0});
+    PositionType pos = {0, temp.getPosition().y - 1};
+    Cell *c = factory.create(pos, 0);
+    cells[i].insert(cells[i].begin(), *c);
+  }
+
+  // aumentar el valor de size_M
+  // std::cout << "Aumentar el valor de size_M" << std::endl;
+  size_M++;
+
+  // recorre todas las filas y aumenta la coordenada x de cada celda
+  // std::cout << "Aumentar la coordenada x de cada celda" << std::endl;
+  // for (int i = 0; i < size_N; i++) {
+  //   for (int j = 0; j < size_M; j++) {
+  //     Position temporal = {i, j};
+  //     cells[i][j]->setPosition(temporal);
+  //   }
+  // }
+}
+
+// aumentarArriba de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::aumentarArriba() {
+  // crear un vector de celdas muertas
+  std::vector<Cell*> fila;
+
+  // llenar el vector de celdas muertas
+  for (int i = 0; i < size_M; i++) {
+    Cell temp = this->getCell(Position{0, 0});
+    Position pos = {temp.getPosition().x - 1, i};
+    Cell *c = factory.create(pos, 0);
+    fila.push_back(*c);
+  }
+
+  // insertar en el principio de cells el vector de celdas muertas
+  cells.insert(cells.begin(), fila);
+
+  // aumentar el valor de size_N
+  size_N++;
+}
+
+// aumentarAbajo de la clase template Lattice2D_NoBorder
+template <typename PositionType, typename Cell, typename FactoryCell>
+void Lattice2D_NoBorder<PositionType, Cell, FactoryCell>::aumentarAbajo() {
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells antes de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
+
+  // crear un vector de celdas
+  std::vector<Cell*> fila;
+
+  // llenar en vector de celulas muertas
+  for (int i = 0; i < size_M; i++) {
+    Position pos = {size_N, i};
+    Cell *c = factory.create(pos, 0);
+    fila.push_back(*c);
+  }
+
+  // agregar el vector de celdas muertas a cells
+  cells.push_back(fila);
+
+  // aumentar el valor de size_N
+  size_N++;
+
+  // imprimr el contenido de cells
+  // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
+  // std::cout << *this << std::endl;
+}
 
 
 

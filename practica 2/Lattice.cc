@@ -197,7 +197,7 @@ const Cell& Lattice::getCell(const Position& x) const {
         temporal.y >= size_M) {
       return *VIVA;
     }
-  } else if (b == 2) {  // frontera dinamica b = 2
+  } else if (b == 2) {  // no frontera b = 2
     if (temporal.x < 0) {
       return *MUERTA;
     } else if (temporal.x >= size_N) {

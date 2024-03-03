@@ -16,7 +16,7 @@ class FactoryCell {
 template <typename PositionType>
 class FactoryCellACE110 : public FactoryCell {
  public:
-  Cell* createCell(PositionType temp, int value) override { return new CellACE110(temp, value); }
+  Cell* createCell(PositionType temp, int value) override { return new CellACE110(temp, value); } // DUDA: el override ayuda o es un estorbo?
 };
 
 template <typename PositionType>
