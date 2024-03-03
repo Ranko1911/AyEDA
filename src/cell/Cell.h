@@ -11,7 +11,6 @@ protected:
     PositionType position;
     int value;
     int nextValue;
-    virtual ostream& display(ostream& os) const = 0;
 
 public:
     // Constructor
@@ -28,7 +27,9 @@ public:
     virtual int nextState(const Lattice& lattice) = 0;
     virtual void updateState(); 
     // Sobrecarga del operador de inserción como función amiga
-    friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType>& cell); // hecho, no comprobado
+    friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType, Lattice>& cell); // hecho, no comprobado
+    std::ostream& display(std::ostream& os) const;
+
 };
 
 // Ahora PositionType puede ser cualquier tipo de posición, como PositionDim

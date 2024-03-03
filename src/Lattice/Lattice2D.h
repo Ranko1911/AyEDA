@@ -12,7 +12,7 @@ class Lattice2D : public Lattice<PositionType, Cell, FactoryCell> {
   void nextGeneration(); // Hecho, no comprobado
   int Population(); // Hecho, no comprobado
   Cell& operator[](const PositionType&) const; // Hecho, no comprobado
-  friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado
+  friend std::ostream& operator<<(std::ostream&, const Lattice<PositionType, Cell, FactoryCell>&); // Hecho, no comprobado
   void saveToFile(const std::string& file_name); // Hecho, no comprobado
   void display();  // Hecho, no comprobado
 };

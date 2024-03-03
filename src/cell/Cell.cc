@@ -51,6 +51,14 @@ std::ostream& operator<<(std::ostream& os,
   return os;
 }
 
+//metodo display, que realmente es una llamada a la sobrecarga del operador <<
+template <typename PositionType, typename Lattice>
+std::ostream& Cell<PositionType, Lattice>::display(std::ostream& os) const {
+  os << *this;
+  return os;
+}
+
+
 // // nextState de CellLifeACE110
 // // Método para obtener el siguiente estado de la celda ACE110
 // template <typename PositionType, typename Lattice>

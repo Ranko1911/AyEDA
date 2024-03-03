@@ -21,7 +21,7 @@ class Lattice1D : public Lattice<PositionType, Cell, FactoryCell> {
   std::string file_name = "";
   std::vector<Cell*> cells;
   int vivas;
-  setCell(const PositionType&, const int& i) { cells[PositionType[i]] = Cell; }
+  void setCell(const PositionType&, const int& i) { cells[PositionType[i]] = Cell; }
 };
 
 //clase Lattice1D_open hereda de Lattice, esta no es una plantilla

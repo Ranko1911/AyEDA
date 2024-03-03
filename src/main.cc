@@ -190,10 +190,10 @@ int main(int argc, char** argv) {
   std::vector<int> size;
   int b;
   int v = -1;
-  int c = 0;
+  int celula = 0;
   int dim = 1;
 
-  ArgumentsFunction(argc, argv, file_name, size, b, v, c, dim);
+  ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
 
   // Lattice* lattice_ptr = nullptr;
 
@@ -206,10 +206,10 @@ int main(int argc, char** argv) {
   // si b = 1, crear un lattice con frontera periodica
   // si b = 2, crear un lattice sin frontera
   // si b = 3, crear un lattice con frontera reflectante
-  // si c es 1, crear un lattice con la celula ACE110
-  // si c es 2, crear un lattice con la celula ACE30
-  // si c es 3, crear un lattice con la celula Life23_3
-  // si c es 4, crear un lattice con la celula Life51_346
+  // si celula es 1, crear un lattice con la celula ACE110
+  // si celula es 2, crear un lattice con la celula ACE30
+  // si celula es 3, crear un lattice con la celula Life23_3
+  // si celula es 4, crear un lattice con la celula Life51_346
 
   // comprobar que size y file_name no estén definidos a la vez
   if (TooMuchArguments(file_name, size) == 1) {
