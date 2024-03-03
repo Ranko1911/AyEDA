@@ -4,12 +4,18 @@
 #include <string>
 #include <thread>  // sleep_for
 #include <vector>
+#include <memory>
 
 #include "Lattice/Lattice.h"
 #include "Lattice/Lattice1D.h"
 #include "Lattice/Lattice2D.h"
 #include "Position/Position.h"
 #include "cell/Cell.h"
+#include "cell/CellACE.h"
+#include "cell/CellLife.h"
+#include "FactoryCell/FactoryCell.h"
+
+
 
 // estructura de codificacion de Martin Fowler -> apache maven
 
@@ -195,10 +201,7 @@ int main(int argc, char** argv) {
 
   ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
 
-  // Lattice* lattice_ptr = nullptr;
-
-  // Lattice<PositionDim<DIM>, Cell, FactoryCell> lattice(b, v, size, file_name,
-  // c, dim);
+  // Lattice* lattice_ptr = nullptr; 
 
   // Crear puntero a lattice en funcion de los argumentos
   // asignar el valor del positiontype en funcion de dim
