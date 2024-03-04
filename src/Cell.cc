@@ -1,60 +1,53 @@
 
 #include "Cell.h"
 
-#include "../Lattice/Lattice.h"
+#include "../include/Lattice.h"
 
 // int getstate() const
 // Método para obtener el estado de la celda
-template <typename PositionType, typename Lattice>
-int Cell<PositionType, Lattice>::getState() const {
+int Cell::getState() const {
   return value;
 }
 
 // void setState(int val)
 // Método para establecer el estado de la celda
-template <typename PositionType, typename Lattice>
-void Cell<PositionType, Lattice>::setState(int val) {
+void Cell::setState(int val) {
   value = val;
 }
 
 // void setPosition(const PositionType& pos)
 // Método para establecer la posición de la celda
-template <typename PositionType, typename Lattice>
-void Cell<PositionType, Lattice>::setPosition(const PositionType& pos) {
+void Cell::setPosition(const Position& pos) {
   position = pos;
 }
 
 // PositionType getPosition() const
 // Método para obtener la posición de la celda
-template <typename PositionType, typename Lattice>
-PositionType Cell<PositionType, Lattice>::getPosition() const {
+Position& Cell::getPosition() const {
   return position;
 }
 
 // void updateState()
 // Método para actualizar el estado de la celda
-template <typename PositionType, typename Lattice>
-void Cell<PositionType, Lattice>::updateState() {
+void Cell::updateState() {
   value = nextValue;
 }
 
 // friend std::ostream& operator<<(std::ostream& os, const Cell<PositionType>&
-// cell) Sobrecarga del operador de inserción como función amiga
-template <typename PositionType, typename Lattice>
+// cell) Sobrecarga del operador de inserción como función 
+// realmente solo llama a la funcion display
 std::ostream& operator<<(std::ostream& os,
-                         const Cell<PositionType, Lattice>& cell) {
+                         const Cell& cell) {
+  return cell.display(os, cell);
+}
+
+//metodo display, que realmente es una llamada a la sobrecarga del operador <<
+std::ostream& Cell::display(std::ostream& os, const Cell& cell) const {
   if (cell.getState() == 0) {
     os << "-";
   } else if (cell.getState() == 1) {
     os << "X";
   }
-  return os;
-}
-
-//metodo display, que realmente es una llamada a la sobrecarga del operador <<
-template <typename PositionType, typename Lattice>
-std::ostream& Cell<PositionType, Lattice>::display(std::ostream& os) const {
-  os << *this;
   return os;
 }
 

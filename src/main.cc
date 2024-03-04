@@ -6,14 +6,14 @@
 #include <vector>
 #include <memory>
 
-#include "Lattice/Lattice.h"
-#include "Lattice/Lattice1D.h"
-#include "Lattice/Lattice2D.h"
-#include "Position/Position.h"
-#include "cell/Cell.h"
-#include "cell/CellACE.h"
-#include "cell/CellLife.h"
-#include "FactoryCell/FactoryCell.h"
+#include "../include/Lattice.h"
+#include "../include/Lattice1D.h"
+#include "../include/Lattice2D.h"
+#include "../include/Position.h"
+#include "../include/Cell.h"
+#include "../include/CellACE.h"
+#include "../include/CellLife.h"
+#include "../include/FactoryCell.h"
 
 
 

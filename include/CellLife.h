@@ -1,12 +1,12 @@
+#pragma once
+
 #include "Cell.h"
 
-
 // clase CellLife hereda de Cell
-template <typename PositionType, typename Lattice>
-class CellLife : public Cell<PositionType> {
+class CellLife : public Cell {
 public:
     // Constructor
-    CellLife(const PositionType& pos, const int val) : Cell<PositionType>(pos, val) {}
+    CellLife( Position& pos, const int val) : Cell(pos, val) {}
 
     // Destructor
     ~CellLife() {}
@@ -16,11 +16,10 @@ public:
 };
 
 // clase CellLife23_3 hereda de CellLife
-template <typename PositionType, typename Lattice>
-class CellLife23_3 : public CellLife<PositionType> {
+class CellLife23_3 : public CellLife {
 public:
     // Constructor
-    CellLife23_3(const PositionType& pos, const int val) : CellLife<PositionType>(pos, val) {}
+    CellLife23_3( Position& pos, const int val) : CellLife(pos, val) {}
 
     // Destructor
     ~CellLife23_3() {}
@@ -30,11 +29,10 @@ public:
 };
 
 // clase CellLife51_346 hereda de CellLife
-template <typename PositionType, typename Lattice>
-class CellLife51_346 : public CellLife<PositionType> {
+class CellLife51_346 : public CellLife {
 public:
     // Constructor
-    CellLife51_346(const PositionType& pos, const int val) : CellLife<PositionType>(pos, val) {}
+    CellLife51_346( Position& pos, const int val) : CellLife(pos, val) {}
 
     // Destructor
     ~CellLife51_346() {}

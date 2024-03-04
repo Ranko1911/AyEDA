@@ -23,12 +23,12 @@ class PositionDim : public Position {
   Coor_t Coordinates[Dim];
 
  public:
-  // Constructor por defecto
-  PositionDim() {
-    for (int d = 0; d < Dim; d++) {
-      Coordinates[d] = 0;
-    }
-  }
+  // // Constructor por defecto
+  // PositionDim() {
+  //   for (int d = 0; d < Dim; d++) {
+  //     Coordinates[d] = 0;
+  //   }
+  // }
   // Constructor con lista variable de parámetros
   PositionDim(int sz, ...) {
     va_list vl;
@@ -47,8 +47,5 @@ class PositionDim : public Position {
 
 
 //ejemplo de uso
-// PositionDim<2> p(1, 2);
-//PositionDim<3> p(1, 2, 3);
-
-const int DIM = 2;
-PositionDim<DIM> p(1, 2);
+PositionDim<2> p(1, 2);
+PositionDim<3> p(1, 2, 3);

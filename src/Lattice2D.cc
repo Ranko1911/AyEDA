@@ -1,5 +1,5 @@
-#include "Lattice.h"
-#include "Lattice2D.h"
+#include "../include/Lattice.h"
+#include "../include/Lattice2D.h"
 
 
 

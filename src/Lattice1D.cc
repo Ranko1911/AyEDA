@@ -1,5 +1,5 @@
-#include "Lattice.h"
-#include "Lattice1D.h"
+#include "../include/Lattice.h"
+#include "../include/Lattice1D.h"
 
 // constructor de la clase template Lattice1D con entrada por fichero
 template <typename PositionType, typename Cell, typename FactoryCell>

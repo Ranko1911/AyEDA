@@ -5,21 +5,21 @@
 #include <iostream>
 #include <vector>
 
-#include "../Position/Position.h"
-#include "../cell/Cell.h"
+#include "Position.h"
+#include "Cell.h"
+#include "FactoryCell.h"
 // class Position
 
 // Clase plantilla Lattice
-template <typename PositionType, typename Cell, typename FactoryCell>
 class Lattice {
  protected:
-  int size_N;  // columnas
-  int size_M;  // filas
-  int b;
-  int v = 0;
-  std::string file_name = "";
-  std::vector<std::vector<Cell*>> cells;
-  int vivas;
+  // int size_N;  // columnas
+  // int size_M;  // filas
+  // int b;
+  // int v = 0;
+  // std::string file_name = "";
+  // std::vector<std::vector<Cell*>> cells;
+  // int vivas;
 
   // Utiliza PositionDim en lugar de Position
   // const Cell& getCell(const PositionType&) const;
@@ -36,12 +36,12 @@ class Lattice {
   virtual ~Lattice() = 0;  // Destructor virtual para permitir la herencia
 
   // Métodos virtuales puros
-  virtual PositionType getSize() const = 0;
-  int getB() const; // Hecho, no comprobado
-  int getV() const; // Hecho, no comprobado
+  virtual Position getSize() const = 0;
+  // int getB() const; // Hecho, no comprobado
+  // int getV() const; // Hecho, no comprobado
   virtual void nextGeneration() = 0;
   virtual int Population() = 0;
-  virtual Cell& operator[](const PositionType&) const = 0;
+  virtual Cell& operator[](const Position&) const = 0;
   virtual void saveToFile(const std::string& file_name) = 0;
 };
 

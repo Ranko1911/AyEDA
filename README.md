@@ -12,7 +12,7 @@
 - revisar los metodos que usan getCell y cambiarlos por el operator[].
 - revisar el uso de el operator[] en la clase Lattice.
 
-### Dudasque comentar al profesor
+### Dudas que comentar al profesor
 
 - En las practicas anterirores yo he estado usando el "Lattice* lattice_ptr = nullptr; " para poder usar el puntero en las clases, pero en la practica 3 no se como hacer para que esto funcione de forma correcta.
 

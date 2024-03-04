@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lattice.h"
+#include "../include/Lattice.h"
 
 // -------------------- BASE  --------------------------- //
 
