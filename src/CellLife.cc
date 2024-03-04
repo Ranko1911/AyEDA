@@ -12,13 +12,18 @@ CellLife23_3::CellLife23_3(Position& pos, const int val) : CellLife(pos, val) {
 // Método para obtener el siguiente estado de la celda CellLife23_3
 int CellLife23_3::nextState(const Lattice& lattice) {
   // nuevos vecinos
+
+  int size_N = getPosition()[0];
+
+  // CellLife23_3 Neightbour1 = lattice[0];
+
   CellLife23_3 Neightbour1 = lattice[getPosition()[0] - 1][getPosition()[1] - 1];
-  CellLife23_3 Neightbour2 = lattice[getPosition()[0] - 1][getPosition()[1]];
+  CellLife23_3 Neightbour2 = lattice[getPosition()[0] - 1][getPosition()[1] + 0];
   CellLife23_3 Neightbour3 = lattice[getPosition()[0] - 1][getPosition()[1] + 1];
-  CellLife23_3 Neightbour4 = lattice[getPosition()[0]][getPosition()[1] - 1];
-  CellLife23_3 Neightbour5 = lattice[getPosition()[0]][getPosition()[1] + 1];
+  CellLife23_3 Neightbour4 = lattice[getPosition()[0] - 0][getPosition()[1] - 1];
+  CellLife23_3 Neightbour5 = lattice[getPosition()[0] + 0][getPosition()[1] + 1];
   CellLife23_3 Neightbour6 = lattice[getPosition()[0] + 1][getPosition()[1] - 1];
-  CellLife23_3 Neightbour7 = lattice[getPosition()[0] + 1][getPosition()[1]];
+  CellLife23_3 Neightbour7 = lattice[getPosition()[0] + 1][getPosition()[1] - 0];
   CellLife23_3 Neightbour8 = lattice[getPosition()[0] + 1][getPosition()[1] + 1];
 
 

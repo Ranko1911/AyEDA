@@ -256,23 +256,20 @@ void Lattice::nextGeneration() {
   return;
 }
 
-// std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
-//   // // limpiar la pantalla aqui o en el main?
-//   // Position size = lattice.getSize();
-//   // for (int i = 0; i < size.x; i++) {
-//   //   for (int j = 0; j < size.y; j++) {
-//   //     os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
-//   //     // os << "[ " << i << "," << j << " ]";
-//   //     // os << "[" << lattice.cells[i][j]->getPosition().x << "," << lattice.cells[i][j]->getPosition().y << "]";
-//   //   }
-//   //   os << std::endl;
-//   // }
-//   // return os;
-  
-//   // llamar al metodo display de cada celda
-//   Position size = lattice.getSize();
+std::ostream& operator<<(std::ostream& os, const Lattice& lattice) {
+  // limpiar la pantalla aqui o en el main?
+  Position size = lattice.getSize();
+  for (int i = 0; i < size.x; i++) {
+    for (int j = 0; j < size.y; j++) {
+      os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
+      // os << "[ " << i << "," << j << " ]";
+      // os << "[" << lattice.cells[i][j]->getPosition().x << "," << lattice.cells[i][j]->getPosition().y << "]";
+    }
+    os << std::endl;
+  }
+  return os;
 
-// }
+}
 
 Cell& Lattice::operator[](const Position& pos) const {
   // return *cells[pos.x][pos.y];

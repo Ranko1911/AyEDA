@@ -14,7 +14,7 @@ int CellACE110::nextState(const Lattice& lattice) {
   int sum1 = getState() + lattice[getPosition()[0] + 1].getState();
   int mult1 = getState() * lattice[getPosition()[0] + 1].getState();
   int mult2 = lattice[getPosition()[0] - 1].getState() * getState() *
-              lattice[getPosition()[0] + 1].getState();
+              lattice[getPosition()[1] + 1].getState();
   nextValue = sum1 + mult1 + mult2;
   nextValue = nextValue % 2;
   return 0;

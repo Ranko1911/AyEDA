@@ -1,10 +1,13 @@
+
 #include "../include/Lattice1D.h"
 
 #include "../include/Lattice.h"
+#include "../include/Position.h"
 
 // constructor de la clase template Lattice1D con entrada por fichero
 Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
-                     FactoryCell& factory): factory(factory) {
+                     FactoryCell& factory)
+    : factory(factory) {
   this->b = b;
   this->v = v;
   this->file_name = file_name;
@@ -33,8 +36,9 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
   //   }
   // }
   // std::cout << std::endl;
-
-  this->size = lineas[0].size();
+  this->size[0] = 1;
+  this->size[1] = lineas[0].size();
+  // this->size = pos;
 
   for (int pos = 0; pos < lineas[0].size(); pos++) {
     if (lineas[0][pos] == '0') {
@@ -63,14 +67,15 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
 // constructor de la clase template Lattice1D con entrada por tamaño
 // se que no es necesario la parte de usar el constructor de la clase base
 // pero lo pongo por si a caso
-Lattice1D::Lattice1D(const int& b, const int& v, const int& size,
-                     FactoryCell& factory) : factory(factory){
+Lattice1D::Lattice1D(const int& b, const int& v, const Position& size,
+                     FactoryCell& factory)
+    : factory(factory) {
   this->b = b;
   this->v = v;
-  this->size = size;
+  this->size = size[1];
 
   int pos = 0;
-  for (pos = 0; pos < (size / 2); pos++) {
+  for (pos = 0; pos < (size[1] / 2); pos++) {
     PositionDim<2> pos1(pos, 0);
     Cell* c = factory.createCell(pos1, 0);
     // cells.push_back(*c);
@@ -84,7 +89,7 @@ Lattice1D::Lattice1D(const int& b, const int& v, const int& size,
   cells[pos] = d;
   // pos++;
 
-  for (pos = pos + 1; pos < size; pos++) {
+  for (pos = pos + 1; pos < size[1]; pos++) {
     // Cell* c = factory.create(pos, 0);
     // cells.push_back(*c);
     PositionDim<2> pos1(pos, 0);
@@ -98,12 +103,12 @@ void Lattice1D::nextGeneration() {
   this->vivas = Population();
 
   // bucle para nextStates
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size[1]; i++) {
     cells[i]->nextState(*this);
   }
 
   // bucle para updateStates
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < size[1]; i++) {
     cells[i]->updateState();
   }
 }
@@ -140,7 +145,7 @@ Lattice1D::~Lattice1D() {
 
 // getsize de la clase template Lattice1D
 Position& Lattice1D::getSize() const {
-  PositionDim<2> pos(size, 0);
+  PositionDim<2> pos(size[1], 0);
   return pos;
 }
 
@@ -154,45 +159,43 @@ std::ostream& operator<<(std::ostream& os, Lattice1D& lattice) {
 // metodo display de la clase template Lattice1D
 // realmente solo es una llama a operator<<
 std::ostream& Lattice1D::display(std::ostream& os, const Lattice1D& lattice) {
-  for (int i = 0; i < lattice.size; i++) {
+  for (int i = 0; i < lattice.size[1]; i++) {
     os << *lattice.cells[i];
   }
   return os;
 }
 
-// getCell de la clase template Lattice1D_open
-
+// operator[] de la clase template Lattice1D_open
 Cell& Lattice1D_open::operator[](const Position& pos) const {
-  PositionDim<2> pos1(2, 0);
-  Cell* VIVA = factory.createCell(pos1, 1);
-  Cell* MUERTA = factory.createCell(pos1, 0);
   int x = pos[0];
-  int v = this->v;
-  if (v == 0) {
-    // std::cout << "open cold" << std::endl;
-    if (x < 0) {
-      return *MUERTA;
-    } else if (x > size - 1) {
-      return *MUERTA;
-    } else {
-      return *cells[x];
-    }
-  } else if (v == 1) {
-    // std::cout << "open hot" << std::endl;
-    if (x < 0) {
-      return *VIVA;
-    } else if (x > size - 1) {
-      return *VIVA;
-    } else {
-      return *cells[x];
-    }
-  }
-  return *cells[x];
+  return *const_cast<Cell*>(&getCell(x));
+}
+
+// operator[] de la clase template Lattice1D_open
+Cell& Lattice1D_periodic::operator[](const Position& pos) const {
+  return *const_cast<Cell*>(&getCell(pos));
 }
 
 // getCell de la clase template Lattice1D_periodic
+Cell& Lattice1D_periodic::getCell(const Position& pos) const {
+  PositionDim<2> pos1(2, 0);
+  Cell* VIVA = factory.createCell(pos1, 1);
+  Cell* MUERTA = factory.createCell(pos1, 0);
 
-Cell& Lattice1D_periodic::operator[](const Position& pos) const {
+  if (pos[1] < 0) {
+    return *cells[size[1] - 1];
+  } else if (pos[1] > size[1] - 1) {
+    return *cells[0];
+  } else {
+    return *cells[pos[1]];
+  }
+
+  return *cells[pos[1]];
+}
+
+// operator[] de la clase template Lattice1D_periodic
+
+Cell& Lattice1D_periodic::getCell(const Position& pos) const {
   PositionDim<2> pos1(2, 0);
   Cell* VIVA = factory.createCell(pos1, 1);
   Cell* MUERTA = factory.createCell(pos1, 0);
@@ -201,18 +204,18 @@ Cell& Lattice1D_periodic::operator[](const Position& pos) const {
   if (v == 0) {
     // std::cout << "periodic cold" << std::endl;
     if (x < 0) {
-      return *cells[size + x];
-    } else if (x > size - 1) {
-      return *cells[x - size];
+      return *cells[size[1] + x];
+    } else if (x > size[1] - 1) {
+      return *cells[x - size[1]];
     } else {
       return *cells[x];
     }
   } else if (v == 1) {
     // std::cout << "periodic hot" << std::endl;
     if (x < 0) {
-      return *cells[size + x];
-    } else if (x > size - 1) {
-      return *cells[x - size];
+      return *cells[size[1] + x];
+    } else if (x > size[1] - 1) {
+      return *cells[x - size[1]];
     } else {
       return *cells[x];
     }

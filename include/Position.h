@@ -23,12 +23,8 @@ class PositionDim : public Position {
   Coor_t Coordinates[Dim];
 
  public:
-  // // Constructor por defecto
-  // PositionDim() {
-  //   for (int d = 0; d < Dim; d++) {
-  //     Coordinates[d] = 0;
-  //   }
-  // }
+  // Constructor por defecto
+  PositionDim() {  }
   // Constructor con lista variable de parámetros
   PositionDim(int sz, ...) {
     va_list vl;

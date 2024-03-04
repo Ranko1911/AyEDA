@@ -1,21 +1,19 @@
 #include <atomic>
 #include <chrono>  // sleep_for
 #include <iostream>
+#include <memory>
 #include <string>
 #include <thread>  // sleep_for
 #include <vector>
-#include <memory>
 
-#include "../include/Lattice.h"
-#include "../include/Lattice1D.h"
-#include "../include/Lattice2D.h"
-#include "../include/Position.h"
 #include "../include/Cell.h"
 #include "../include/CellACE.h"
 #include "../include/CellLife.h"
 #include "../include/FactoryCell.h"
-
-
+#include "../include/Lattice.h"
+#include "../include/Lattice1D.h"
+#include "../include/Lattice2D.h"
+#include "../include/Position.h"
 
 // estructura de codificacion de Martin Fowler -> apache maven
 
@@ -198,21 +196,42 @@ int main(int argc, char** argv) {
   int v = -1;
   int celula = 0;
   int dim = 1;
+  FactoryCell* factory = nullptr;
+  Lattice* lattice_ptr = nullptr;
+  Position* pos = nullptr;
+  
+  // crear un PositionDim en base del valor de dim
+  // si dim es menor de 2 o mayor de 3, dar error
+  // si dim es 2, crear un PositionDim<2>
+  // si dim es 3, crear un PositionDim<3>
+
 
   ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
 
-  // Lattice* lattice_ptr = nullptr; 
+  // Lattice* lattice_ptr = nullptr;
 
-  // Crear puntero a lattice en funcion de los argumentos
-  // asignar el valor del positiontype en funcion de dim
-  // si b = 0, crear un lattice con frontera abierta
-  // si b = 1, crear un lattice con frontera periodica
-  // si b = 2, crear un lattice sin frontera
-  // si b = 3, crear un lattice con frontera reflectante
-  // si celula es 1, crear un lattice con la celula ACE110
-  // si celula es 2, crear un lattice con la celula ACE30
-  // si celula es 3, crear un lattice con la celula Life23_3
-  // si celula es 4, crear un lattice con la celula Life51_346
+  // si celula es 1, crear un FactoryCellACE110
+  // si celula es 2, crear un FactoryCellACE30
+  // si celula es 3, crear un FactoryCellLife23_3
+  // si celula es 4, crear un FactoryCellLife51_346
+  if (celula == 1) {
+    factory = new FactoryCellACE110();
+  } else if (celula == 2) {
+    factory = new FactoryCellACE30();
+  } else if (celula == 3) {
+    factory = new FactoryCellLife23_3();
+  } else if (celula == 4) {
+    factory = new FactoryCellLife51_346();
+  }
+    
+  if (dim < 2 || dim > 3) {
+    std::cout << "Error: Dim must be 1, 2 or 3" << std::endl;
+    return 1;
+  } else if (dim == 2) {
+    pos = new PositionDim<2>(2, size[0], size[1]);
+  } else if (dim == 3) {
+    pos = new PositionDim<3>(3, size[0], size[1], size[2]);
+  }
 
   // comprobar que size y file_name no estén definidos a la vez
   if (TooMuchArguments(file_name, size) == 1) {
@@ -221,17 +240,33 @@ int main(int argc, char** argv) {
 
   if (file_name != "") {
     std::cout << "Creating lattice with file: " << file_name << std::endl;
-    // lattice_ptr = new Lattice(b, v, file_name);
-    // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    if (b == 1) {
+      lattice_ptr = new Lattice1D_open(b, v, file_name, *factory);
+    } else if (b == 0) {
+      lattice_ptr = new Lattice1D_periodic(b, v, file_name, *factory);
+    } else if (b == 2) {
+      lattice_ptr = new Lattice2D_NoBorder(b, v, file_name, *factory);
+    } else if (b == 3) {
+      lattice_ptr = new Lattice2D_reflective(b, v, file_name, *factory);
+    }
+
   } else {
     std::cout << "Creating lattice with size: ";
-    for (int i = 0; i < size.size(); i++) {
-      std::cout << size[i] << " ";
+
+    if (b == 1) {
+      lattice_ptr = new Lattice1D_open(b, v, *pos, *factory);
+    } else if (b == 0) {
+      lattice_ptr = new Lattice1D_periodic(b, v, *pos, *factory);
+    } else if (b == 2) {
+      lattice_ptr = new Lattice2D_NoBorder(b, v, *pos, *factory);
+    } else if (b == 3) {
+      lattice_ptr = new Lattice2D_reflective(b, v, *pos, *factory);
     }
-    std::cout << std::endl;
-    // lattice_ptr = new Lattice(b, v, size_N, size_M);
-    // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+
   }
+    std::cout << "Contenido del lattice:\n" << std::endl;
+    lattice_ptr->display(std::cout, *lattice_ptr);
+    std::cout << std::endl;
 
   char option = ' ';
   bool c = false;
@@ -243,21 +278,21 @@ int main(int argc, char** argv) {
   int gen = 1;
   while (true) {
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
-    if (gen = 1) {
-      if (file_name != "") {
-        std::cout << "Creating lattice with file: " << file_name << std::endl;
-        // lattice_ptr = new Lattice(b, v, file_name);
-        // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
-      } else {
-        std::cout << "Creating lattice with size: ";
-        for (int i = 0; i < size.size(); i++) {
-          std::cout << size[i] << " ";
-        }
-        std::cout << std::endl;
-        // lattice_ptr = new Lattice(b, v, size_N, size_M);
-        // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
-      }
-    }
+    // if (gen = 1) {
+    //   if (file_name != "") {
+    //     std::cout << "Creating lattice with file: " << file_name << std::endl;
+    //     // lattice_ptr = new Lattice(b, v, file_name);
+    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    //   } else {
+    //     std::cout << "Creating lattice with size: ";
+    //     for (int i = 0; i < size.size(); i++) {
+    //       std::cout << size[i] << " ";
+    //     }
+    //     std::cout << std::endl;
+    //     // lattice_ptr = new Lattice(b, v, size_N, size_M);
+    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    //   }
+    // }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
     // std::cout << "Dimensiones: " << lattice_ptr->getSize()[1] << "x"
@@ -278,17 +313,17 @@ int main(int argc, char** argv) {
         // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular y mostrar la siguiente generacion
-        // std::cout << "Calcular y mostrar la siguiente generacion" <<
-        // std::endl;
-        // lattice_ptr->nextGeneration();
+        std::cout << "Calcular y mostrar la siguiente generacion" <<
+        std::endl;
+        lattice_ptr->nextGeneration();
         // std::cout << "Acierto despues de nextGeneration" << std::endl;
         if (c == false) {
           std::cout << "Generation: " << gen << std::endl;
-          // std::cout << *lattice_ptr << std::endl;
+          lattice_ptr->display(std::cout, *lattice_ptr);
           // std::cout << "despues de nextGeneration" << std::endl;
         } else {
-          // std::cout << "Poblacion: " << lattice_ptr->Population() <<
-          // std::endl;
+          std::cout << "Poblacion: " << lattice_ptr->Population() <<
+          std::endl;
         }
 
         break;
@@ -297,16 +332,18 @@ int main(int argc, char** argv) {
 
         // calcular las siguientes 5 generaciones y mostrarlas
         for (int i = 0; i < 5; i++) {
-          // std::cout << "Generation: " << i << std::endl;
+          std::cout << "Generation: " << i << std::endl;
           // std::cout << *lattice_ptr << std::endl;
-          // lattice_ptr->nextGeneration();
+          lattice_ptr->display(std::cout, *lattice_ptr);
+          lattice_ptr->nextGeneration();
         }
         if (c == false) {
-          // std::cout << "Generation: " << std::endl;
+          std::cout << "Generation: " << std::endl;
           // std::cout << *lattice_ptr << std::endl;
+          lattice_ptr->display(std::cout, *lattice_ptr);
         } else {
-          // std::cout << "Poblacion: " << lattice_ptr->Population() <<
-          // std::endl;
+          std::cout << "Poblacion: " << lattice_ptr->Population() <<
+          std::endl;
         }
         break;
 
@@ -323,7 +360,7 @@ int main(int argc, char** argv) {
       case 's':
         // guardar la generacion en un archivo
         std::cout << "Guardando generacion en un archivo" << std::endl;
-        // lattice_ptr->saveToFile("generacion.txt");
+        lattice_ptr->saveToFile("generacion.txt");
         break;
 
       default:
@@ -333,7 +370,7 @@ int main(int argc, char** argv) {
     gen++;
   }
 
-  // lattice_ptr = nullptr;
-  // delete lattice_ptr;
+  lattice_ptr = nullptr;
+  delete lattice_ptr;
   return 0;
 }
