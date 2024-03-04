@@ -36,14 +36,15 @@ class Lattice {
   virtual ~Lattice() = 0;  // Destructor virtual para permitir la herencia
 
   // Métodos virtuales puros
-  virtual Position getSize() const = 0;
+  virtual Position& getSize() const = 0;
   // int getB() const; // Hecho, no comprobado
   // int getV() const; // Hecho, no comprobado
   virtual void nextGeneration() = 0;
   virtual int Population() = 0;
   virtual Cell& operator[](const Position&) const = 0;
   virtual void saveToFile(const std::string& file_name) = 0;
-};
+  virtual void display() = 0;
+  // friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado};
 
 // //clase Lattice1D hereda de Lattice pero sigue siendo plantilla
 // template <typename PositionType, typename Cell, typename FactoryCell>
@@ -67,7 +68,7 @@ class Lattice {
 //   std::vector<Cell*> cells;
 //   int vivas;
 //   setCell(const PositionType&, const int& i) { cells[PositionType[i]] = Cell; }
-// };
+};
 
 // //clase Lattice1D_open hereda de Lattice, esta no es una plantilla
 // template <typename PositionType, typename Cell, typename FactoryCell>

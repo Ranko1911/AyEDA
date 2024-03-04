@@ -14,6 +14,17 @@ class Lattice2D : public Lattice{
   friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado
   void saveToFile(const std::string& file_name); // Hecho, no comprobado
   void display();  // Hecho, no comprobado
+
+  protected:
+  int size_N;  // columnas
+  int b;
+  int v = 0;
+  std::string file_name = "";
+  std::vector<Cell*> cells;
+  int vivas;
+  FactoryCell& factory;
+  void setCell (const int& i, const int& val); // NO Hecho, no comprobado
+
 };
 
 // clase Lattice2D_reflective hereda de Lattice, esta no es una plantilla
