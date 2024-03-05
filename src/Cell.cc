@@ -36,7 +36,12 @@ void Cell::updateState() {
 // realmente solo llama a la funcion display
 std::ostream& operator<<(std::ostream& os,
                          const Cell& cell) {
-  return cell.display(os, cell);
+  if (cell.getState() == 0) {
+    os << " ";
+  } else if (cell.getState() == 1) {
+    os << "X";
+  }
+  return os;
 }
 
 //metodo display, que realmente es una llamada a la sobrecarga del operador <<

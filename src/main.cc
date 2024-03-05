@@ -23,6 +23,8 @@
 // Opcion con fichero:./programa -b periodic -init variante.txt
 // Opcion sin bordes: ./programa -init variante.txt -b noborder
 
+// ./programa -init variante.txt -b periodic -dim 2 -cell ACE110
+
 void checkKeyPress(std::atomic<bool>& stop) {
   char key;
   std::cin >> key;
@@ -211,7 +213,7 @@ int main(int argc, char** argv) {
 
   ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
 
-  std::cout << "Despues de funcion argumentos" << std::endl;
+  // std::cout << "Despues de funcion argumentos" << std::endl;
 
   // Lattice* lattice_ptr = nullptr;
 
@@ -236,7 +238,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  std::cout << "file_name:" << file_name << std::endl;
+  // std::cout << "file_name:" << file_name << std::endl;
 
   // comprobar que size y file_name no estén definidos a la vez
   if (TooMuchArguments(file_name, size) == 1) {
@@ -262,7 +264,7 @@ int main(int argc, char** argv) {
     std::cout << "Creating lattice with size: " << size[0] << "x" << size[1]
               << "x" << size[2] << std::endl;
   }
-  std::cout << "Creating lattice with size: ";
+  // std::cout << "Creating lattice with size: ";
 
   if (file_name != "") {
     std::cout << "Creating lattice with file: " << file_name << std::endl;
@@ -281,8 +283,7 @@ int main(int argc, char** argv) {
     }
 
   } else {
-    std::cout << "Creating lattice with size: ";
-
+    std::cout << "Creating lattice with size" << std::endl;
     if (b == 1) {
       lattice_ptr = new Lattice1D_open(b, v, *pos, *factory);
     } else if (b == 0) {
@@ -293,8 +294,9 @@ int main(int argc, char** argv) {
       lattice_ptr = new Lattice2D_reflective(b, v, *pos, *factory);
     }
   }
-  std::cout << "Contenido del lattice:\n" << std::endl;
+  std::cout << "Contenido del lattice:" << std::endl;
   lattice_ptr->display(std::cout, *lattice_ptr);
+  // std::cout << "no llega al final" << std::endl;
   std::cout << std::endl;
 
   char option = ' ';

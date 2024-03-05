@@ -26,7 +26,7 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
 
   archivo.close();
 
-  // imprimr el contenido del archivo
+  //imprimr el contenido del archivo
   // std::cout << "Contenido del archivo: " << std::endl;
   // for (int i = 0; i < lineas.size(); i++) {
   //   for (int j = 0; j < lineas[i].size(); j++) {
@@ -39,23 +39,24 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
   // this->size = pos;
 
   for (int pos = 0; pos < lineas[0].size(); pos++) {
-    if (lineas[0][pos] == '0') {
+    // std::cout << "pos: " << pos << std::endl;
+    if (lineas[0][pos] == ' ') {
       PositionDim<2> pos1(pos, 0);
       Cell* c = factory.createCell(pos1, 0);
-      // cells.push_back(*c);
-      cells[pos] = c;
+      cells.push_back(c);
+      // cells[pos] = c;
       // std::cout << "cero" << std::endl;
-    } else if (lineas[0][pos] == '1') {
+    } else if (lineas[0][pos] == 'X') {
       PositionDim<2> pos1(pos, 0);
       Cell* c = factory.createCell(pos1, 1);
-      // cells.push_back(*c);
-      cells[pos] = c;
+      cells.push_back(c);
+      // cells[pos] = c;
       // std::cout << "uno" << std::endl;
     }
   }
 
   // imprimir cells, funciona
-  // std::cout << "Contenido de cells: " << std::endl;
+  // std::cout << "Contenido de cells: " << cells.size() << std::endl;
   // for (int i = 0; i < cells.size(); i++) {
   //   std::cout << *cells[i];
   // }
@@ -83,8 +84,8 @@ Lattice1D::Lattice1D(const int& b, const int& v, const Position& size,
   PositionDim<2> pos1(pos, 0);
   Cell* d = factory.createCell(pos1, 1);
   // Cell* d = factory.create(pos, 1);
-  // cells.push_back(*d);
-  cells[pos] = d;
+  cells.push_back(d);
+  // cells[pos] = d;
   // pos++;
 
   for (pos = pos + 1; pos < size[1]; pos++) {
@@ -92,7 +93,8 @@ Lattice1D::Lattice1D(const int& b, const int& v, const Position& size,
     // cells.push_back(*c);
     PositionDim<2> pos1(pos, 0);
     Cell* c = factory.createCell(pos1, 0);
-    cells[pos] = c;
+    // cells[pos] = c;
+    cells.push_back(c);
   }
 }
 

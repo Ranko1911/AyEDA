@@ -266,6 +266,7 @@ void Lattice2D::nextGeneration() {
 std::ostream& Lattice2D::display(std::ostream& os, const Lattice2D& lattice) {
   Position& size = this->getSize();
   for (int i = 0; i < size[1]; i++) {
+    std::cout << "i: " << i << std::endl;
     for (int j = 0; j < size[0]; j++) {
       os << *lattice.cells[i][j] ;  // << "(" << i << "," << j << ") "
       // os << "[ " << i << "," << j << " ]";
