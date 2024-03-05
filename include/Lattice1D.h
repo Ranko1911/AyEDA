@@ -37,7 +37,12 @@ class Lattice1D_open : public Lattice1D{
  public:
   Lattice1D_open(const int& b, const int& v, const std::string& file_name, FactoryCell& factory): Lattice1D (b, v, file_name, factory) {}
   Lattice1D_open(const int& b, const int& v, const Position& size,  FactoryCell& factory) : Lattice1D (b, v, size, factory) {}
-  ~Lattice1D_open();
+  ~Lattice1D_open() { 
+    for (Cell* cell : cells) {
+      delete cell;
+    }
+    cells.clear();
+  }
   Cell& operator[](const Position&) const;
 
   protected:
@@ -55,7 +60,12 @@ class Lattice1D_periodic : public Lattice1D {
  public:
   Lattice1D_periodic(const int& b, const int& v, const std::string& file_name,  FactoryCell& factory) : Lattice1D(b, v, file_name, factory) {}
   Lattice1D_periodic(const int& b, const int& v, const Position& size,  FactoryCell& factory) : Lattice1D(b, v, size, factory) {}
-  ~Lattice1D_periodic();
+  ~Lattice1D_periodic(){
+    for (Cell* cell : cells) {
+      delete cell;
+    }
+    cells.clear();
+  }
   Cell& operator[](const Position&) const;
 
   protected:

@@ -1,7 +1,5 @@
 
 #include "../include/Lattice1D.h"
-
-#include "../include/Lattice.h"
 #include "../include/Position.h"
 
 // constructor de la clase template Lattice1D con entrada por fichero

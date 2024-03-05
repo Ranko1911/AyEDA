@@ -30,7 +30,7 @@ class Lattice2D : public Lattice{
   int vivas;
   FactoryCell& factory;
   void setCell (const Position& i, const int& val); // NO Hecho, no comprobado
-  virtual Cell& getCell (const Position& i) const = 0; // NO Hecho, no comprobado
+  Cell& getCell (const Position& i) const; // NO Hecho, no comprobado
 };
 
 // clase Lattice2D_reflective hereda de Lattice, esta no es una plantilla

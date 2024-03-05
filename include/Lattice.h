@@ -16,7 +16,7 @@ class Lattice {
  Lattice() = default;
   Lattice(const int& b, const int& v, const std::string& file_name, const FactoryCell& factory);
   Lattice(const int& b, const int& v, const int& size_N, const int& size_M, const FactoryCell& factory);
-  virtual ~Lattice() = 0;  // Destructor virtual para permitir la herencia
+  ~Lattice() {}  // Destructor virtual para permitir la herencia
 
   // Métodos virtuales puros
   virtual Position& getSize() const = 0;

@@ -455,3 +455,55 @@ void Lattice2D_NoBorder::aumentarAbajo() {
   // std::cout << "Contenido de cells despues de aumentar: " << std::endl;
   // std::cout << *this << std::endl;
 }
+
+// getCell de la clase template Lattice2D_reflective
+Cell& Lattice2D_reflective::getCell(const Position& pos) const {
+  // std::cout << "pos: " << pos.x << "," << pos.y << std::endl;
+  // std::cout << "size_N: " << size_N << " size_M: " << size_M << std::endl;
+  if (pos[0] < 0) {
+    if (pos[1] < 0) {
+      // std::cout << "1" << std::endl;
+      return *cells[0][0];
+    } else if (pos[1] >= size_N) {
+      // std::cout << "2" << std::endl;
+      return *cells[0][size_N - 1];
+    } else {
+      // std::cout << "3" << std::endl;
+      return *cells[0][pos[1]];
+    }
+  } else if (pos[0] >= size_M) {
+    if (pos[1] < 0) {
+      // std::cout << "4" << std::endl;
+      return *cells[size_M - 1][0];
+    } else if (pos[1] >= size_N) {
+      // std::cout << "5" << std::endl;
+      return *cells[size_M - 1][size_N - 1];
+    } else {
+      // std::cout << "6" << std::endl;
+      return *cells[size_M - 1][pos[1]];
+    }
+  } else {
+    if (pos[1] < 0) {
+      // std::cout << "7" << std::endl;
+      return *cells[pos[0]][0];
+    } else if (pos[1] >= size_N) {
+      // std::cout << "8" << std::endl;
+      return *cells[pos[0]][size_N - 1];
+    } else {
+      // std::cout << "9" << std::endl;
+      return *cells[pos[0]][pos[1]];
+    }
+  }
+}
+
+// getCell de la clase template Lattice2D_NoBorder
+Cell& Lattice2D_NoBorder::getCell(const Position& pos) const {
+  if (pos[0] < 0 || pos[0] >= size_M || pos[1] < 0 || pos[1] >= size_N) {
+    PositionDim<3> pos1(2, 0, 0);
+    Cell* VIVA = factory.createCell(pos1, 1);
+    Cell* MUERTA = factory.createCell(pos1, 0);
+    return *MUERTA;
+  } else {
+    return *cells[pos[0]][pos[1]];
+  }
+}
