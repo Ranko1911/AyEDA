@@ -17,6 +17,7 @@ class Lattice2D : public Lattice{
   std::ostream& display(std::ostream&, const Lattice&){
     //llamar al display de esta clase
     this->display(std::cout, *this);
+    return std::cout;
   } // Hecho, no comprobado
   
   protected:
@@ -35,8 +36,8 @@ class Lattice2D : public Lattice{
 // clase Lattice2D_reflective hereda de Lattice, esta no es una plantilla
 class Lattice2D_reflective : public Lattice2D {
  public:
-  Lattice2D_reflective(const int& b, const int& v, const std::string& file_name, const FactoryCell& factory); // Hecho, no comprobado
-  Lattice2D_reflective(const int& b, const int& v, const Position& size, const FactoryCell& factory); // Hecho, no comprobado
+  Lattice2D_reflective(const int& b, const int& v, const std::string& file_name, FactoryCell& factory) : Lattice2D(b, v, file_name, factory) {}// Hecho, no comprobado
+  Lattice2D_reflective(const int& b, const int& v, const Position& size,  FactoryCell& factory): Lattice2D(b,v,size, factory) {} // Hecho, no comprobado
   ~Lattice2D_reflective(); // Hecho, no comprobado
   Cell& operator[](const Position&) const; // Hecho, no comprobado
 
@@ -55,8 +56,8 @@ class Lattice2D_reflective : public Lattice2D {
 // clase Lattice2D_NoBorder hereda de Lattice, esta no es una plantilla
 class Lattice2D_NoBorder : public Lattice2D {
  public:
-  Lattice2D_NoBorder(const int& b, const int& v, const std::string& file_name,  FactoryCell& factory); // Hecho, no comprobado
-  Lattice2D_NoBorder(const int& b, const int& v, const Position& size,  FactoryCell& factory); // Hecho, no comprobado
+  Lattice2D_NoBorder(const int& b, const int& v, const std::string& file_name,  FactoryCell& factory) : Lattice2D(b,v,file_name, factory){} // Hecho, no comprobado
+  Lattice2D_NoBorder(const int& b, const int& v, const Position& size,  FactoryCell& factory) : Lattice2D(b,v, size, factory) {}// Hecho, no comprobado
   ~Lattice2D_NoBorder();  // Hecho, no comprobado
   void nextGeneration(); // Hecho, no comprobado
   Cell& operator[](const Position&) const;// Hecho, no comprobado

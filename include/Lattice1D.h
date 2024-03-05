@@ -14,6 +14,7 @@ class Lattice1D : public Lattice {
   std::ostream& display(std::ostream&, const Lattice&){
     //llamar al display de esta clase
     this->display(std::cout, *this);
+    return std::cout;
   } // Hecho, no comprobado
   friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado
 
@@ -34,8 +35,8 @@ class Lattice1D : public Lattice {
 //clase Lattice1D_open hereda de Lattice, esta no es una plantilla
 class Lattice1D_open : public Lattice1D{
  public:
-  Lattice1D_open(const int& b, const int& v, const std::string& file_name, FactoryCell& factory): Lattice1D(b, v, file_name, factory) {}
-  Lattice1D_open(const int& b, const int& v, const Position& size,  FactoryCell& factory) : Lattice1D(b, v, size, factory) {}
+  Lattice1D_open(const int& b, const int& v, const std::string& file_name, FactoryCell& factory): Lattice1D (b, v, file_name, factory) {}
+  Lattice1D_open(const int& b, const int& v, const Position& size,  FactoryCell& factory) : Lattice1D (b, v, size, factory) {}
   ~Lattice1D_open();
   Cell& operator[](const Position&) const;
 
@@ -46,7 +47,7 @@ class Lattice1D_open : public Lattice1D{
   std::string file_name = "";
   std::vector<Cell*> cells;
   int vivas;
-  Cell& getCell (const int& i) const; // NO Hecho, no comprobado
+  Cell& getCell (const Position& i) const; // NO Hecho, no comprobado
 };
 
 //clase Lattice1D_periodic hereda de Lattice, esta no es una plantilla
@@ -66,3 +67,7 @@ class Lattice1D_periodic : public Lattice1D {
   int vivas;
   Cell& getCell (const Position& i) const; // NO Hecho, no comprobado
 };
+
+//ejemplo de objeto de la clase Lattice1D
+// FactoryCellACE110 factory;
+// Lattice1D_open l1(1, 1, "file.txt", factory);

@@ -145,8 +145,8 @@ Lattice1D::~Lattice1D() {
 
 // getsize de la clase template Lattice1D
 Position& Lattice1D::getSize() const {
-  PositionDim<2> pos(size[1], 0);
-  return pos;
+  PositionDim<2> pos_var = size;
+  return pos_var;
 }
 
 // operador << de la clase template Lattice1D
@@ -168,7 +168,7 @@ std::ostream& Lattice1D::display(std::ostream& os, const Lattice1D& lattice) {
 // operator[] de la clase template Lattice1D_open
 Cell& Lattice1D_open::operator[](const Position& pos) const {
   int x = pos[0];
-  return *const_cast<Cell*>(&getCell(x));
+  return *const_cast<Cell*>(&getCell(pos));
 }
 
 // operator[] de la clase template Lattice1D_open
@@ -177,7 +177,7 @@ Cell& Lattice1D_periodic::operator[](const Position& pos) const {
 }
 
 // getCell de la clase template Lattice1D_periodic
-Cell& Lattice1D_periodic::getCell(const Position& pos) const {
+Cell& Lattice1D_open::getCell(const Position& pos) const {
   PositionDim<2> pos1(2, 0);
   Cell* VIVA = factory.createCell(pos1, 1);
   Cell* MUERTA = factory.createCell(pos1, 0);

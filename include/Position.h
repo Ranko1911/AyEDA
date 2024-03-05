@@ -43,5 +43,5 @@ class PositionDim : public Position {
 
 
 //ejemplo de uso
-PositionDim<2> p(1, 2);
-PositionDim<3> p(1, 2, 3);
+// PositionDim<2> p(1, 2);
+// PositionDim<3> p(1, 2, 3);

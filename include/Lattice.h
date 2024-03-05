@@ -24,7 +24,7 @@ class Lattice {
   // int getV() const; // Hecho, no comprobado
   virtual void nextGeneration() = 0;
   virtual int Population() = 0;
-  // virtual Cell& operator[](const Position&) const = 0;
+  virtual Cell& operator[](const Position&) const = 0;
   virtual void saveToFile(const std::string& file_name) = 0;
   virtual std::ostream& display(std::ostream&, const Lattice&) = 0;
   // friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado};

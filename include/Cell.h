@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "Lattice.h"
 #include "Position.h"
+
+class Lattice;
 
 // Cell clase plantilla
 class Cell {
