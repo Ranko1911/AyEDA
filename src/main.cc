@@ -46,8 +46,8 @@ int TooMuchArguments(std::string file_name, std::vector<int> size) {
     std::cout << "Error: Both file and size are defined" << std::endl;
     return 1;
 
-  } else {
-    std::cout << "Error: No size or file defined" << std::endl;
+  } else if (file_name == "" && size.size() == 0) {
+    std::cout << "Error: No file or size defined" << std::endl;
     return 1;
   }
   return 0;
@@ -133,25 +133,25 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
                   << std::endl;
         exit(1);
       }
-    } else if (arg == "-cell ") {
+    } else if (arg == "-cell") {
       std::string c_arg = argv[i + 1];
       if (c_arg == "ACE110" || c_arg == "ACE30" || c_arg == "Life23_3" ||
           c_arg == "Life51_346") {
         if (c_arg == "ACE110") {
-          c_arg = "1";
+          c = 1;
           i++;
         } else if (c_arg == "ACE30") {
-          c_arg = "2";
+          c = 2;
           i++;
         } else if (c_arg == "Life23_3") {
-          c_arg = "3";
+          c = 3;
           i++;
         } else if (c_arg == "Life51_346") {
-          c_arg = "4";
+          c = 4;
           i++;
         }
         i++;
-        std::cout << "C: " << c << std::endl;
+        std::cout << "C: " << c_arg << std::endl;
       } else {
         std::cout << "Error: Not Valid option for c first argument: " << c_arg
                   << std::endl;
@@ -159,6 +159,7 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
       }
 
     } else if (arg == "-dim") {
+      std::cout << "Dim: " << argv[i + 1] << std::endl;
       std::string dim_arg = argv[i + 1];
 
       // si no es un numero, error
@@ -169,13 +170,14 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
 
       dim = std::stoi(dim_arg);
       i++;
-      std::cout << "Dim: " << dim << std::endl;
+      // std::cout << "Dim: " << dim << std::endl;
 
     } else {
       std::cout << "Unknown argument: " << argc << std::endl;
       exit(1);
     }
   }
+
 }
 
 int main(int argc, char** argv) {
@@ -199,14 +201,17 @@ int main(int argc, char** argv) {
   FactoryCell* factory = nullptr;
   Lattice* lattice_ptr = nullptr;
   Position* pos = nullptr;
-  
+
   // crear un PositionDim en base del valor de dim
   // si dim es menor de 2 o mayor de 3, dar error
   // si dim es 2, crear un PositionDim<2>
   // si dim es 3, crear un PositionDim<3>
 
+  // std::cout << "Antes de funcion argumentos" << std::endl;
 
   ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
+
+  std::cout << "Despues de funcion argumentos" << std::endl;
 
   // Lattice* lattice_ptr = nullptr;
 
@@ -215,39 +220,64 @@ int main(int argc, char** argv) {
   // si celula es 3, crear un FactoryCellLife23_3
   // si celula es 4, crear un FactoryCellLife51_346
   if (celula == 1) {
+    std::cout << "Creating FactoryCellACE110" << std::endl;
     factory = new FactoryCellACE110();
   } else if (celula == 2) {
+    std::cout << "Creating FactoryCellACE30" << std::endl;
     factory = new FactoryCellACE30();
   } else if (celula == 3) {
+    std::cout << "Creating FactoryCellLife23_3" << std::endl;
     factory = new FactoryCellLife23_3();
   } else if (celula == 4) {
+    std::cout << "Creating FactoryCellLife51_346" << std::endl;
     factory = new FactoryCellLife51_346();
-  }
-    
-  if (dim < 2 || dim > 3) {
-    std::cout << "Error: Dim must be 1, 2 or 3" << std::endl;
+  } else {
+    std::cout << "Error: Not valid option for c" << std::endl;
     return 1;
-  } else if (dim == 2) {
-    pos = new PositionDim<2>(2, size[0], size[1]);
-  } else if (dim == 3) {
-    pos = new PositionDim<3>(3, size[0], size[1], size[2]);
   }
+
+  std::cout << "file_name:" << file_name << std::endl;
 
   // comprobar que size y file_name no estén definidos a la vez
   if (TooMuchArguments(file_name, size) == 1) {
     return 1;
   }
 
+  //si el vector size esta vacio, relleanr con 0 hasta 3
+  while (size.size() < 3) {
+    size.push_back(0);
+  }
+
+  if (dim < 2 || dim > 3) {
+    std::cout << "Error: Dim must be 2 or 3" << std::endl;
+    return 1;
+  } else if (dim == 2) {
+    std::cout << "Creating PositionDim<2>" << std::endl;
+    pos = new PositionDim<2>(2, size[0], size[1]);
+    std::cout << "Creating lattice with size: " << size[0] << "x" << size[1]
+              << std::endl;
+  } else if (dim == 3) {
+    std::cout << "Creating PositionDim<3>" << std::endl;
+    pos = new PositionDim<3>(3, size[0], size[1], size[2]);
+    std::cout << "Creating lattice with size: " << size[0] << "x" << size[1]
+              << "x" << size[2] << std::endl;
+  }
+  std::cout << "Creating lattice with size: ";
+
   if (file_name != "") {
     std::cout << "Creating lattice with file: " << file_name << std::endl;
-    if (b == 1) {
+    if (b == 0) {
       lattice_ptr = new Lattice1D_open(b, v, file_name, *factory);
-    } else if (b == 0) {
+      std::cout << "Creating lattice1D_open" << std::endl;
+    } else if (b == 1) {
       lattice_ptr = new Lattice1D_periodic(b, v, file_name, *factory);
+      std::cout << "Creating lattice1D_periodic" << std::endl;
     } else if (b == 2) {
       lattice_ptr = new Lattice2D_NoBorder(b, v, file_name, *factory);
+      std::cout << "Creating lattice2D_NoBorder" << std::endl;
     } else if (b == 3) {
       lattice_ptr = new Lattice2D_reflective(b, v, file_name, *factory);
+      std::cout << "Creating lattice2D_reflective" << std::endl;
     }
 
   } else {
@@ -262,11 +292,10 @@ int main(int argc, char** argv) {
     } else if (b == 3) {
       lattice_ptr = new Lattice2D_reflective(b, v, *pos, *factory);
     }
-
   }
-    std::cout << "Contenido del lattice:\n" << std::endl;
-    lattice_ptr->display(std::cout, *lattice_ptr);
-    std::cout << std::endl;
+  std::cout << "Contenido del lattice:\n" << std::endl;
+  lattice_ptr->display(std::cout, *lattice_ptr);
+  std::cout << std::endl;
 
   char option = ' ';
   bool c = false;
@@ -280,9 +309,11 @@ int main(int argc, char** argv) {
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
     // if (gen = 1) {
     //   if (file_name != "") {
-    //     std::cout << "Creating lattice with file: " << file_name << std::endl;
+    //     std::cout << "Creating lattice with file: " << file_name <<
+    //     std::endl;
     //     // lattice_ptr = new Lattice(b, v, file_name);
-    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr <<
+    //     std::endl;
     //   } else {
     //     std::cout << "Creating lattice with size: ";
     //     for (int i = 0; i < size.size(); i++) {
@@ -290,7 +321,8 @@ int main(int argc, char** argv) {
     //     }
     //     std::cout << std::endl;
     //     // lattice_ptr = new Lattice(b, v, size_N, size_M);
-    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr << std::endl;
+    //     // std::cout << "Contenido del lattice:\n" << *lattice_ptr <<
+    //     std::endl;
     //   }
     // }
     // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
@@ -313,8 +345,7 @@ int main(int argc, char** argv) {
         // std::cout << "\033[2J\033[1;1H";  // limpia la pantalla
 
         // calcular y mostrar la siguiente generacion
-        std::cout << "Calcular y mostrar la siguiente generacion" <<
-        std::endl;
+        std::cout << "Calcular y mostrar la siguiente generacion" << std::endl;
         lattice_ptr->nextGeneration();
         // std::cout << "Acierto despues de nextGeneration" << std::endl;
         if (c == false) {
@@ -322,8 +353,7 @@ int main(int argc, char** argv) {
           lattice_ptr->display(std::cout, *lattice_ptr);
           // std::cout << "despues de nextGeneration" << std::endl;
         } else {
-          std::cout << "Poblacion: " << lattice_ptr->Population() <<
-          std::endl;
+          std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
         }
 
         break;
@@ -342,8 +372,7 @@ int main(int argc, char** argv) {
           // std::cout << *lattice_ptr << std::endl;
           lattice_ptr->display(std::cout, *lattice_ptr);
         } else {
-          std::cout << "Poblacion: " << lattice_ptr->Population() <<
-          std::endl;
+          std::cout << "Poblacion: " << lattice_ptr->Population() << std::endl;
         }
         break;
 

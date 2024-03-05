@@ -42,7 +42,7 @@ std::ostream& operator<<(std::ostream& os,
 //metodo display, que realmente es una llamada a la sobrecarga del operador <<
 std::ostream& Cell::display(std::ostream& os, const Cell& cell) const {
   if (cell.getState() == 0) {
-    os << "-";
+    os << " ";
   } else if (cell.getState() == 1) {
     os << "X";
   }
