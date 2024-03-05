@@ -24,9 +24,15 @@ class PositionDim : public Position {
 
  public:
   // Constructor por defecto
-  PositionDim() {  }
+    // // Constructor por defecto
+  PositionDim(){
+    for (int d = 0; d < Dim; d++) {
+      Coordinates[d] = 0;
+    }
+  }
+  // PositionDim() {  }
   // Constructor con lista variable de parámetros
-  PositionDim(int sz, ...) {
+  PositionDim(int sz, ...){
     va_list vl;
     va_start(vl, sz);
     for (int d = 0; d < Dim; d++) {
@@ -36,7 +42,7 @@ class PositionDim : public Position {
   }
 
   Coor_t operator[](unsigned int i) const { return Coordinates[i]; }
-  Coor_t& operator[](unsigned int i) { return Coordinates[i]; }
+  // Coor_t& operator[](unsigned int i) { return Coordinates[i]; }
 
 };
 

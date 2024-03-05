@@ -27,7 +27,7 @@ class FactoryCellACE30 : public FactoryCell {
 
 class FactoryCellLife23_3 : public FactoryCell {
  public:
-  Cell* createCell(Position& temp, int value) override { return new CellLife23_3(temp, value); }
+  Cell* createCell(Position& temp, int value)override { return new CellLife23_3(temp, value); }
 };
 
 class FactoryCellLife51_346 : public FactoryCell {

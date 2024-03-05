@@ -12,16 +12,27 @@
 // nextState de CellLifeACE110
 // Método para obtener el siguiente estado de la celda ACE110
 int CellACE110::nextState(const Lattice& lattice) {
-  Position& pos = getPosition();
-  int pos01 = pos[0] + 1;
-  PositionDim<2> pos1(2, pos01, pos[1]);
+  std::cout << "nextState de CellACE110" << std::endl;
+  // Position& pos = getPosition();
+  // this->position[0] ;
+  // std::cout << "pos pa papa" << pos[0]  << std::endl;
+  std::cout << "AAAAAAAAAAAAAAAAAAAAA  0" << std::endl;
+  int pos01 = this->position[0];
+  std::cout << "AAAAAAAAAAAAAAAAAAAAA  0.5" << std::endl;
+  std::cout << position[1] << std::endl;
+    std::cout << "AAAAAAAAAAAAAAAAAAAAA  1" << std::endl;
+
+  pos01 = pos01 + 1;
+  std::cout << "AAAAAAAAAAAAAAAAAAAAA" << std::endl;
+  PositionDim<2> pos1(2, pos01, this->position[1]);
+  std::cout << "BBBBBBBBBBBBBBBBBBBBB" << std::endl;
   int sum1 = getState() + lattice[pos1].getState();
-
-  int pos11 = pos[0] - 1;
-  PositionDim<2> pos2(2, pos11, pos[1]);
+  std::cout << "CCCCCCCCCCCCCCCCCCCCC" << std::endl;
+  int pos11 = this->position[0] - 1;
+  PositionDim<2> pos2(2, pos11, this->position[1]);
   int mult1 = getState() * lattice[pos2].getState();
-
-  int pos21 = pos[1] + 1;
+  std::cout << " DDDDDDDDDDDDDDDDDDD" << std::endl;
+  int pos21 = this->position[0] + 1;
   PositionDim<2> pos3(2, pos11, pos21);
   int mult2 = lattice[pos2].getState() * getState() * lattice[pos3].getState();
 

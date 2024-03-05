@@ -1,6 +1,9 @@
 
+#include "../include/Cell.h"
 #include "../include/Lattice1D.h"
 #include "../include/Position.h"
+#include <fstream>
+#include <iostream>
 
 // constructor de la clase template Lattice1D con entrada por fichero
 Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
@@ -34,8 +37,11 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
   //   }
   // }
   // std::cout << std::endl;
-  this->size[0] = 1;
-  this->size[1] = lineas[0].size();
+  // this->size[0] = 1;
+  // this->size[1] = lineas[0].size();
+
+  PositionDim<2> pos1(1, lineas[0].size());
+  this->size = pos1;
   // this->size = pos;
 
   for (int pos = 0; pos < lineas[0].size(); pos++) {
@@ -103,14 +109,20 @@ void Lattice1D::nextGeneration() {
   this->vivas = Population();
 
   // bucle para nextStates
+  std::cout << "Antes de nextStates" << std::endl;
+  // std::cout << "size[1]: " << size[1] << std::endl;
   for (int i = 0; i < size[1]; i++) {
     cells[i]->nextState(*this);
+    // std::cout << "cell: " << *cells[i] << std::endl;
   }
+  std::cout << "Despues de nextStates" << std::endl;
 
+  std::cout << "Antes de updateStates" << std::endl;
   // bucle para updateStates
   for (int i = 0; i < size[1]; i++) {
     cells[i]->updateState();
   }
+  std::cout << "Despues de updateStates" << std::endl;
 }
 
 // saveToFile de la clase template Lattice1D

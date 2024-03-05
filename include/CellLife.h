@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Cell.h"
+#include "Position.h"
+
 
 // clase CellLife hereda de Cell
 class CellLife : public Cell {

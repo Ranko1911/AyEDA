@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Lattice.h"
+#include "Position.h"
 
 //clase Lattice2D hereda de Lattice pero sigue siendo plantilla
 class Lattice2D : public Lattice{

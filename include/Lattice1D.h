@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Lattice.h"
 
 //clase Lattice1D hereda de Lattice pero sigue siendo plantilla

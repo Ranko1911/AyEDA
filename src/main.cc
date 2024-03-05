@@ -23,7 +23,7 @@
 // Opcion con fichero:./programa -b periodic -init variante.txt
 // Opcion sin bordes: ./programa -init variante.txt -b noborder
 
-// ./programa -init variante.txt -b periodic -dim 2 -cell ACE110
+// ./programa -init 1dimen.txt -b periodic -dim 2 -cell ACE110
 
 void checkKeyPress(std::atomic<bool>& stop) {
   char key;
