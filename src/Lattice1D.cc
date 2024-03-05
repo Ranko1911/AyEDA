@@ -30,30 +30,32 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
   archivo.close();
 
   //imprimr el contenido del archivo
-  // std::cout << "Contenido del archivo: " << std::endl;
-  // for (int i = 0; i < lineas.size(); i++) {
-  //   for (int j = 0; j < lineas[i].size(); j++) {
-  //     std::cout << lineas[i][j];
-  //   }
-  // }
-  // std::cout << std::endl;
+  std::cout << "Contenido del archivo: " << std::endl;
+  for (int i = 0; i < lineas.size(); i++) {
+    for (int j = 0; j < lineas[i].size(); j++) {
+      std::cout << lineas[i][j];
+    }
+  }
+  std::cout << std::endl;
   // this->size[0] = 1;
   // this->size[1] = lineas[0].size();
 
   PositionDim<2> pos1(1, lineas[0].size());
   this->size = pos1;
+  // std::cout << "lineas[0].size(): " << lineas[0].size() << std::endl;
+  std::cout << "size[0]: " << this->size[0] << std::endl;
   // this->size = pos;
 
-  for (int pos = 0; pos < lineas[0].size(); pos++) {
+  for (int pos = 0; pos < size[0]; pos++) {
     // std::cout << "pos: " << pos << std::endl;
     if (lineas[0][pos] == ' ') {
-      PositionDim<2> pos1(pos, 0);
+      PositionDim<2> pos1(2, pos);
       Cell* c = factory.createCell(pos1, 0);
       cells.push_back(c);
       // cells[pos] = c;
       // std::cout << "cero" << std::endl;
     } else if (lineas[0][pos] == 'X') {
-      PositionDim<2> pos1(pos, 0);
+      PositionDim<2> pos1(2, pos);
       Cell* c = factory.createCell(pos1, 1);
       cells.push_back(c);
       // cells[pos] = c;
@@ -61,12 +63,16 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
     }
   }
 
-  // imprimir cells, funciona
+  // // imprimir cells, funciona
   // std::cout << "Contenido de cells: " << cells.size() << std::endl;
   // for (int i = 0; i < cells.size(); i++) {
   //   std::cout << *cells[i];
   // }
   // std::cout << std::endl;
+
+  //imprimir cells con display
+  std::cout << "Contenido de cells: " << std::endl;
+  display(std::cout, *this);
 }
 
 // constructor de la clase template Lattice1D con entrada por tamaño
@@ -110,10 +116,10 @@ void Lattice1D::nextGeneration() {
 
   // bucle para nextStates
   std::cout << "Antes de nextStates" << std::endl;
-  // std::cout << "size[1]: " << size[1] << std::endl;
+  std::cout << "size[1]: " << size[0] << std::endl;
   for (int i = 0; i < size[1]; i++) {
     cells[i]->nextState(*this);
-    // std::cout << "cell: " << *cells[i] << std::endl;
+    std::cout << "cell: " << *cells[i] << std::endl;
   }
   std::cout << "Despues de nextStates" << std::endl;
 
@@ -164,16 +170,26 @@ Position& Lattice1D::getSize() const {
 // operador << de la clase template Lattice1D
 std::ostream& operator<<(std::ostream& os, Lattice1D& lattice) {
   // lamada a display de la clase template Lattice1D
-  lattice.display(os, lattice);
+  // lattice.display(os, lattice);
+  std::cout << "entrando en operator<< de Lattice1D" << std::endl;
+  std::vector<Cell*> cells_ = lattice.getCells();
+  std::cout << "cells_.size(): " << cells_.size() << std::endl;
+  for (int i = 0; i < lattice.getSize()[1]; i++) {
+    os << *cells_[i];
+  }
   return os;
 }
 
 // metodo display de la clase template Lattice1D
 // realmente solo es una llama a operator<<
 std::ostream& Lattice1D::display(std::ostream& os, const Lattice1D& lattice) {
-  for (int i = 0; i < lattice.size[1]; i++) {
+  std::cout << "entrando en display de Lattice1D" << std::endl;
+  Position& pos_var = lattice.getSize();
+  for (int i = 0; i < lattice.size[0]; i++) {
+    // std::cout << "i: " << i << std::endl;
     os << *lattice.cells[i];
   }
+  os << std::endl;
   return os;
 }
 

@@ -14,7 +14,13 @@ protected:
 
 public:
     // Constructor
-    Cell(Position& pos, const int val) : position(pos), value(val), nextValue(0) {}
+    Cell(Position& pos, const int val) : position(pos), value(val), nextValue(0) {
+        std::cout << "Constructor de Cell" << std::endl;
+        std::cout << "pos: " << position[0] << std::endl;
+        std::cout << "pos: " << position[1] << std::endl;
+        std::cout << "val: " << value << std::endl;
+
+    }
 
     // Destructor virtual para permitir la herencia
     virtual ~Cell() {}

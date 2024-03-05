@@ -14,6 +14,7 @@
 // Método para obtener el siguiente estado de la celda CellLife23_3
 int CellLife23_3::nextState(const Lattice& lattice) {
   // nuevos vecinos
+  std::cout << "nextState de CellLife23_3" << std::endl;
 
   int size_N = lattice.getSize()[0];
 
@@ -87,6 +88,7 @@ int CellLife23_3::nextState(const Lattice& lattice) {
 // nextState CellLife51_346
 // Método para obtener el siguiente estado de la celda CellLife51_346
 int CellLife51_346::nextState(const Lattice& lattice) {
+  std::cout << "nextState de CellLife51_346" << std::endl;
   //nuevos vecinos
   // CellLife51_346 Neightbour1 = lattice[lattice.getSize()[0] - 1][lattice.getSize()[1] - 1];
   PositionDim<3> pos1(3, lattice.getSize()[1] - 1, lattice.getSize()[2] - 1);

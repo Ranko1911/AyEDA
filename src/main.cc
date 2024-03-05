@@ -153,7 +153,7 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
           i++;
         }
         i++;
-        std::cout << "C: " << c_arg << std::endl;
+        std::cout << "C: " << c_arg << " " << c << std::endl;
       } else {
         std::cout << "Error: Not Valid option for c first argument: " << c_arg
                   << std::endl;
@@ -165,8 +165,8 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
       std::string dim_arg = argv[i + 1];
 
       // si no es un numero, error
-      if (std::stoi(dim_arg) <= 0) {
-        std::cout << "Error: Dim must be greater than 0" << std::endl;
+      if (std::stoi(dim_arg) < 2) {
+        std::cout << "Error: Dim must be greater than 2" << std::endl;
         exit(1);
       }
 
@@ -179,7 +179,6 @@ void ArgumentsFunction(int argc, char** argv, std::string& file_name,
       exit(1);
     }
   }
-
 }
 
 int main(int argc, char** argv) {
@@ -204,18 +203,11 @@ int main(int argc, char** argv) {
   Lattice* lattice_ptr = nullptr;
   Position* pos = nullptr;
 
-  // crear un PositionDim en base del valor de dim
-  // si dim es menor de 2 o mayor de 3, dar error
-  // si dim es 2, crear un PositionDim<2>
-  // si dim es 3, crear un PositionDim<3>
-
   // std::cout << "Antes de funcion argumentos" << std::endl;
 
   ArgumentsFunction(argc, argv, file_name, size, b, v, celula, dim);
 
   // std::cout << "Despues de funcion argumentos" << std::endl;
-
-  // Lattice* lattice_ptr = nullptr;
 
   // si celula es 1, crear un FactoryCellACE110
   // si celula es 2, crear un FactoryCellACE30
@@ -245,7 +237,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  //si el vector size esta vacio, relleanr con 0 hasta 3
+  // si el vector size esta vacio, relleanr con 0 hasta 3
   while (size.size() < 3) {
     size.push_back(0);
   }
@@ -255,14 +247,13 @@ int main(int argc, char** argv) {
     return 1;
   } else if (dim == 2) {
     std::cout << "Creating PositionDim<2>" << std::endl;
-    pos = new PositionDim<2>(2, size[0], size[1]);
-    std::cout << "Creating lattice with size: " << size[0] << "x" << size[1]
-              << std::endl;
+    pos = new PositionDim<2>(2, size[0]);
+    std::cout << "Creating lattice with size: " << size[0] << std::endl;
   } else if (dim == 3) {
     std::cout << "Creating PositionDim<3>" << std::endl;
-    pos = new PositionDim<3>(3, size[0], size[1], size[2]);
+    pos = new PositionDim<3>(3, size[0], size[1]);
     std::cout << "Creating lattice with size: " << size[0] << "x" << size[1]
-              << "x" << size[2] << std::endl;
+              << std::endl;
   }
   // std::cout << "Creating lattice with size: ";
 
@@ -294,14 +285,17 @@ int main(int argc, char** argv) {
       lattice_ptr = new Lattice2D_reflective(b, v, *pos, *factory);
     }
   }
-  std::cout << "Contenido del lattice:" << std::endl;
+  std::cout << "Contenido del lattice(main):" << std::endl;
   lattice_ptr->display(std::cout, *lattice_ptr);
+  // std::cout << *lattice_ptr << std::endl;
   // std::cout << "no llega al final" << std::endl;
   std::cout << std::endl;
 
   char option = ' ';
   bool c = false;
 
+  //imprimir position de la celula 0 del lattice
+  std::cout << "Position de la celula 0: " << lattice_ptr->getCell(0).getPosition()[0] << std::endl;
   // PositionDim<2> p(1, 2);
   // std::cout << "p[0]: " << p[0] << std::endl;
   // std::cout << "p[1]: " << p[1] << std::endl;
@@ -364,7 +358,8 @@ int main(int argc, char** argv) {
 
         // calcular las siguientes 5 generaciones y mostrarlas
         for (int i = 0; i < 5; i++) {
-          std::cout << "Generation: " << i << std::endl;
+          gen++;
+          std::cout << "Generation: " << gen << std::endl;
           // std::cout << *lattice_ptr << std::endl;
           lattice_ptr->display(std::cout, *lattice_ptr);
           lattice_ptr->nextGeneration();

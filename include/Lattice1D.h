@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lattice.h"
+#include "Cell.h"
 
 //clase Lattice1D hereda de Lattice pero sigue siendo plantilla
 class Lattice1D : public Lattice {
@@ -19,6 +20,7 @@ class Lattice1D : public Lattice {
     return std::cout;
   } // Hecho, no comprobado
   friend std::ostream& operator<<(std::ostream&, const Lattice&); // Hecho, no comprobado
+  std::vector<Cell*> getCells() const {return cells;}
 
   protected:
   PositionDim<2> size;  // columnas
