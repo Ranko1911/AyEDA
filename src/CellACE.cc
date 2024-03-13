@@ -1,5 +1,6 @@
-#include "../include/Cell.h"
 #include "../include/CellACE.h"
+
+#include "../include/Cell.h"
 #include "../include/Lattice.h"
 #include "../include/Position.h"
 
@@ -39,7 +40,8 @@ int CellACE110::nextState(const Lattice& lattice) {
   // std::cout << " DDDDDDDDDDDDDDDDDDD" << std::endl;
   // int pos21 = this->position[1] + 1;
   // PositionDim<2> pos3(2, pos11, pos21);
-  // int mult2 = lattice[pos2].getState() * getState() * lattice[pos3].getState();
+  // int mult2 = lattice[pos2].getState() * getState() *
+  // lattice[pos3].getState();
 
   // int sum1 = getState() + lattice[getPosition()[0] + 1].getState();
   // int mult1 = getState() * lattice[getPosition()[0] + 1].getState();
@@ -48,7 +50,7 @@ int CellACE110::nextState(const Lattice& lattice) {
 
   // int sum1 = getState() + lattice[getPosition()[0] + 1].getState();
 
-  const int derecha = this->getPosition()[0] + 1;
+  int derecha = position[0];
   std::cout << "derecha: " << derecha << std::endl;
   const int izq = this->getPosition()[0] - 1;
   std::cout << "izq: " << izq << std::endl;
@@ -61,7 +63,8 @@ int CellACE110::nextState(const Lattice& lattice) {
   int mult1 = this->getState() * lattice[posDer].getState();
   // int mult2 = lattice[getPosition()[0] - 1].getState() * getState() *
   //             lattice[getPosition()[1] + 1].getState();
-  int mult2 = lattice[posIzq].getState() * getState() * lattice[posDer].getState();
+  int mult2 =
+      lattice[posIzq].getState() * getState() * lattice[posDer].getState();
 
   nextValue = sum1 + mult1 + mult2;
   nextValue = nextValue % 2;
@@ -84,7 +87,7 @@ int CellACE30::nextState(const Lattice& lattice) {
   int pos11 = pos[0] - 1;
   PositionDim<2> pos2(2, pos11, pos[1]);
   int mult1 = getState() * lattice[pos2].getState();
-  
+
   // int sum1 = getState() + lattice[getPosition()[0] - 1].getState() +
   //            lattice[getPosition()[0] + 1].getState();
   // int mult1 = getState() * lattice[getPosition()[0] + 1].getState();

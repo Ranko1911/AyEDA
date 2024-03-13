@@ -6,8 +6,8 @@
 //clase Lattice1D hereda de Lattice pero sigue siendo plantilla
 class Lattice1D : public Lattice {
  public:
-  Lattice1D(const int& b, const int& v, const std::string& file_name,  FactoryCell& factory); // Hecho, no comprobado
-  Lattice1D(const int& b, const int& v, const Position& size,  FactoryCell& factory); // Hecho, no comprobado
+  Lattice1D(const int& b, const int& v, const std::string& file_name, FactoryCell& factory); // Hecho, no comprobado
+  Lattice1D(const int& b, const int& v, const Position& size, FactoryCell& factory); // Hecho, no comprobado
   ~Lattice1D(); // Hecho, no comprobado
   Position& getSize() const; // Hecho, no comprobado
   void nextGeneration(); // Hecho, no comprobado
@@ -23,14 +23,14 @@ class Lattice1D : public Lattice {
   std::vector<Cell*> getCells() const {return cells;}
 
   protected:
-  PositionDim<2> size;  // columnas
+   PositionDim<2> size;  // columnas
   
   int b;
   int v = 0;
   std::string file_name = "";
   std::vector<Cell*> cells;
   int vivas;
-  FactoryCell& factory;
+  const FactoryCell& factory;
   void setCell (const int& i, const int& val); // NO Hecho, no comprobado
   Cell& getCell (const int& i) const; // NO Hecho, no comprobado
 

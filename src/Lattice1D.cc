@@ -8,7 +8,7 @@
 // constructor de la clase template Lattice1D con entrada por fichero
 Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
                      FactoryCell& factory)
-    : factory(factory) {
+    : Lattice(b, v, file_name, factory), size(PositionDim<2>(0,0)), factory(factory){
   this->b = b;
   this->v = v;
   this->file_name = file_name;
@@ -49,7 +49,7 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
   for (int pos = 0; pos < size[0]; pos++) {
     // std::cout << "pos: " << pos << std::endl;
     if (lineas[0][pos] == ' ') {
-      PositionDim<2> pos1(2, pos);
+      PositionDim<2> pos1(pos);
       Cell* c = factory.createCell(pos1, 0);
       cells.push_back(c);
       // cells[pos] = c;
@@ -80,7 +80,7 @@ Lattice1D::Lattice1D(const int& b, const int& v, const std::string& file_name,
 // pero lo pongo por si a caso
 Lattice1D::Lattice1D(const int& b, const int& v, const Position& size,
                      FactoryCell& factory)
-    : factory(factory) {
+    : Lattice1D(b, v, size, factory){
   this->b = b;
   this->v = v;
   this->size = size[1];

@@ -295,7 +295,7 @@ int main(int argc, char** argv) {
   bool c = false;
 
   //imprimir position de la celula 0 del lattice
-  std::cout << "Position de la celula 0: " << lattice_ptr->getCell(0).getPosition()[0] << std::endl;
+  // std::cout << "Position de la celula 0: " << lattice_ptr->getCell(0).getPosition()[0] << std::endl;
   // PositionDim<2> p(1, 2);
   // std::cout << "p[0]: " << p[0] << std::endl;
   // std::cout << "p[1]: " << p[1] << std::endl;

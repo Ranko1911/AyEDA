@@ -12,10 +12,18 @@
 
 // Clase plantilla Lattice
 class Lattice {
+  protected:
+    int b;
+    int v = 0;
+    std::string file_name = "";
+    const FactoryCell& factory;
+    const Position& size;  // columnas
+  
+    // std::vector<Cell*>
  public:
- Lattice() = default;
-  Lattice(const int& b, const int& v, const std::string& file_name, const FactoryCell& factory);
-  Lattice(const int& b, const int& v, const int& size_N, const int& size_M, const FactoryCell& factory);
+  Lattice() = default;
+  Lattice(const int& b, const int& v, const std::string& file_name, const FactoryCell& factory) : b(b), v(v), file_name(file_name), factory(factory), size(PositionDim<2>(0,0)) {}
+  Lattice(const int& b, const int& v, const Position& size, const FactoryCell& factory): b(b), v(v), size(size), factory(factory) {}
   ~Lattice() {}  // Destructor virtual para permitir la herencia
 
   // Métodos virtuales puros

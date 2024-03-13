@@ -22,8 +22,6 @@ class CellACE110 : public CellACE {
 public:
     // Constructor
     CellACE110( Position& pos, const int val) : CellACE(pos, val) {
-        std::cout << "Constructor de CellACE110" << std::endl;
-        std::cout << "pos: " << position[0] << std::endl;
     }
 
     // Destructor
