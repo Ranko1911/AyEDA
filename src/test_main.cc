@@ -34,11 +34,11 @@ int main() {
     std::cout << "Cuadratica: " << cuadratica(23, 2) << std::endl;
 
     ModuloDispersion<unsigned> modulo2(10);
-    DobleDispersión doble(&modulo2);
-    std::cout << "Doble: " << doble(23, 2) << std::endl;
+    DobleDispersion doble_(&modulo2);
+    std::cout << "Doble: " << doble_(23, 2) << std::endl;
 
     ModuloDispersion<unsigned> modulo3(10);
-    Redispersión redis(&modulo3);
+    Redispersion redis(&modulo3);
     std::cout << "Redispersion: " << redis(23, 2) << std::endl;
 
     std::cout << "Ejemplo de uso de la clase Sequence: \n";

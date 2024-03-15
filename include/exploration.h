@@ -24,22 +24,22 @@ class ExploracionCuadratica : public Exploracion {
 };
 
 // Clase derivada que implementa la doble dispersión.
-class DobleDispersión : public Exploracion {
+class DobleDispersion : public Exploracion {
  private:
   DispersionFunction<unsigned>* f;
 
  public:
-  DobleDispersión(DispersionFunction<unsigned>* function);
+  DobleDispersion(DispersionFunction<unsigned>* function);
   unsigned operator()(unsigned key, unsigned i) const override;
 };
 
 // Clase derivada que implementa la re-dispersión.
-class Redispersión : public Exploracion {
+class Redispersion : public Exploracion {
  private:
   DispersionFunction<unsigned>* f;
 
  public:
-  Redispersión(DispersionFunction<unsigned>* function);
+  Redispersion(DispersionFunction<unsigned>* function);
   unsigned operator()(unsigned key, unsigned i) const override;
 };
 
@@ -51,17 +51,17 @@ unsigned ExploracionCuadratica::operator()(unsigned key, unsigned i) const {
   return i * i;
 }
 
-DobleDispersión::DobleDispersión(DispersionFunction<unsigned>* function)
+DobleDispersion::DobleDispersion(DispersionFunction<unsigned>* function)
     : f(function) {}
 
-unsigned DobleDispersión::operator()(unsigned key, unsigned i) const {
+unsigned DobleDispersion::operator()(unsigned key, unsigned i) const {
   return (*f)(key)*i;
 }
 
-Redispersión::Redispersión(DispersionFunction<unsigned>* function)
+Redispersion::Redispersion(DispersionFunction<unsigned>* function)
     : f(function) {}
 
-unsigned Redispersión::operator()(unsigned key, unsigned i) const {
+unsigned Redispersion::operator()(unsigned key, unsigned i) const {
   return (*f)(key + i);
 }
 
