@@ -8,4 +8,4 @@
 
 ## Práctica 4: Funciones de Distribución y Exploración
 
-Se compila con: g++ src/test_main.cc include/dispersion.h include/exploration.h include/sequence.h
+Se compila con: g++ src/test_main.cc include/dispersion.h include/exploration.h include/sequence.h include/sequence.cc
