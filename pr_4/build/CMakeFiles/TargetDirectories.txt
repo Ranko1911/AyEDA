@@ -1,0 +1,3 @@
+/home/alu0101313313/Escritorio/Clases/año_2022-2023/AyEDA/practica_4/build/CMakeFiles/hash_table_main.dir
+/home/alu0101313313/Escritorio/Clases/año_2022-2023/AyEDA/practica_4/build/CMakeFiles/edit_cache.dir
+/home/alu0101313313/Escritorio/Clases/año_2022-2023/AyEDA/practica_4/build/CMakeFiles/rebuild_cache.dir
