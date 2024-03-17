@@ -27,12 +27,12 @@ class HashTable{
     if(fe != nullptr && block_size != 0){
       fe_ = fe;
       for(int i = 0; i < table_size_; i++){
-        Sequence<Key> *block = new Block<Key>(block_size_);
+        Sequence<Key> *block = new staticSequence<Key>(block_size_);
         table_[i] = block;
       }
     } else {
       for(int i = 0; i < table_size_; i++){
-        Sequence<Key> *list = new List<Key>();
+        Sequence<Key> *list = new dynamicSequence<Key>();
         table_[i] = list;
       }
     }
@@ -65,30 +65,36 @@ class HashTable{
     }
   }
 
-  bool Insert(const Key& key){
-    if(!Search(key)){
-      unsigned jump, gap = 1, pos = (*fd_)(key);
-      if(table_[pos]->Is_full()){
-        while(true){
-          jump = (*fe_)(key,gap);
-          pos += jump;
-          gap++;
-          if(pos >= table_size_){
-            pos = pos % table_size_;
-          }
-          if(!table_[pos]->Is_full()){
+  bool Insert(const Key& key) {
+    std::cout << "Insertar" << std::endl;
+    if (!Search(key)) {
+        unsigned jump, gap = 1, pos = (*fd_)(key);
+        if (table_[pos]->Is_full()) {
+            unsigned max_attempts = table_size_; // Número máximo de intentos
+            while (max_attempts > 0) {
+                jump = (*fe_)(key, gap);
+                pos += jump;
+                gap++;
+                if (pos >= table_size_) {
+                    pos = pos % table_size_;
+                }
+                if (!table_[pos]->Is_full()) {
+                    table_[pos]->Insert(key);
+                    return true;
+                }
+                std::cout << "Intento fallido" << max_attempts << std::endl;
+                max_attempts--; // Decrementa el contador de intentos
+            }
+            // Si se han agotado los intentos, la inserción falla
+            return false;
+        } else {
             table_[pos]->Insert(key);
             return true;
-          }
         }
-      } else {
-        table_[pos]->Insert(key);
-        return true;
-      }
     } else {
-      return false;
+        return false;
     }
-  }
+}
 
  private:
   int block_size_, table_size_;
