@@ -9,3 +9,5 @@
 ## Práctica 4: Funciones de Distribución y Exploración
 
 Se compila con: ./ejecutable .... y se eliminan los ejecutables con: ./limpiar
+
+ <!-- g++ src/test_hash.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h  -->

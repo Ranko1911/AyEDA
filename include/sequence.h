@@ -21,12 +21,12 @@ class staticSequence : public Sequence<Key> {
  public:
   staticSequence(int n){ 
     block_size_ = n;
-    block_ = new int [block_size_];
+    block_ = new int[block_size_];
     e_insert_ = 0;
   }
 
-  bool Search(const Key& key) const{
-    for(int i = 0; i < block_size_; i++){
+  bool Search(const Key& key) const {
+    for(int i = 0; i < e_insert_; i++){
       if(key == block_[i]){
         return true;
       }
@@ -34,7 +34,7 @@ class staticSequence : public Sequence<Key> {
     return false;
   }
 
-  bool Insert(const Key& key){
+  bool Insert(const Key& key) {
     if(!Search(key) && !Is_full()){
       block_[e_insert_] = key;
       e_insert_++;
@@ -43,33 +43,29 @@ class staticSequence : public Sequence<Key> {
     return false;
   }
 
-  bool Is_full() const{
-    for(int i = 0; i < block_size_; i++){
-      if(block_[i] != NULL){
-        return false;
-      }
-    }
-    return true;
+  bool Is_full() const {
+    return (e_insert_ == block_size_);
   }
 
  private:
   int block_size_;
   int *block_;
   int e_insert_;
-
 };
+
 
 //class dynamicSequence deriva de sequence
 template <class Key>
 class dynamicSequence : public Sequence<Key> {
  public:
   dynamicSequence(){ 
-    list_.clear();  
+    // No es necesario hacer nada aquí, ya que el vector se inicializa vacío automáticamente
   }
 
   bool Search(const Key& key) const{
-    for(int i = 0; i < list_.size(); i++){
-      if(key == list_.at(i)){
+    // Itera sobre el vector para buscar el elemento
+    for(const auto& item : list_){
+      if(key == item){
         return true;
       }
     }
@@ -77,6 +73,7 @@ class dynamicSequence : public Sequence<Key> {
   }
 
   bool Insert(const Key& key){
+    // Inserta el elemento si no se encuentra y el vector no está lleno
     if(!Search(key) && !Is_full()){
       list_.push_back(key);
       return true;
@@ -85,14 +82,13 @@ class dynamicSequence : public Sequence<Key> {
   }
 
   bool Is_full() const{
-    return false;
+    // Devuelve verdadero si el tamaño del vector alcanza cierto límite (por ejemplo, 100)
+    return (list_.size() >= 100); // Puedes ajustar el límite según sea necesario
   }
 
  private:
-  std::vector<int> list_;
-
+  std::vector<Key> list_; // Usa Key en lugar de int para hacer la clase más genérica
 };
-
 
 
 #endif

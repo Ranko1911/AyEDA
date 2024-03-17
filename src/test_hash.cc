@@ -2,16 +2,12 @@
 
 int main() {
 
-  HashTable<int> h(10);
   DispersionFunction<int> *fd = new DispersionFunctionModule<int>(10);
   ExplorationFunction<int> *fe = new ExplorationFunctionLineal<int>;
   
   //crear hash table
   std::cout << "Crear hash table" << std::endl;
-  HashTable<int> h1(10, fd, fe, 5);
-
-  //comprobar h1 es un hastable
-  std::cout << "Comprobar h1 es un hastable" << std::endl;
+  HashTable<int> h1(12, fd, fe, 6);
 
   //crear hash table vacia
 

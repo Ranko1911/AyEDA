@@ -66,19 +66,24 @@ class HashTable{
   }
 
   bool Insert(const Key& key) {
-    std::cout << "Insertar" << std::endl;
+    std::cout << "Insertar aaaa" << std::endl;
     if (!Search(key)) {
+      std::cout << "No encontrado, proceder a insertar" << std::endl;
         unsigned jump, gap = 1, pos = (*fd_)(key);
         if (table_[pos]->Is_full()) {
+            std::cout<< "El bloque está lleno, se procede a buscar otro lugar para insertar" << std::endl;
             unsigned max_attempts = table_size_; // Número máximo de intentos
             while (max_attempts > 0) {
+                std::cout << "Intento " << max_attempts << std::endl;
                 jump = (*fe_)(key, gap);
                 pos += jump;
                 gap++;
                 if (pos >= table_size_) {
+                    std::cout << "Se ha llegado al final de la tabla, se procede a volver al inicio" << std::endl;
                     pos = pos % table_size_;
                 }
                 if (!table_[pos]->Is_full()) {
+                    std::cout << "Se ha encontrado un bloque vacío, se procede a insertar" << std::endl;
                     table_[pos]->Insert(key);
                     return true;
                 }
@@ -88,10 +93,12 @@ class HashTable{
             // Si se han agotado los intentos, la inserción falla
             return false;
         } else {
+            std::cout << "El bloque no está lleno, se procede a insertar" << std::endl;
             table_[pos]->Insert(key);
             return true;
         }
     } else {
+        std::cout << "El elemento ya existe" << std::endl;
         return false;
     }
 }
