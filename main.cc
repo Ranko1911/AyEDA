@@ -1,7 +1,7 @@
+# include "include/hashtable.h"
+#include <iostream>
 
-#include "hash_table.h"
-
-DispersionFunction<Vehicle>* dispersion_menu(unsigned table_size){
+DispersionFunction<int>* dispersion_menu(unsigned table_size){
   char option;
   while(true){
     std::cout << " Seleccione el tipo de dispersion que se quiera utilizar" << std::endl
@@ -11,19 +11,19 @@ DispersionFunction<Vehicle>* dispersion_menu(unsigned table_size){
     std::cin >> option;
     switch(option){
       case '1': {
-        DispersionFunction<Vehicle> *fd = new DispersionFunctionModule<Vehicle>(table_size); 
+        DispersionFunction<int> *fd = new DispersionFunctionModule<int>(table_size); 
         return fd;
         break;
       }
       
       case '2': {
-        DispersionFunction<Vehicle> *fd = new DispersionFunctionPseudorandom<Vehicle>(table_size); 
+        DispersionFunction<int> *fd = new DispersionFunctionPseudorandom<int>(table_size); 
         return fd;
         break;
       }
 
       case '3': {
-        DispersionFunction<Vehicle> *fd = new DispersionFunctionSum<Vehicle>(table_size); 
+        DispersionFunction<int> *fd = new DispersionFunctionSum<int>(table_size); 
         return fd;
         break;
       }
@@ -35,7 +35,7 @@ DispersionFunction<Vehicle>* dispersion_menu(unsigned table_size){
   }
 }
 
-ExplorationFunction<Vehicle>* exploration_menu(DispersionFunction<Vehicle>* fd){
+ExplorationFunction<int>* exploration_menu(DispersionFunction<int>* fd){
   char option;
   while(true){
     std::cout << " Seleccione el tipo de exploracion que se quiera utilizar" << std::endl
@@ -46,25 +46,25 @@ ExplorationFunction<Vehicle>* exploration_menu(DispersionFunction<Vehicle>* fd){
     std::cin >> option;
     switch(option){
       case '1': {
-        ExplorationFunction<Vehicle> *fe = new ExplorationFunctionLineal<Vehicle>; 
+        ExplorationFunction<int> *fe = new ExplorationFunctionLineal<int>; 
         return fe;
         break;
       }
       
       case '2': {
-        ExplorationFunction<Vehicle> *fe = new ExplorationFunctionDouble<Vehicle>(fd); 
+        ExplorationFunction<int> *fe = new ExplorationFunctionDouble<int>(fd); 
         return fe;
         break;
       }
 
       case '3': {
-        ExplorationFunction<Vehicle> *fe = new ExplorationFunctionQuadratic<Vehicle>;
+        ExplorationFunction<int> *fe = new ExplorationFunctionQuadratic<int>;
         return fe;
         break;
       }
 
       case '4': {
-        ExplorationFunction<Vehicle> *fe = new ExplorationFunctionRedispersion<Vehicle>(fd);
+        ExplorationFunction<int> *fe = new ExplorationFunctionRedispersion<int>(fd);
         return fe;
         break;
       }
@@ -77,11 +77,11 @@ ExplorationFunction<Vehicle>* exploration_menu(DispersionFunction<Vehicle>* fd){
 }
 
 int main(){
-  HashTable<Vehicle> ht;
+  HashTable<int> ht;
   bool is_table_created = false;
   char option, dispersion_type;
   unsigned table_size, block_size;
-  Vehicle key;
+  int key;
   while(true){
     std::cout << "1.Crear Tabla" << std::endl 
     << "2.Buscar en la tabla" << std::endl  
@@ -102,19 +102,19 @@ int main(){
           std::cin >> dispersion_type;
           switch(dispersion_type){
             case '1': {
-              DispersionFunction<Vehicle> *dispersion_function = dispersion_menu(table_size);
-              HashTable<Vehicle> hash_table(table_size, dispersion_function);
+              DispersionFunction<int> *dispersion_function = dispersion_menu(table_size);
+              HashTable<int> hash_table(table_size, dispersion_function);
               ht = hash_table;
               is_table_created = true;
               break;
             }
             
             case '2': {
-              DispersionFunction<Vehicle> *dispersion_function = dispersion_menu(table_size);
-              ExplorationFunction<Vehicle> *exploration_function = exploration_menu(dispersion_function);
+              DispersionFunction<int> *dispersion_function = dispersion_menu(table_size);
+              ExplorationFunction<int> *exploration_function = exploration_menu(dispersion_function);
               std::cout << "Introduzca el tamaño del bloque: " << std::endl;
               std::cin >> block_size;
-              HashTable<Vehicle> hash_table(table_size, dispersion_function, exploration_function, block_size);
+              HashTable<int> hash_table(table_size, dispersion_function, exploration_function, block_size);
               ht = hash_table;
               is_table_created = true;
               break;

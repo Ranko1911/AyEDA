@@ -1,69 +1,59 @@
-#include "dispersion.h"
-
 #ifndef EXPLORACION_H
 #define EXPLORACION_H
 
+#include "dispersion.h"
+
 // Clase base abstracta para representar una estrategia de exploración en caso
 // de colisiones.
-class Exploracion {
+template <class Key>
+class ExplorationFunction{
  public:
-  virtual unsigned operator()(unsigned key, unsigned i) const = 0;
-  virtual ~Exploracion() {}
+  virtual unsigned operator()(const Key& key, unsigned i) const = 0;
 };
+
 
 // Clase derivada que implementa la exploración lineal.
-class ExploracionLineal : public Exploracion {
+template <class Key>
+class ExplorationFunctionLineal: public ExplorationFunction<Key> {
  public:
-  unsigned operator()(unsigned key, unsigned i) const override;
+  unsigned operator()(const Key& key, unsigned i) const{
+    return i;
+  }
 };
 
+
 // Clase derivada que implementa la exploración cuadrática.
-class ExploracionCuadratica : public Exploracion {
+template <class Key>
+class ExplorationFunctionQuadratic: public ExplorationFunction<Key> {
  public:
-  unsigned operator()(unsigned key, unsigned i) const override;
+  unsigned operator()(const Key& key, unsigned i) const{
+    return i * i;
+  }
 };
 
 // Clase derivada que implementa la doble dispersión.
-class DobleDispersion : public Exploracion {
- private:
-  DispersionFunction<unsigned>* f;
-
+template <class Key>
+class ExplorationFunctionDouble: public ExplorationFunction<Key> {
  public:
-  DobleDispersion(DispersionFunction<unsigned>* function);
-  unsigned operator()(unsigned key, unsigned i) const override;
+ ExplorationFunctionDouble(DispersionFunction<Key> *fd): fd_(fd){}
+  unsigned operator()(const Key& key, unsigned i) const{
+    return i * i;
+  }
+ private:
+  DispersionFunction<Key> *fd_;
 };
 
 // Clase derivada que implementa la re-dispersión.
-class Redispersion : public Exploracion {
- private:
-  DispersionFunction<unsigned>* f;
-
+template <class Key>
+class ExplorationFunctionRedispersion: public ExplorationFunction<Key> {
  public:
-  Redispersion(DispersionFunction<unsigned>* function);
-  unsigned operator()(unsigned key, unsigned i) const override;
+ ExplorationFunctionRedispersion(DispersionFunction<Key> *fd): fd_(fd){}
+  unsigned operator()(const Key& key, unsigned i) const{
+    unsigned op = (*fd_)(key);
+    return i * op;
+  }
+ private:
+  DispersionFunction<Key> *fd_;
 };
-
-unsigned ExploracionLineal::operator()(unsigned key, unsigned i) const {
-  return i;
-}
-
-unsigned ExploracionCuadratica::operator()(unsigned key, unsigned i) const {
-  return i * i;
-}
-
-DobleDispersion::DobleDispersion(DispersionFunction<unsigned>* function)
-    : f(function) {}
-
-unsigned DobleDispersion::operator()(unsigned key, unsigned i) const {
-  return (*f)(key)*i;
-}
-
-Redispersion::Redispersion(DispersionFunction<unsigned>* function)
-    : f(function) {}
-
-unsigned Redispersion::operator()(unsigned key, unsigned i) const {
-  return (*f)(key + i);
-}
-
 
 #endif  // EXPLORACION_H

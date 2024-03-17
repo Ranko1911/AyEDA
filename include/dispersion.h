@@ -16,46 +16,49 @@ class DispersionFunction {
 // Clase derivada que implementa la función de dispersión utilizando el operador
 // módulo.
 template <typename Key>
-class ModuloDispersion : public DispersionFunction<Key> {
+class DispersionFunctionModule : public DispersionFunction<Key> {
  private:
   unsigned tableSize;
 
  public:
-  ModuloDispersion(unsigned size) : tableSize(size) {}
-  unsigned operator()(const Key& key) const override {
-    return key % tableSize;
-}
-
+  DispersionFunctionModule(unsigned size) : tableSize(size) {}
+  unsigned operator()(const Key& key) const override { return key % tableSize; }
 };
 
 // Clase derivada que implementa la función de dispersión basada en la suma.
-template <typename Key>
-class SumaDispersion : public DispersionFunction<Key> {
- private:
-  unsigned tableSize;
-
+template <class Key>
+class DispersionFunctionSum : public DispersionFunction<Key> {
  public:
-  SumaDispersion(unsigned size) : tableSize(size) {}
-  unsigned operator()(const Key& key) const override {
-    unsigned sum = 0;
-    for (const auto& k : key) {
-      sum += k;
+  DispersionFunctionSum(const unsigned n) : table_size_(n) {}
+  unsigned operator()(const Key& key) const {
+    unsigned sum = 0, k = key, aux;
+    while (k > 0) {
+      aux = k % 10;
+      sum += aux;
+      k /= 10;
     }
-    return sum % tableSize;
+    return sum % table_size_;
   }
+
+ private:
+  unsigned table_size_;
 };
 
 // Clase derivada que implementa la función de dispersión pseudoaleatoria.
-template <typename Key>
-class PseudoaleatoriaDispersion : public DispersionFunction<Key> {
-  private:
-  unsigned tableSize;
+template <class Key>
+class DispersionFunctionPseudorandom : public DispersionFunction<Key> {
  public:
-  PseudoaleatoriaDispersion(unsigned size) : tableSize(size) {}
-  unsigned operator()(const Key& key) const override {
+  DispersionFunctionPseudorandom(const unsigned n) : table_size_(n) {}
+  unsigned operator()(const Key& key) const {
     srand(key);
-    return rand();
+    return rand() % table_size_;
   }
+
+ private:
+  unsigned table_size_;
 };
+
+//ejemplo de dipersionmodular
+//  DispersionFunction<int> *fd = new DispersionFunctionModule<int>(10);
 
 #endif  // DISPERSION_H

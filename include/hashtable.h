@@ -9,90 +9,94 @@
 #include "exploration.h"
 #include "sequence.h"
 
-template <class Key, class Container = ArraySequence<Key> >
-class HashTable {
- private:
-  Container table;
-  DispersionFunction<Key>* dispersion;
-  Exploracion* exploration;
-  int tableSize;
-  int blockSize;
-
+template <class Key>
+class HashTable{
  public:
-  HashTable(int tableSize_, DispersionFunction<Key>* dispersion_,
-            Exploracion* exploration_, int blockSize_ )
-      : tableSize(tableSize_),
-        dispersion(dispersion_),
-        exploration(exploration_),
-        blockSize(blockSize_) {}
+  HashTable(){
+    table_size_ = 0;
+    block_size_ = 0;
+    fd_ = nullptr;
+    fe_ = nullptr;
+  }
 
-  void insert(const Key& key) {
-    unsigned i = 0;
-    unsigned index = (*dispersion)(key);
-    while (i < tableSize && table.search(index)) {
-      index = (index + (*exploration)(key, i)) % tableSize;
-      i++;
-    }
-    if (i < tableSize) {
-      table.insert(index);
-      blockSize++;
+  HashTable(int table_size, DispersionFunction<Key> *fd = nullptr, ExplorationFunction<Key> *fe = nullptr, int block_size = 0){
+    table_size_ = table_size;
+    block_size_ = block_size;
+    fd_ = fd;
+    table_ = new Sequence<Key> *[table_size_];
+    if(fe != nullptr && block_size != 0){
+      fe_ = fe;
+      for(int i = 0; i < table_size_; i++){
+        Sequence<Key> *block = new Block<Key>(block_size_);
+        table_[i] = block;
+      }
+    } else {
+      for(int i = 0; i < table_size_; i++){
+        Sequence<Key> *list = new List<Key>();
+        table_[i] = list;
+      }
     }
   }
 
-  bool search(const Key& key) const {
-    unsigned i = 0;
-    unsigned index = (*dispersion)(key);
-    while (i < tableSize && table.search(index)) {
-      index = (index + (*exploration)(key, i)) % tableSize;
-      i++;
+  bool Search(const Key& key) const {
+    unsigned jump, gap = 1, pos = (*fd_)(key);
+    if(table_[pos]->Search(key)){
+      return true;
+    } else {
+      if(table_[pos]->Is_full()){
+        while(true){
+          jump = (*fe_)(key,gap);
+          pos += jump;
+          gap++;
+          if(pos >= table_size_){
+            pos = pos % table_size_;
+          } 
+          if(table_[pos]->Search(key)){
+            return true;
+          } else {
+            if(!table_[pos]->Is_full()){
+              return false;
+            }
+          }
+        }
+      } else {
+        return false;
+      }
     }
-    return i < tableSize;
   }
 
-  void print(std::ostream& o) const { table.print(o); }
+  bool Insert(const Key& key){
+    if(!Search(key)){
+      unsigned jump, gap = 1, pos = (*fd_)(key);
+      if(table_[pos]->Is_full()){
+        while(true){
+          jump = (*fe_)(key,gap);
+          pos += jump;
+          gap++;
+          if(pos >= table_size_){
+            pos = pos % table_size_;
+          }
+          if(!table_[pos]->Is_full()){
+            table_[pos]->Insert(key);
+            return true;
+          }
+        }
+      } else {
+        table_[pos]->Insert(key);
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+ private:
+  int block_size_, table_size_;
+  DispersionFunction<Key> *fd_;
+  ExplorationFunction<Key> *fe_;
+  Sequence<Key> **table_;
+
 };
 
-template <class Key >
-class HashTable<Key, ListSequence<Key> > {
- private:
-  std::vector<ListSequence<Key>> table;
-  DispersionFunction<Key>* dispersion;
-  Exploracion* exploration;
-  int tableSize;
-  int blockSize;
-
- public:
-  HashTable(int tableSize_, DispersionFunction<Key>* dispersion_,
-            Exploracion* exploration_, Sequence<Key>* table_)
-      : tableSize(tableSize_),
-        dispersion(dispersion_),
-        exploration(exploration_),
-        table(table_) {}
-
-  void insert(const Key& key) {
-    unsigned i = 0;
-    unsigned index = (*dispersion)(key);
-    while (i < tableSize && table.search(index)) {
-      index = (index + (*exploration)(key, i)) % tableSize;
-      i++;
-    }
-    if (i < tableSize) {
-      table.insert(index);
-      blockSize++;
-    }
-  }
-
-  bool search(const Key& key) const {
-    unsigned i = 0;
-    unsigned index = (*dispersion)(key);
-    while (i < tableSize && table.search(index)) {
-      index = (index + (*exploration)(key, i)) % tableSize;
-      i++;
-    }
-    return i < tableSize;
-  }
-
-  void print(std::ostream& o) const { table.print(o); }
-};
 
 #endif  // HASHTABLE_H

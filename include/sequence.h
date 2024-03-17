@@ -6,95 +6,93 @@
 #include <cstdlib>
 
 //clase sequence abstracta
-template <typename T>
-class Sequence {
+template <class Key>
+class Sequence{
  public:
-  virtual void insert(const T& x) = 0;
-  virtual bool search(const T& x) const = 0;
-  virtual void print(std::ostream& o) const = 0;
-  virtual bool isFull() = 0;
-  virtual ~Sequence() {}
+  virtual bool Search(const Key& key) const = 0;
+  virtual bool Insert(const Key& key) = 0;
+  virtual bool Is_full() const = 0;
 };
 
-//class template deriva de sequence
-template <typename T>
-class ArraySequence : public Sequence<T> {
- private:
-  std::vector<T> v;
-  int blockSize;
 
+//class staticSequence deriva de sequence
+template <class Key>
+class staticSequence : public Sequence<Key> {
  public:
-  ArraySequence(int blockSize) : blockSize(blockSize) {}
-
-  void insert(const T& x) override {
-    //si el boque esta lleno
-    if(v.size() == blockSize){
-      v.push_back(x);
-    }
-    else{
-      v.push_back(x);
-    }
+  staticSequence(int n){ 
+    block_size_ = n;
+    block_ = new int [block_size_];
+    e_insert_ = 0;
   }
 
-  bool search(const T& x) const override {
-    for (const auto& e : v) {
-      if (e == x) {
+  bool Search(const Key& key) const{
+    for(int i = 0; i < block_size_; i++){
+      if(key == block_[i]){
         return true;
       }
     }
     return false;
   }
 
-  void print(std::ostream& o) const override {
-    for (const auto& e : v) {
-      o << e << " ";
-    }
-    o << std::endl;
-  }
-
-  bool isFull() override {
-    //comprobra si el vector esta lleno
-    if(v.size() == v.capacity()){
+  bool Insert(const Key& key){
+    if(!Search(key) && !Is_full()){
+      block_[e_insert_] = key;
+      e_insert_++;
       return true;
     }
     return false;
   }
 
-};
-
-//class array deriva de sequence
-template <typename T>
-class ListSequence : public Sequence<T> {
- private:
-  std::vector<T> v;
-
- public:
-  ListSequence() {}
-
-  void insert(const T& x) override {
-    v.push_back(x);
+  bool Is_full() const{
+    for(int i = 0; i < block_size_; i++){
+      if(block_[i] != NULL){
+        return false;
+      }
+    }
+    return true;
   }
 
-  bool search(const T& x) const override {
-    for (const auto& e : v) {
-      if (e == x) {
+ private:
+  int block_size_;
+  int *block_;
+  int e_insert_;
+
+};
+
+//class dynamicSequence deriva de sequence
+template <class Key>
+class dynamicSequence : public Sequence<Key> {
+ public:
+  dynamicSequence(){ 
+    list_.clear();  
+  }
+
+  bool Search(const Key& key) const{
+    for(int i = 0; i < list_.size(); i++){
+      if(key == list_.at(i)){
         return true;
       }
     }
     return false;
   }
 
-  void print(std::ostream& o) const override {
-    for (const auto& e : v) {
-      o << e << " ";
+  bool Insert(const Key& key){
+    if(!Search(key) && !Is_full()){
+      list_.push_back(key);
+      return true;
     }
-    o << std::endl;
-  }
-
-  bool isFull() override {
     return false;
   }
+
+  bool Is_full() const{
+    return false;
+  }
+
+ private:
+  std::vector<int> list_;
+
 };
+
 
 
 #endif
