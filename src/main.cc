@@ -158,6 +158,10 @@ int main(){
         return 0;
         break;
 
+      case 'q':
+        return 0;
+        break;
+        
       default:
         std::cout << "Opcion Incorrecta, vuelva a escoger otra opcion" << std::endl;
         break;

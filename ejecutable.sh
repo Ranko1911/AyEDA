@@ -1,3 +1,4 @@
+rm programa
 # g++ -std=c++11 -c src/dispersion.cc -o obj/dispersion.o
 # g++ -std=c++11  -c src/exploration.cc -o obj/exploration.o
 # g++ -std=c++11  -c src/dispersionTable.cc -o obj/dispersionTable.o
