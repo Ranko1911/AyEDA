@@ -8,6 +8,9 @@
 
 ## Práctica 4: Funciones de Distribución y Exploración
 
-Se compila con: ./ejecutable .... y se eliminan los ejecutables con: ./limpiar
+Se compila con: ./ejecutable y se eliminan los ejecutables con: ./limpiar
+
+Ejemplo de uso:
+  ./programa -ts 3 -fd 1 -hash 2 -bs 2 -fe 1
 
  <!-- g++ src/test_hash.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h  -->
