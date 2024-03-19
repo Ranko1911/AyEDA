@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "../include/hashtable.h"
-#include "../include/nif.h"
+#include "../include/libro.h"
 
 // Función para verificar si un carácter es un dígito
 bool isDigit(char c) { return std::isdigit(static_cast<unsigned char>(c)); }
@@ -84,7 +84,7 @@ Options parseArgs(int argc, char *argv[]) {
   return options;
 }
 
-DispersionFunction<nif> *dispersion_menu(unsigned table_size, Options options) {
+DispersionFunction<libro> *dispersion_menu(unsigned table_size, Options options) {
   char option;
   option = options.hashFunction;
   while (true) {
@@ -96,22 +96,22 @@ DispersionFunction<nif> *dispersion_menu(unsigned table_size, Options options) {
     // std::cin >> option;
     switch (option) {
       case '1': {
-        DispersionFunction<nif> *fd =
-            new DispersionFunctionModule<nif>(table_size);
+        DispersionFunction<libro> *fd =
+            new DispersionFunctionModule<libro>(table_size);
         return fd;
         break;
       }
 
       case '2': {
-        DispersionFunction<nif> *fd =
-            new DispersionFunctionPseudorandom<nif>(table_size);
+        DispersionFunction<libro> *fd =
+            new DispersionFunctionPseudorandom<libro>(table_size);
         return fd;
         break;
       }
 
       case '3': {
-        DispersionFunction<nif> *fd =
-            new DispersionFunctionSum<nif>(table_size);
+        DispersionFunction<libro> *fd =
+            new DispersionFunctionSum<libro>(table_size);
         return fd;
         break;
       }
@@ -125,7 +125,7 @@ DispersionFunction<nif> *dispersion_menu(unsigned table_size, Options options) {
   }
 }
 
-ExplorationFunction<nif> *exploration_menu(DispersionFunction<nif> *fd, Options options) {
+ExplorationFunction<libro> *exploration_menu(DispersionFunction<libro> *fd, Options options) {
   char option;
   option = options.explorationFunction;
   while (true) {
@@ -138,26 +138,26 @@ ExplorationFunction<nif> *exploration_menu(DispersionFunction<nif> *fd, Options 
     // std::cin >> option;
     switch (option) {
       case '1': {
-        ExplorationFunction<nif> *fe = new ExplorationFunctionLineal<nif>;
+        ExplorationFunction<libro> *fe = new ExplorationFunctionLineal<libro>;
         return fe;
         break;
       }
 
       case '2': {
-        ExplorationFunction<nif> *fe = new ExplorationFunctionDouble<nif>(fd);
+        ExplorationFunction<libro> *fe = new ExplorationFunctionDouble<libro>(fd);
         return fe;
         break;
       }
 
       case '3': {
-        ExplorationFunction<nif> *fe = new ExplorationFunctionQuadratic<nif>;
+        ExplorationFunction<libro> *fe = new ExplorationFunctionQuadratic<libro>;
         return fe;
         break;
       }
 
       case '4': {
-        ExplorationFunction<nif> *fe =
-            new ExplorationFunctionRedispersion<nif>(fd);
+        ExplorationFunction<libro> *fe =
+            new ExplorationFunctionRedispersion<libro>(fd);
         return fe;
         break;
       }
@@ -183,11 +183,11 @@ int main(int argc, char* argv[]) {
               << std::endl;
   }
 
-  HashTable<nif> ht;
+  HashTable<libro> ht;
   bool is_table_created = false;
   char option, dispersion_type;
   unsigned table_size, block_size;
-  nif key;
+  libro key;
 
   table_size = options.tableSize;
   block_size = options.blockSize;
@@ -208,22 +208,22 @@ int main(int argc, char* argv[]) {
 
           switch (dispersion_type) {
             case '1': {
-              DispersionFunction<nif> *dispersion_function =
+              DispersionFunction<libro> *dispersion_function =
                   dispersion_menu(table_size, options);
-              HashTable<nif> hash_table(table_size, dispersion_function);
+              HashTable<libro> hash_table(table_size, dispersion_function);
               ht = hash_table;
               is_table_created = true;
               break;
             }
 
             case '2': {
-              DispersionFunction<nif> *dispersion_function =
+              DispersionFunction<libro> *dispersion_function =
                   dispersion_menu(table_size, options);
-              ExplorationFunction<nif> *exploration_function =
+              ExplorationFunction<libro> *exploration_function =
                   exploration_menu(dispersion_function, options);
               // std::cout << "Introduzca el tamaño del bloque: " << std::endl;
               // std::cin >> block_size;
-              HashTable<nif> hash_table(table_size, dispersion_function,
+              HashTable<libro> hash_table(table_size, dispersion_function,
                                         exploration_function, block_size);
               ht = hash_table;
               is_table_created = true;

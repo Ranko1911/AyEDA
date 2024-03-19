@@ -43,6 +43,8 @@ class HashTable{
     unsigned jump, gap = 1, pos = (*fd_)(key);
     if(table_[pos]->Search(key)){
       std::cout << "Encontrado" << std::endl;
+      std::cout << "Posición: " << pos << std::endl;
+      std::cout << key << std::endl;
       return true;
     } else {
       if(table_[pos]->Is_full()){
