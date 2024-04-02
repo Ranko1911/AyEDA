@@ -75,37 +75,49 @@ class QuickSort : public SortingAlgorithm<T> {
 };
 template <typename T>
 class RadixSort : public SortingAlgorithm<T> {
- public:
+public:
   void sort(T sec[], int n) override {
     T max = getMax(sec, n);
-    for (T exp = 1; max / exp > 0; exp *= 10)
+    for (T exp = 1; max != 0; exp *= 10) {
       countSort(sec, n, exp);
+      max /= 10;
+    }
   }
 
- private:
+private:
   T getMax(T arr[], int n) {
-    T mx = arr[0];
-    for (int i = 1; i < n; i++)
-      if (arr[i] > mx) mx = arr[i];
+    T mx = abs(arr[0]);
+    for (int i = 1; i < n; i++) {
+      if (abs(arr[i]) > mx) {
+        mx = abs(arr[i]);
+      }
+    }
     return mx;
   }
 
   void countSort(T arr[], int n, int exp) {
     T output[n];
-    int i, count[10] = {0};
+    int i, count[19] = {0}; // 19 para manejar valores negativos también
 
-    for (i = 0; i < n; i++) count[(arr[i] / exp) % 10]++;
-
-    for (i = 1; i < 10; i++) count[i] += count[i - 1];
-
-    for (i = n - 1; i >= 0; i--) {
-      output[count[(arr[i] / exp) % 10] - 1] = arr[i];
-      count[(arr[i] / exp) % 10]--;
+    for (i = 0; i < n; i++) {
+      count[(arr[i] / exp) % 10 + 9]++; // Ajuste para valores negativos
     }
 
-    for (i = 0; i < n; i++) arr[i] = output[i];
+    for (i = 1; i < 19; i++) { // 19 para manejar valores negativos también
+      count[i] += count[i - 1];
+    }
+
+    for (i = n - 1; i >= 0; i--) {
+      output[count[(arr[i] / exp) % 10 + 9] - 1] = arr[i]; // Ajuste para valores negativos
+      count[(arr[i] / exp) % 10 + 9]--;
+    }
+
+    for (i = 0; i < n; i++) {
+      arr[i] = output[i];
+    }
   }
 };
+
 
 template <typename T>
 class SelectionSort : public SortingAlgorithm<T> {

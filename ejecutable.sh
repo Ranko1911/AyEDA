@@ -4,7 +4,8 @@ rm programa
 # g++ -std=c++11  -c src/dispersionTable.cc -o obj/dispersionTable.o
 # g++ -std=c++11  -c src/test_main.cc -o obj/test_main.o
 # g++ obj/dispersion.o obj/exploration.o obj/dispersionTable.o obj/test_main.o -o programa
-g++ src/main.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/nif.h -o programa
-g++ src/main_mod.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/libro.h -o programa2
-
+# g++ src/main.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/nif.h -o programa
+# g++ src/main_mod.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/libro.h -o programa2
 # g++ src/test_main.cc include/nif.h -o test
+
+g++ src/main.cc include/sorting.h -o programa
