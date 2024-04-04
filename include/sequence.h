@@ -12,6 +12,7 @@ class Sequence {
   // virtual bool Search(const Key& key) const = 0;
   virtual bool Insert(const Key& key) = 0;
   virtual bool Is_full() const = 0;
+  virtual Key Sequence<Key>::operator[](const Position&) const = 0;
 };
 
 // class staticSequence deriva de sequence
@@ -43,6 +44,10 @@ class staticSequence : public Sequence<Key> {
   }
 
   bool Is_full() const { return (e_insert_ == block_size_); }
+
+  Key Sequence<Key>::operator[](const Position& p) const {
+    return block_[p];
+  }
 
  private:
   int block_size_;

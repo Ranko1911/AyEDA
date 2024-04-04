@@ -1,9 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "sequence.h"
 
 template <typename T>
 class SortingAlgorithm {
+  private:
+    void swap(T &a, T &b) {
+      T temp = a;
+      a = b;
+      b = temp;
+    }
+
+    staticSequence<Key> *sequence_;
  public:
   virtual void sort(T arr[], int size) = 0;
 };
