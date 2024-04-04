@@ -12,7 +12,7 @@ class SortingAlgorithm {
       b = temp;
     }
 
-    staticSequence<Key> *sequence_;
+    staticSequence<T> *sequence_;
  public:
   virtual void sort(T arr[], int size) = 0;
 };

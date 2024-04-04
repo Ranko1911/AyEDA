@@ -1,5 +1,7 @@
 #include <iostream>
 #include "../include/sorting.h"
+#include "../include/sequence.h"
+
 int main() {
   int sec[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
   int n = sizeof(sec) / sizeof(sec[0]);
