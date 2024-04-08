@@ -24,7 +24,7 @@ void printHelp() {
   std::cout << "  -init <i> [f]  Especifica cómo se inicializan los datos de "
                "la secuencia.\n";
   std::cout << "                 i=manual | i=random | i=file f=nombre del "
-               "fichero de entrada.\n";
+               "fichero de entrada.txt\n";
   std::cout << "  -trace <y|n>   Indica si se muestra o no la traza durante la "
                "ejecución.\n";
   std::cout << "  -h             Muestra esta ayuda.\n";
@@ -141,7 +141,7 @@ void printSequence(int x[], int size) {
 int main(int argc, char* argv[]) {
   Options options = parseCommandLine(argc, argv);
 
-  int sec[] = {};  // No se usa ningún elemento ficticio
+  int sec[options.size];  // No se usa ningún elemento ficticio
 
   if (options.initMethod == "random") {
     randomInit(sec, options.size);
@@ -153,30 +153,23 @@ int main(int argc, char* argv[]) {
 
   printSequence(sec, options.size);
 
-
-  // int n = sizeof(sec) / sizeof(sec[0]);
-  std::cout << "Tamaño de la secuencia: " << options.size << std::endl;
+  // std::cout << "Tamaño de la secuencia: " << options.size << std::endl;
 
   if (options.sortingMethod == "heap") {
-    std::cout << "Ordenando la secuencia usando HeapSort...\n";
     HeapSort<int> heap_sort;
-    heap_sort.sort(sec, options.size);
+    heap_sort.sort(sec, options.size, options.trace);
   } else if (options.sortingMethod == "quick") {
-    std::cout << "Ordenando la secuencia usando QuickSort...\n";
     QuickSort<int> quick_sort;
-    quick_sort.sort(sec, options.size);
+    quick_sort.sort(sec, options.size, options.trace);
   } else if (options.sortingMethod == "radix") {
-    std::cout << "Ordenando la secuencia usando RadixSort...\n";
     RadixSort<int> radix_sort;
-    radix_sort.sort(sec, options.size);
+    radix_sort.sort(sec, options.size, options.trace);
   } else if (options.sortingMethod == "seleccion") {
-    std::cout << "Ordenando la secuencia usando SelectionSort...\n";
     SelectionSort<int> selection_sort;
-    selection_sort.sort(sec, options.size);
+    selection_sort.sort(sec, options.size, options.trace);
   } else if (options.sortingMethod == "shell") {
-    std::cout << "Ordenando la secuencia usando ShellSort...\n";
     ShellSort<int> shell_sort;
-    shell_sort.sort(sec, options.size);
+    shell_sort.sort(sec, options.size, options.trace);
   }
 
   std::cout << "Arreglo ordenado usando " << options.sortingMethod << "\n";
