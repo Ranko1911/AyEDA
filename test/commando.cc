@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include "../include/sorting.h"
-#include "../include/sequence.h"
+
 
 struct Options {
     int size; // Tamaño de la secuencia
@@ -53,8 +51,7 @@ Options parseCommandLine(int argc, char* argv[]) {
                     std::cerr << "Método de ordenación incorrecto: " << argv[i + 1] << std::endl;
                     exit(1);
                 }
-                options.sortingMethod = argv[i + 1];
-                std::cout << "Método de ordenación: " << options.sortingMethod << std::endl;
+                std::cout << "Método de ordenación: " << argv[i + 1] << std::endl;
                 ++i;
             }
         } else if (arg == "-init") {
@@ -86,83 +83,11 @@ Options parseCommandLine(int argc, char* argv[]) {
     return options;
 }
 
-void manualInit(int x[], int size) {
-    std::cout << "Introduce los elementos de la secuencia:\n";
-    for (int i = 0; i < size; i++) {
-        std::cin >> x[i];
-    }
-}
-
-void randomInit(int x[], int size) {
-    srand(time(nullptr)); // Initialize random seed
-    for (int i = 0; i < size; i++) {
-        x[i] = rand() % 100;
-    }
-}
-
-void fileInit(int x[], int size, std::string fileName) {
-    std::ifstream file("files/" + fileName); // Adjusting the file path
-    if (!file.is_open()) {
-        std::cerr << "No se pudo abrir el archivo " << fileName << std::endl;
-        exit(1);
-    }
-
-    int n;
-    int i = 0;
-    while (file >> n && i < size) {
-        x[i++] = n;
-    }
-}
-
-void printSequence(int x[], int size) {
-    std::cout << "Secuencia:\n";
-    for (int i = 0; i < size; i++) {
-        std::cout << x[i] << " ";
-    }
-    std::cout << std::endl;
-}
-
-
-
 int main(int argc, char* argv[]) {
     Options options = parseCommandLine(argc, argv);
 
-    int sec[] = {}; // No se usa ningún elemento ficticio
-
-    if (options.initMethod == "random") {
-        randomInit(sec, options.size);
-        printSequence(sec, options.size);
-    } else if (options.initMethod == "manual") {
-        manualInit(sec, options.size);
-        printSequence(sec, options.size);
-    } else if (options.initMethod == "file") {
-        fileInit(sec, options.size, options.fileName);
-        printSequence(sec, options.size);
-    }
-
-    // int sec[] = {64, 25, 12, 22, 11}; // Ejemplo de secuencia, se deberá cambiar según la inicialización
-    int n = sizeof(sec) / sizeof(sec[0]);
-
-    if (options.sortingMethod == "heap") {
-        HeapSort<int> heap_sort;
-        heap_sort.sort(sec, n);
-    } else if (options.sortingMethod == "quick") {
-        QuickSort<int> quick_sort;
-        quick_sort.sort(sec, n);
-    } else if (options.sortingMethod == "radix") {
-        RadixSort<int> radix_sort;
-        radix_sort.sort(sec, n);
-    } else if (options.sortingMethod == "seleccion") {
-        SelectionSort<int> selection_sort;
-        selection_sort.sort(sec, n);
-    } else if (options.sortingMethod == "shell") {
-        ShellSort<int> shell_sort;
-        shell_sort.sort(sec, n);
-    }
-
-    std::cout << "Arreglo ordenado usando " << options.sortingMethod << ": \n";
-    for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
-    std::cout << std::endl;
+    // Aquí puedes realizar la inicialización de la secuencia según el método seleccionado
+    // y luego realizar la ordenación según el método especificado
 
     return 0;
 }

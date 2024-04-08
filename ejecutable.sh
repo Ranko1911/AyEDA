@@ -7,5 +7,5 @@ rm programa
 # g++ src/main.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/nif.h -o programa
 # g++ src/main_mod.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/libro.h -o programa2
 # g++ src/test_main.cc include/nif.h -o test
-
-g++ src/main.cc include/sorting.h -o programa
+# g++ src/main.cc include/sorting.h -o programa
+g++ src/main.cc include/sequence.h include/sorting.h -o programa
