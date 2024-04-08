@@ -6,6 +6,8 @@ int main() {
   int sec[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
   int n = sizeof(sec) / sizeof(sec[0]);
 
+  std::cout << "tamano de la secuencia: " << n << "\n";
+
   // Prueba de HeapSort
   HeapSort<int> heap_sort;
   heap_sort.sort(sec, n);

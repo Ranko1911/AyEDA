@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../include/sorting.h"
 #include "../include/sequence.h"
+#include "../include/sorting.h"
 
 struct Options {
   int size;                   // Tamaño de la secuencia
@@ -145,49 +145,42 @@ int main(int argc, char* argv[]) {
 
   if (options.initMethod == "random") {
     randomInit(sec, options.size);
-    printSequence(sec, options.size);
   } else if (options.initMethod == "manual") {
     manualInit(sec, options.size);
-    printSequence(sec, options.size);
   } else if (options.initMethod == "file") {
     fileInit(sec, options.size, options.fileName);
-    printSequence(sec, options.size);
   }
 
-  // int sec[] = {64, 25, 12, 22, 11}; // Ejemplo de secuencia, se deberá
-  // cambiar según la inicialización
+  printSequence(sec, options.size);
 
-  int m = sizeof(sec) / sizeof(sec[0]) - 1;  // Ignoramos el elemento ficticio
 
+  // int n = sizeof(sec) / sizeof(sec[0]);
+  std::cout << "Tamaño de la secuencia: " << options.size << std::endl;
 
   if (options.sortingMethod == "heap") {
+    std::cout << "Ordenando la secuencia usando HeapSort...\n";
     HeapSort<int> heap_sort;
-    heap_sort.sort(sec, m);
-    std::cout << "Arreglo ordenado usando Heapsort: \n";
-    for (int i = 1; i <= m; i++) std::cout << sec[i] << " ";
-    std::cout << std::endl;
-    return 0;
-  }
-
-  int n = sizeof(sec) / sizeof(sec[0]);
-  
-  if (options.sortingMethod == "quick") {
+    heap_sort.sort(sec, options.size);
+  } else if (options.sortingMethod == "quick") {
+    std::cout << "Ordenando la secuencia usando QuickSort...\n";
     QuickSort<int> quick_sort;
-    quick_sort.sort(sec, n);
+    quick_sort.sort(sec, options.size);
   } else if (options.sortingMethod == "radix") {
+    std::cout << "Ordenando la secuencia usando RadixSort...\n";
     RadixSort<int> radix_sort;
-    radix_sort.sort(sec, n);
+    radix_sort.sort(sec, options.size);
   } else if (options.sortingMethod == "seleccion") {
+    std::cout << "Ordenando la secuencia usando SelectionSort...\n";
     SelectionSort<int> selection_sort;
-    selection_sort.sort(sec, n);
+    selection_sort.sort(sec, options.size);
   } else if (options.sortingMethod == "shell") {
+    std::cout << "Ordenando la secuencia usando ShellSort...\n";
     ShellSort<int> shell_sort;
-    shell_sort.sort(sec, n);
+    shell_sort.sort(sec, options.size);
   }
 
-  std::cout << "Arreglo ordenado usando " << options.sortingMethod << ": \n";
-  for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
-  std::cout << std::endl;
+  std::cout << "Arreglo ordenado usando " << options.sortingMethod << "\n";
+  printSequence(sec, options.size);
 
   return 0;
 }
