@@ -1,18 +1,20 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <algorithm>
+
 #include "sequence.h"
 
 template <typename T>
 class SortingAlgorithm {
-  private:
-    void swap(T &a, T &b) {
-      T temp = a;
-      a = b;
-      b = temp;
-    }
+ private:
+  void swap(T &a, T &b) {
+    T temp = a;
+    a = b;
+    b = temp;
+  }
 
-    staticSequence<T> *sequence_;
+  staticSequence<T> *sequence_;
+
  public:
   virtual void sort(T arr[], int size) = 0;
 };
@@ -31,10 +33,10 @@ class HeapSort : public SortingAlgorithm<T> {
       int h1 = 2 * i;
       int h2 = h1 + 1;
       int h;
-      if (h1 == n || sec[h1] > sec[h2])
-        h = h1;
-      else
+      if (h2 <= n && sec[h2] > sec[h1])
         h = h2;
+      else
+        h = h1;
       if (sec[h] <= sec[i])
         break;
       else {
@@ -44,8 +46,9 @@ class HeapSort : public SortingAlgorithm<T> {
     }
   }
 
-  void sort(T sec[], int n) override {
-    for (int i = n / 2; i > 0; i--) baja(i, sec, n);
+  void sort(T sec[], int n) {
+    sec--;
+    for (int i = n / 2; i >= 1; i--) baja(i, sec, n);
     for (int i = n; i > 1; i--) {
       swap(sec[1], sec[i]);
       baja(1, sec, i - 1);
@@ -78,13 +81,11 @@ class QuickSort : public SortingAlgorithm<T> {
     if (i < fin) Qsort(sec, i, fin);
   }
 
-  void sort(T sec[], int n) override {
-    Qsort(sec, 0, n - 1);
-  }
+  void sort(T sec[], int n) override { Qsort(sec, 0, n - 1); }
 };
 template <typename T>
 class RadixSort : public SortingAlgorithm<T> {
-public:
+ public:
   void sort(T sec[], int n) override {
     T max = getMax(sec, n);
     for (T exp = 1; max != 0; exp *= 10) {
@@ -93,7 +94,7 @@ public:
     }
   }
 
-private:
+ private:
   T getMax(T arr[], int n) {
     T mx = abs(arr[0]);
     for (int i = 1; i < n; i++) {
@@ -106,18 +107,19 @@ private:
 
   void countSort(T arr[], int n, int exp) {
     T output[n];
-    int i, count[19] = {0}; // 19 para manejar valores negativos también
+    int i, count[19] = {0};  // 19 para manejar valores negativos también
 
     for (i = 0; i < n; i++) {
-      count[(arr[i] / exp) % 10 + 9]++; // Ajuste para valores negativos
+      count[(arr[i] / exp) % 10 + 9]++;  // Ajuste para valores negativos
     }
 
-    for (i = 1; i < 19; i++) { // 19 para manejar valores negativos también
+    for (i = 1; i < 19; i++) {  // 19 para manejar valores negativos también
       count[i] += count[i - 1];
     }
 
     for (i = n - 1; i >= 0; i--) {
-      output[count[(arr[i] / exp) % 10 + 9] - 1] = arr[i]; // Ajuste para valores negativos
+      output[count[(arr[i] / exp) % 10 + 9] - 1] =
+          arr[i];  // Ajuste para valores negativos
       count[(arr[i] / exp) % 10 + 9]--;
     }
 
@@ -126,7 +128,6 @@ private:
     }
   }
 };
-
 
 template <typename T>
 class SelectionSort : public SortingAlgorithm<T> {
@@ -162,5 +163,3 @@ class ShellSort : public SortingAlgorithm<T> {
     }
   }
 };
-
-
