@@ -2,15 +2,23 @@
 #include "../include/sorting.h"
 #include "../include/sequence.h"
 
+void arreglooriginal(int sec[], int n) {
+  std::cout << "Arreglo original: \n";
+  for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
+  std::cout << std::endl;
+}
+
 int main() {
   int sec[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
   int n = sizeof(sec) / sizeof(sec[0]);
+  bool printFlag = false;
 
   std::cout << "tamano de la secuencia: " << n << "\n";
 
   // Prueba de HeapSort
   HeapSort<int> heap_sort;
-  heap_sort.sort(sec, n);
+  //arreglooriginal(sec, n);
+  heap_sort.sort(sec, n, printFlag);
   std::cout << "Arreglo ordenado usando HeapSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
   std::cout << std::endl;
@@ -20,7 +28,8 @@ int main() {
 
   // Prueba de QuickSort
   QuickSort<int> quick_sort;
-  quick_sort.sort(sec2, n);
+  //arreglooriginal(sec2, n);
+  quick_sort.sort(sec2, n, printFlag);
   std::cout << "Arreglo ordenado usando QuickSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec2[i] << " ";
   std::cout << std::endl;
@@ -30,7 +39,8 @@ int main() {
 
   // Prueba de RadixSort
   RadixSort<int> radix_sort;
-  radix_sort.sort(sec3, n);
+  //arreglooriginal(sec3, n);
+  radix_sort.sort(sec3, n, printFlag);
   std::cout << "Arreglo ordenado usando RadixSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec3[i] << " ";
   std::cout << std::endl;
@@ -40,7 +50,8 @@ int main() {
 
   // Prueba de SelectionSort
   SelectionSort<int> selection_sort;
-  selection_sort.sort(sec4, n);
+  //arreglooriginal(sec4, n);
+  selection_sort.sort(sec4, n, printFlag);
   std::cout << "Arreglo ordenado usando SelectionSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec4[i] << " ";
   std::cout << std::endl;
@@ -50,7 +61,8 @@ int main() {
 
   // Prueba de ShellSort
   ShellSort<int> shell_sort;
-  shell_sort.sort(sec5, n);
+  //arreglooriginal(sec5, n);
+  shell_sort.sort(sec5, n, printFlag);
   std::cout << "Arreglo ordenado usando ShellSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec5[i] << " ";
   std::cout << std::endl;
