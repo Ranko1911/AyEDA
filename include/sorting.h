@@ -17,8 +17,6 @@ class SortingAlgorithm {
 
  public:
   virtual void sort(T arr[], int size, bool printflag) = 0;
-
-  
 };
 
 template <typename T>
@@ -79,30 +77,31 @@ class HeapSort : public SortingAlgorithm<T> {
 template <typename T>
 class QuickSort : public SortingAlgorithm<T> {
  public:
-  void swap(T &a, T &b) {
-    T temp = a;
-    a = b;
-    b = temp;
+  void swap(Sequence<T> &sec, int idx1, int idx2) {
+    T temp = sec[idx1];
+    sec[idx1] = sec[idx2];
+    sec[idx2] = temp;
   }
 
-  void Qsort(T sec[], int ini, int fin, bool printFlag) {
+  void Qsort(Sequence<T> &sec, int ini, int fin, bool printFlag) {
     int i = ini, f = fin;
     T p = sec[(i + f) / 2];
     while (i <= f) {
       while (sec[i] < p) i++;
       while (sec[f] > p) f--;
       if (i <= f) {
-        swap(sec[i], sec[f]);
+        swap(sec, i, f);  // Pasamos los índices de los elementos
         i++;
         f--;
       }
     }
+    // imprimir segun la flag
     if (printFlag) {
-      std::cout << "Array after partitioning: ";
-      printArray(sec, fin + 1);
+      std::cout << "Array after iteration " << n + n - i + 1 << ": ";
+      printArray(sec + 1, n);
     }
-    if (ini < f) Qsort(sec, ini, f, printFlag);
-    if (i < fin) Qsort(sec, i, fin, printFlag);
+    if (ini < f) Qsort(sec, ini, f);
+    if (i < fin) Qsort(sec, i, fin);
   }
 
   void sort(T sec[], int n, bool printFlag) { Qsort(sec, 0, n - 1, printFlag); }
@@ -119,16 +118,47 @@ class QuickSort : public SortingAlgorithm<T> {
 template <typename T>
 class RadixSort : public SortingAlgorithm<T> {
  public:
-  void sort(T sec[], int n, bool printflag) override {
-    T max = getMax(sec, n);
-    for (T exp = 1; max != 0; exp *= 10) {
-      countSort(sec, n, exp);
-      max /= 10;
-      if (printflag) {
-        std::cout << "Array after sorting for exp = " << exp << ": ";
-        printArray(sec, n);
+  void sort(staticSequence<T> &sec, int size, bool printFlag) {
+    // Encontrar el dígito máximo en la secuencia
+    T max = sec[0];
+    for (int i = 1; i < size; i++) {
+      if (sec[i] > max) {
+        max = sec[i];
       }
     }
+
+    // Crear un arreglo para el conteo de frecuencia
+    staticSequence<int> conteo(10);  // Los dígitos van de 0 a 9
+
+    // Crear un arreglo para el resultado ordenado
+    staticSequence<T> resultado(size);
+
+    // Realizar el conteo de frecuencia para cada dígito
+    for (T exp = 1; max / exp > 0; exp *= 10) {
+      conteo = staticSequence<int>(
+          10);  // Reiniciamos el arreglo de conteo en cada iteración
+
+      for (int i = 0; i < size; i++) conteo[(sec[i] / exp) % 10]++;
+
+      for (int i = 1; i < 10; i++) conteo[i] += conteo[i - 1];
+
+      for (int i = size - 1; i >= 0; i--) {
+        resultado[conteo[(sec[i] / exp) % 10] - 1] = sec[i];
+        conteo[(sec[i] / exp) % 10]--;
+      }
+
+      if (printFlag) {
+        std::cout << "Array after iteration " << n + n - i + 1 << ": ";
+        printArray(sec + 1, n);
+      }
+
+      for (int i = 0; i < size; i++) sec[i] = resultado[i];
+    }
+  }
+
+  int obtenerDigito(T numero, int posicion) {
+    while (posicion--) numero /= 10;
+    return numero % 10;
   }
 
  private:
@@ -138,58 +168,26 @@ class RadixSort : public SortingAlgorithm<T> {
     }
     std::cout << std::endl;
   }
-
-  T getMax(T arr[], int n) {
-    T mx = abs(arr[0]);
-    for (int i = 1; i < n; i++) {
-      if (abs(arr[i]) > mx) {
-        mx = abs(arr[i]);
-      }
-    }
-    return mx;
-  }
-
-  void countSort(T arr[], int n, int exp) {
-    T output[n];
-    int i, count[19] = {0};  // 19 para manejar valores negativos también
-
-    for (i = 0; i < n; i++) {
-      count[(arr[i] / exp) % 10 + 9]++;  // Ajuste para valores negativos
-    }
-
-    for (i = 1; i < 19; i++) {  // 19 para manejar valores negativos también
-      count[i] += count[i - 1];
-    }
-
-    for (i = n - 1; i >= 0; i--) {
-      output[count[(arr[i] / exp) % 10 + 9] - 1] =
-          arr[i];  // Ajuste para valores negativos
-      count[(arr[i] / exp) % 10 + 9]--;
-    }
-
-    for (i = 0; i < n; i++) {
-      arr[i] = output[i];
-    }
-  }
 };
 
 template <typename T>
 class SelectionSort : public SortingAlgorithm<T> {
  public:
-  void sort(T arr[], int n, bool printflag) override {
+  void sort(staticSequence<T> &sec, int n, bool printFlag) {
+    int min;
+    T x;
     for (int i = 0; i < n - 1; i++) {
-      int min = i;
+      min = i;
       for (int j = i + 1; j < n; j++) {
-        if (arr[j] < arr[min]) min = j;
+        if (sec[j] < sec[min]) min = j;
       }
-      if (min != i) {
-        T temp = arr[min];
-        arr[min] = arr[i];
-        arr[i] = temp;
-      }
-      if (printflag) {
-        std::cout << "Array after iteration " << i + 1 << ": ";
-        printArray(arr, n);
+      // Intercambio de elementos
+      x = sec[min];
+      sec[min] = sec[i];
+      sec[i] = x;
+      if(printFlag){
+        std::cout << "Array after iteration " << n + n - i + 1 << ": ";
+        printArray(sec + 1, n);
       }
     }
   }
@@ -206,7 +204,7 @@ class SelectionSort : public SortingAlgorithm<T> {
 template <typename T>
 class ShellSort : public SortingAlgorithm<T> {
  public:
-  void deltasort(int delta, T sec[], int n, bool printflag) {
+  void deltasort(int delta, staticSequence<T> &sec, int n, bool printFlag) {
     for (int i = delta; i < n; i++) {
       T x = sec[i];
       int j = i;
@@ -215,18 +213,18 @@ class ShellSort : public SortingAlgorithm<T> {
         j = j - delta;
       }
       sec[j] = x;
-      if (printflag) {
-        std::cout << "Array after iteration with delta " << delta << ": ";
-        printArray(sec, n);
+      if(printFlag){
+        std::cout << "Array after iteration " << n + n - i + 1 << ": ";
+        printArray(sec + 1, n);
       }
     }
   }
 
-  void sort(T sec[], int n, bool printflag) override {
+  void sort(staticSequence<T> &sec, int n) {
     int delta = n;
     while (delta > 1) {
       delta = delta / 2;
-      deltasort(delta, sec, n, printflag);
+      deltasort(delta, sec, n);
     }
   }
 
