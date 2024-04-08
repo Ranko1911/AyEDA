@@ -102,21 +102,24 @@ Options parseCommandLine(int argc, char* argv[]) {
   return options;
 }
 
-void manualInit(int x[], int size) {
+void manualInit(staticSequence<int>& sequence, int size) {
   std::cout << "Introduce los elementos de la secuencia:\n";
+  int element;
   for (int i = 0; i < size; i++) {
-    std::cin >> x[i];
+    std::cin >> element;
+    sequence.Insert(element);
+    std::cout << "Elemento insertado: " << element << std::endl;
   }
 }
 
-void randomInit(int x[], int size) {
+void randomInit(staticSequence<int>& sequence, int size) {
   srand(time(nullptr));  // Initialize random seed
   for (int i = 0; i < size; i++) {
-    x[i] = rand() % 100;
+    sequence.Insert(rand() % 100);
   }
 }
 
-void fileInit(int x[], int size, std::string fileName) {
+void fileInit(staticSequence<int>& sequence, std::string fileName) {
   std::ifstream file("files/" + fileName);  // Adjusting the file path
   if (!file.is_open()) {
     std::cerr << "No se pudo abrir el archivo " << fileName << std::endl;
@@ -124,16 +127,15 @@ void fileInit(int x[], int size, std::string fileName) {
   }
 
   int n;
-  int i = 0;
-  while (file >> n && i < size) {
-    x[i++] = n;
+  while (file >> n) {
+    sequence.Insert(n);
   }
 }
 
-void printSequence(int x[], int size) {
+void printSequence(const staticSequence<int>& sequence, int size) {
   std::cout << "Secuencia:\n";
   for (int i = 0; i < size; i++) {
-    std::cout << x[i] << " ";
+    std::cout << sequence[i] << " ";
   }
   std::cout << std::endl;
 }
@@ -141,14 +143,14 @@ void printSequence(int x[], int size) {
 int main(int argc, char* argv[]) {
   Options options = parseCommandLine(argc, argv);
 
-  int sec[options.size];  // No se usa ningún elemento ficticio
+  staticSequence<int> sec(options.size);  // No se usa ningún elemento ficticio
 
   if (options.initMethod == "random") {
     randomInit(sec, options.size);
   } else if (options.initMethod == "manual") {
     manualInit(sec, options.size);
   } else if (options.initMethod == "file") {
-    fileInit(sec, options.size, options.fileName);
+    fileInit(sec, options.fileName);
   }
 
   printSequence(sec, options.size);
