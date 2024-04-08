@@ -2,70 +2,122 @@
 #include "../include/sorting.h"
 #include "../include/sequence.h"
 
-void arreglooriginal(int sec[], int n) {
-  std::cout << "Arreglo original: \n";
+int main() {
+  
+  // prueba de HeapSort 
+  staticSequence<int> sec(5); // Creamos una staticSequence con capacidad para 5 elementos
+  sec.Insert(64);
+  sec.Insert(25);
+  sec.Insert(12);
+  sec.Insert(22);
+  sec.Insert(11);
+
+  int n = 5;
+  std::cout << "Arreglo original:\n";
   for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
   std::cout << std::endl;
-}
 
-int main() {
-  int sec[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
-  int n = sizeof(sec) / sizeof(sec[0]);
-  bool printFlag = false;
+  HeapSort<int> heapSort;
+  std::cout << "Arreglando usando HeapSort: \n";
+  heapSort.sort(sec, n, true);
 
-  std::cout << "tamano de la secuencia: " << n << "\n";
-
-  // Prueba de HeapSort
-  HeapSort<int> heap_sort;
-  //arreglooriginal(sec, n);
-  heap_sort.sort(sec, n, printFlag);
   std::cout << "Arreglo ordenado usando HeapSort: \n";
   for (int i = 0; i < n; i++) std::cout << sec[i] << " ";
   std::cout << std::endl;
 
-  int sec2[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
-  n = sizeof(sec2) / sizeof(sec2[0]);
+  // ---------------------------------------------------------- //
 
-  // Prueba de QuickSort
-  QuickSort<int> quick_sort;
-  //arreglooriginal(sec2, n);
-  quick_sort.sort(sec2, n, printFlag);
+  // prueba de QuickSort
+  staticSequence<int> sec2(5); // Creamos una staticSequence con capacidad para 5 elementos
+  sec2.Insert(64);
+  sec2.Insert(25);
+  sec2.Insert(12);
+  sec2.Insert(22);
+  sec2.Insert(11);
+
+  int n2 = 5;
+  std::cout << "Arreglo original:\n";
+  for (int i = 0; i < n2; i++) std::cout << sec2[i] << " ";
+  std::cout << std::endl;
+
+  QuickSort<int> quickSort;
+  std::cout << "Arreglando usando QuickSort: \n";
+  quickSort.sort(sec2, n2, true);
+
   std::cout << "Arreglo ordenado usando QuickSort: \n";
-  for (int i = 0; i < n; i++) std::cout << sec2[i] << " ";
+  for (int i = 0; i < n2; i++) std::cout << sec2[i] << " ";
   std::cout << std::endl;
 
-  int sec3[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
-  n = sizeof(sec3) / sizeof(sec3[0]);
+  // ---------------------------------------------------------- //
 
-  // Prueba de RadixSort
-  RadixSort<int> radix_sort;
-  //arreglooriginal(sec3, n);
-  radix_sort.sort(sec3, n, printFlag);
+  // prueba de RadixSort
+  staticSequence<int> sec3(5); // Creamos una staticSequence con capacidad para 5 elementos
+  sec3.Insert(64);
+  sec3.Insert(25);
+  sec3.Insert(12);
+  sec3.Insert(22);
+  sec3.Insert(11);
+
+  int n3 = 5;
+  std::cout << "Arreglo original:\n";
+  for (int i = 0; i < n3; i++) std::cout << sec3[i] << " ";
+  std::cout << std::endl;
+
+  RadixSort<int> radixSort;
+  std::cout << "Arreglando usando RadixSort: \n";
+  radixSort.sort(sec3, n3, true);
+
   std::cout << "Arreglo ordenado usando RadixSort: \n";
-  for (int i = 0; i < n; i++) std::cout << sec3[i] << " ";
+  for (int i = 0; i < n3; i++) std::cout << sec3[i] << " ";
   std::cout << std::endl;
 
-  int sec4[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
-  n = sizeof(sec4) / sizeof(sec4[0]);
+  // ---------------------------------------------------------- //
 
-  // Prueba de SelectionSort
-  SelectionSort<int> selection_sort;
-  //arreglooriginal(sec4, n);
-  selection_sort.sort(sec4, n, printFlag);
+  // prueba de SelectionSort
+  staticSequence<int> sec4(5); // Creamos una staticSequence con capacidad para 5 elementos
+  
+  sec4.Insert(64);
+  sec4.Insert(25);
+  sec4.Insert(12);
+  sec4.Insert(22);
+  sec4.Insert(11);
+
+  int n4 = 5;
+  std::cout << "Arreglo original:\n";
+  for (int i = 0; i < n4; i++) std::cout << sec4[i] << " ";
+  std::cout << std::endl;
+
+  SelectionSort<int> selectionSort;
+  std::cout << "Arreglando usando SelectionSort: \n";
+  selectionSort.sort(sec4, n4, true);
+
   std::cout << "Arreglo ordenado usando SelectionSort: \n";
-  for (int i = 0; i < n; i++) std::cout << sec4[i] << " ";
+  for (int i = 0; i < n4; i++) std::cout << sec4[i] << " ";
   std::cout << std::endl;
 
-  int sec5[] = {64, 25, 12, 22, 11}; // No se usa ningún elemento ficticio
-  n = sizeof(sec5) / sizeof(sec5[0]);
+  // ---------------------------------------------------------- //
 
-  // Prueba de ShellSort
-  ShellSort<int> shell_sort;
-  //arreglooriginal(sec5, n);
-  shell_sort.sort(sec5, n, printFlag);
+  // prueba de ShellSort
+  staticSequence<int> sec5(5); // Creamos una staticSequence con capacidad para 5 elementos
+  sec5.Insert(64);
+  sec5.Insert(25);
+  sec5.Insert(12);
+  sec5.Insert(22);
+  sec5.Insert(11);
+
+  int n5 = 5;
+  std::cout << "Arreglo original:\n";
+  for (int i = 0; i < n5; i++) std::cout << sec5[i] << " ";
+  std::cout << std::endl;
+
+  ShellSort<int> shellSort;
+  std::cout << "Arreglando usando ShellSort: \n";
+  shellSort.sort(sec5, n5, true);
+
   std::cout << "Arreglo ordenado usando ShellSort: \n";
-  for (int i = 0; i < n; i++) std::cout << sec5[i] << " ";
+  for (int i = 0; i < n5; i++) std::cout << sec5[i] << " ";
   std::cout << std::endl;
 
   return 0;
+  
 }
