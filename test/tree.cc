@@ -9,6 +9,9 @@ int main() {
     abb.insert(15);
     abb.insert(7);
     abb.insert(12);
+    abb.insert(26);
+    abb.insert(3);
+    abb.insert(8);
 
     std::cout << "Árbol binario de búsqueda:\n " << abb << std::endl;
 
