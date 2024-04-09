@@ -1,3 +1,6 @@
+#ifndef NODE_H
+#define NODE_H
+
 #include <iostream>
 
 template <class T>
@@ -10,7 +13,10 @@ class NodeB {
  public:
   NodeB(T data) : data(data), left(nullptr), right(nullptr) {}
 
-  T getData() { return data; }
+  T getData() const { return data; }
+
+  // Método para comparar el dato almacenado con otro valor
+  bool compareData(const T& otherData) const { return data < otherData; }
 
   NodeB<T>* getLeft() { return left; }
 
@@ -21,4 +27,12 @@ class NodeB {
   void setLeft(NodeB<T>* left) { this->left = left; }
 
   void setRight(NodeB<T>* right) { this->right = right; }
+
+  template <class U>
+  friend class ABB;
+
+  template <class U>
+  friend class AB;
 };
+
+#endif  // NODE_H
