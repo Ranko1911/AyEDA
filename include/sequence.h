@@ -22,13 +22,12 @@ class staticSequence : public Sequence<Key> {
  public:
   staticSequence(int n) {
     block_size_ = n;
-    block_ = new int[block_size_];
+    block_ = new Key[block_size_];
     e_insert_ = 0;
   }
-
   bool Search(const Key& key) const {
-    for(int i = 0; i < e_insert_; i++){
-      if(key == block_[i]){
+    for (int i = 0; i < e_insert_; i++) {
+      if (key == block_[i]) {
         return true;
       }
     }
@@ -46,17 +45,13 @@ class staticSequence : public Sequence<Key> {
 
   bool Is_full() const { return (e_insert_ == block_size_); }
 
-  Key operator[](const int& p) const {
-    return block_[p];
-  }
+  Key operator[](const int& i) const { return block_[i]; }
 
-  Key& operator[](const int& p) {
-    return block_[p];
-  }
+  Key& operator[](const int& i) { return block_[i]; }
 
  private:
   int block_size_;
-  int* block_;
+  Key* block_;
   int e_insert_;
 };
 

@@ -98,7 +98,6 @@ Options parseCommandLine(int argc, char* argv[]) {
       }
     }
   }
-
   return options;
 }
 
