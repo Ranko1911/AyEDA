@@ -1,21 +1,8 @@
-# rm int_programa
-# rm long_programa
-# rm nif_programa
-rm p1
-rm p2
-rm p3
-# g++ -std=c++11 -c src/dispersion.cc -o obj/dispersion.o
-# g++ -std=c++11  -c src/exploration.cc -o obj/exploration.o
-# g++ -std=c++11  -c src/dispersionTable.cc -o obj/dispersionTable.o
-# g++ -std=c++11  -c src/test_main.cc -o obj/test_main.o
-# g++ obj/dispersion.o obj/exploration.o obj/dispersionTable.o obj/test_main.o -o programa
-# g++ src/main.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/nif.h -o programa
-# g++ src/main_mod.cc include/dispersion.h include/exploration.h include/hashtable.h include/sequence.h include/libro.h -o programa2
-# g++ src/test_main.cc include/nif.h -o test
-# g++ src/main.cc include/sorting.h -o programa
-# g++ src/main.cc include/sequence.h include/sorting.h -o int_programa
-# g++ src/main_long.cc include/sequence.h include/sorting.h -o long_programa
-# g++ src/main_nif.cc include/sequence.h include/sorting.h -o nif_programa
-g++ test/nodo.cc include/nodo.h -o p1
-g++ test/tree.cc include/ab.h include/nodo.h -o p2
-g++ test/abe.cc include/ab.h include/abe.h -o p3
+rm nodo
+rm abb
+rm abe
+rm input
+g++ test/nodo.cc include/nodo.h -o nodo
+g++ test/tree.cc include/ab.h include/nodo.h -o abb
+g++ test/abe.cc include/ab.h include/abe.h -o abe
+g++ test/input.cc -o input
