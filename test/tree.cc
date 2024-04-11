@@ -6,7 +6,7 @@
 void randomInsert(ABB<int> &abb, int n) {
     for (int i = 0; i < n; ++i) {
         int data = rand() % 100;
-        abb.insert(data);
+        abb.insert(i);
     }
 }
 

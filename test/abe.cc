@@ -1,37 +1,52 @@
-// #include <iostream>
+#include <iostream>
+#include "../include/abe.h"
 
-// #include "../include/ab.h"
+int main() {
+    // Crear un árbol binario de búsqueda AVL de enteros
+    ABE<int> avlTree;
 
-// int main() {
-//     // Crear un árbol binario equilibrado (ABE) de enteros
-//     ABE<int> avlTree;
+    // Insertar algunos elementos en el árbol
+    avlTree.insert(10);
+    avlTree.insert(20);
+    avlTree.insert(30);
+    avlTree.insert(40);
+    avlTree.insert(50);
+    avlTree.insert(25);
 
-//     // Insertar algunos valores
-//     avlTree.insert(10);
-//     avlTree.insert(5);
-//     avlTree.insert(15);
-//     avlTree.insert(3);
-//     avlTree.insert(7);
-//     avlTree.insert(12);
-//     avlTree.insert(17);
+    for (int i = 0; i < 10; i++) {
+        avlTree.insert(i);
+    }
 
-//     // Imprimir el árbol en orden
-//     std::cout << "Árbol en orden: ";
-//     avlTree.inorden();
-//     std::cout << std::endl;
+    // Imprimir el árbol
+    std::cout << "Árbol AVL en orden: \n";
+    std::cout << avlTree << std::endl;
 
-//     // Buscar algunos valores
-//     std::cout << "Buscar 7: " << (avlTree.search(7) ? "Encontrado" : "No encontrado") << std::endl;
-//     std::cout << "Buscar 20: " << (avlTree.search(20) ? "Encontrado" : "No encontrado") << std::endl;
+    // // Imprimir el árbol en orden
+    // std::cout << "Árbol AVL en orden: ";
+    // avlTree.inorden();
+    // std::cout << std::endl;
 
-//     // Eliminar algunos valores
-//     avlTree.remove(7);
-//     avlTree.remove(15);
+    // Buscar un elemento en el árbol
+    int searchKey = 39;
+    if (avlTree.search(searchKey)) {
+        std::cout << searchKey << " está presente en el árbol." << std::endl;
+    } else {
+        std::cout << searchKey << " no está presente en el árbol." << std::endl;
+    }
 
-//     // Imprimir el árbol actualizado en orden
-//     std::cout << "Árbol actualizado en orden después de eliminar 7 y 15: ";
-//     avlTree.inorden();
-//     std::cout << std::endl;
+    // Eliminar un elemento del árbol
+    int removeKey = 20;
+    avlTree.remove(removeKey);
+    std::cout << "Eliminado " << removeKey << " del árbol." << std::endl;
 
-//     return 0;
-// }
+    // Imprimir el árbol en orden
+    std::cout << "Árbol AVL en orden: \n";
+    std::cout << avlTree << std::endl;
+
+    // // Imprimir el árbol nuevamente en orden después de la eliminación
+    // std::cout << "Árbol AVL en orden después de eliminar " << removeKey << ": ";
+    // avlTree.inorden();
+    // std::cout << std::endl;
+
+    return 0;
+}
