@@ -89,15 +89,15 @@ class ABB : public AB<T> {
     return current;
   }
 
-  void inorden() { inordenRecursive(AB<T>::root); }
+  // void inorden() { inordenRecursive(AB<T>::root); }
 
-  void inordenRecursive(NodeB<T>* current) {
-    if (current != nullptr) {
-      inordenRecursive(current->getLeft());
-      std::cout << current->getData() << " ";
-      inordenRecursive(current->getRight());
-    }
-  }
+  // void inordenRecursive(NodeB<T>* current) {
+  //   if (current != nullptr) {
+  //     inordenRecursive(current->getLeft());
+  //     std::cout << current->getData() << " ";
+  //     inordenRecursive(current->getRight());
+  //   }
+  // }
 };
 
 #endif

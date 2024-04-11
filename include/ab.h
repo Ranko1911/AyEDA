@@ -12,11 +12,20 @@ class AB {
   virtual void remove(T data) = 0;
   virtual bool search(T data) = 0;
   // virtual void print() = 0;
-//   virtual void inorden() = 0;
 
   friend std::ostream& operator<<(std::ostream& os, const AB<T>& ab) {
     ab.printLevelOrder(os);
     return os;
+  }
+
+  void inorden() { inordenRecursive(AB<T>::root); }
+
+  void inordenRecursive(NodeB<T>* current) {
+    if (current != nullptr) {
+      inordenRecursive(current->getLeft());
+      std::cout << current->getData() << " ";
+      inordenRecursive(current->getRight());
+    }
   }
 
  protected:
@@ -66,7 +75,5 @@ class AB {
     }
   }
 };
-
-
 
 #endif  // AB_H
