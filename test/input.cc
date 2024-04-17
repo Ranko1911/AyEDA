@@ -2,87 +2,99 @@
 #include <iostream>
 #include <string>
 
+// struct DATA que contiene
+struct DATA {
+  std::string tipoArbol;
+  std::string metodo;
+  std::string opcion;
+  std::string nombreFichero;
+};
+
 // Declaración de funciones
 void trabajarConArbol(const std::string& tipoArbol);
 void introducirDatos(const std::string& metodo, const std::string& opcion = "",
                      const std::string& nombreFichero = "");
 void mostrarAyuda(const std::string& nombrePrograma);
 
+DATA inputData(int argc, char* argv[]);
+
 int main(int argc, char* argv[]) {
-  std::string tipoArbol;
-  std::string metodo;
-  std::string opcion;
-  std::string nombreFichero;
+//   std::string tipoArbol;
+//   std::string metodo;
+//   std::string opcion;
+//   std::string nombreFichero;
 
-  // Si no se proporcionan argumentos, mostrar la ayuda
-  if (argc == 1) {
-    mostrarAyuda(argv[0]);
-    return 0;
-  }
+//   // Si no se proporcionan argumentos, mostrar la ayuda
+//   if (argc == 1) {
+//     mostrarAyuda(argv[0]);
+//     return 0;
+//   }
 
-  // Procesar los argumentos de línea de comandos
-  for (int i = 1; i < argc; ++i) {
-    std::string arg = argv[i];
-    if (arg == "-h" || arg == "-help") {
-      mostrarAyuda(argv[0]);
-      return 0;
-    } else if (arg == "-ab") {
-      if (i + 1 < argc) {
-        tipoArbol = argv[++i];
-      } else {
-        std::cerr << "-ab requiere un argumento\n";
-        return 1;
-      }
-    } else if (arg == "-init") {
-      if (i + 1 < argc) {
-        metodo = argv[++i];
-        if (metodo == "file") {
-          if (i + 1 < argc) {
-            opcion = argv[++i];  // Número de elementos (opcional)
-            if (i + 1 < argc && argv[i + 1][0] != '-') {
-              nombreFichero = argv[++i];  // Nombre del fichero
-              // si el nombre del fichero no tiene la extensión .txt, se la
-              // añadimos
-              if (nombreFichero.find(".txt") == std::string::npos) {
-                nombreFichero += ".txt";
-              }
-            }
+//   // Procesar los argumentos de línea de comandos
+//   for (int i = 1; i < argc; ++i) {
+//     std::string arg = argv[i];
+//     if (arg == "-h" || arg == "-help") {
+//       mostrarAyuda(argv[0]);
+//       return 0;
+//     } else if (arg == "-ab") {
+//       if (i + 1 < argc) {
+//         tipoArbol = argv[++i];
+//       } else {
+//         std::cerr << "-ab requiere un argumento\n";
+//         return 1;
+//       }
+//     } else if (arg == "-init") {
+//       if (i + 1 < argc) {
+//         metodo = argv[++i];
+//         if (metodo == "file") {
+//           if (i + 1 < argc) {
+//             opcion = argv[++i];  // Número de elementos (opcional)
+//             if (i + 1 < argc && argv[i + 1][0] != '-') {
+//               nombreFichero = argv[++i];  // Nombre del fichero
+//               // si el nombre del fichero no tiene la extensión .txt, se la
+//               // añadimos
+//               if (nombreFichero.find(".txt") == std::string::npos) {
+//                 nombreFichero += ".txt";
+//               }
+//             }
 
-            // si no se proporciona el nombre del fichero, mostrar un mensaje de
-            // error
-            if (nombreFichero.empty()) {
-              std::cerr << "La opción file requiere el nombre del archivo\n";
-              return 1;
-            }
-          } else {
-            std::cerr
-                << "La opción file requiere al menos el nombre del archivo\n";
-            return 1;
-          }
-        } else if (metodo == "random") {
-          if (i + 1 < argc && std::isdigit(argv[i + 1][0])) {
-            opcion = argv[++i];
-          } else {
-            std::cerr << "La opción random requiere un número de elementos\n";
-            return 1;
-          }
-        }
-      } else {
-        std::cerr << "-init requiere un argumento\n";
-        return 1;
-      }
-    }
-  }
+//             // si no se proporciona el nombre del fichero, mostrar un mensaje de
+//             // error
+//             if (nombreFichero.empty()) {
+//               std::cerr << "La opción file requiere el nombre del archivo\n";
+//               return 1;
+//             }
+//           } else {
+//             std::cerr
+//                 << "La opción file requiere al menos el nombre del archivo\n";
+//             return 1;
+//           }
+//         } else if (metodo == "random") {
+//           if (i + 1 < argc && std::isdigit(argv[i + 1][0])) {
+//             opcion = argv[++i];
+//           } else {
+//             std::cerr << "La opción random requiere un número de elementos\n";
+//             return 1;
+//           }
+//         }
+//       } else {
+//         std::cerr << "-init requiere un argumento\n";
+//         return 1;
+//       }
+//     }
+//   }
 
-  // Verificar que se hayan proporcionado todas las opciones necesarias
-  if (tipoArbol.empty() || metodo.empty()) {
-    std::cerr << "Faltan argumentos obligatorios\n";
-    return 1;
-  }
+//   // Verificar que se hayan proporcionado todas las opciones necesarias
+//   if (tipoArbol.empty() || metodo.empty()) {
+//     std::cerr << "Faltan argumentos obligatorios\n";
+//     return 1;
+//   }
+
+  DATA data = inputData(argc, argv);
 
   // Ejecutar las funciones correspondientes
-  trabajarConArbol(tipoArbol);
-  introducirDatos(metodo, opcion, nombreFichero);
+  trabajarConArbol(data.tipoArbol);
+  introducirDatos(data.metodo, data.opcion, data.nombreFichero);
 
   return 0;
 }
@@ -119,4 +131,76 @@ void mostrarAyuda(const std::string& nombrePrograma) {
          "datos\n"
       << "                         i=manual, i=random [s], i=file [s][f]\n"
       << "  -h, -help              Muestra este mensaje de ayuda\n";
+}
+
+DATA inputData(int argc, char* argv[]) {
+  DATA data;
+
+  // Si no se proporcionan argumentos, mostrar la ayuda
+  if (argc == 1) {
+    mostrarAyuda(argv[0]);
+    exit(0);
+  }
+
+  // Procesar los argumentos de línea de comandos
+  for (int i = 1; i < argc; ++i) {
+    std::string arg = argv[i];
+    if (arg == "-h" || arg == "-help") {
+      mostrarAyuda(argv[0]);
+      exit(0);
+    } else if (arg == "-ab") {
+      if (i + 1 < argc) {
+        data.tipoArbol = argv[++i];
+      } else {
+        std::cerr << "-ab requiere un argumento\n";
+        exit(1);
+      }
+    } else if (arg == "-init") {
+      if (i + 1 < argc) {
+        data.metodo = argv[++i];
+        if (data.metodo == "file") {
+          if (i + 1 < argc) {
+            data.opcion = argv[++i];  // Número de elementos (opcional)
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+              data.nombreFichero = argv[++i];  // Nombre del fichero
+              // si el nombre del fichero no tiene la extensión .txt, se la
+              // añadimos
+              if (data.nombreFichero.find(".txt") == std::string::npos) {
+                data.nombreFichero += ".txt";
+              }
+            }
+
+            // si no se proporciona el nombre del fichero, mostrar un mensaje de
+            // error
+            if (data.nombreFichero.empty()) {
+              std::cerr << "La opción file requiere el nombre del archivo\n";
+              exit(1);
+            }
+          } else {
+            std::cerr
+                << "La opción file requiere al menos el nombre del archivo\n";
+            exit(1);
+          }
+        } else if (data.metodo == "random") {
+          if (i + 1 < argc && std::isdigit(argv[i + 1][0])) {
+            data.opcion = argv[++i];
+          } else {
+            std::cerr << "La opción random requiere un número de elementos\n";
+            exit(1);
+          }
+        }
+      } else {
+        std::cerr << "-init requiere un argumento\n";
+        exit(1);
+      }
+    }
+  }
+
+  // Verificar que se hayan proporcionado todas las opciones necesarias
+  if (data.tipoArbol.empty() || data.metodo.empty()) {
+    std::cerr << "Faltan argumentos obligatorios\n";
+    exit(1);
+  }
+
+  return data;
 }

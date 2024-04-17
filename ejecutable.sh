@@ -10,3 +10,4 @@ g++ test/abe.cc include/ab.h include/abe.h -o abe
 g++ test/input.cc -o input
 g++ test/nif_abe.cc include/ab.h include/abe.h include/nif.h include/nodo.h -o nif_abe
 g++ test/nif_abb.cc include/ab.h include/abe.h include/nif.h include/nodo.h -o nif_abb
+g++ src/main.cc include/ab.h include/abe.h include/abb.h include/nif.h include/nodo.h -o main
