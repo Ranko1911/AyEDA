@@ -1,3 +1,6 @@
+#ifndef NIF_H
+#define NIF_H
+
 #include <iostream>
 #include <string>
 
@@ -14,6 +17,8 @@ class nif {
     while (value_.size() < 8) {
       value_ = "0" + value_;
     }
+
+    // std::cout << "Creando nif con valor: " << value_ << std::endl;
   }
 
   // Operador de conversión a long
@@ -73,3 +78,5 @@ class nif {
  private:
   std::string value_;
 };
+
+#endif  // NIF_H

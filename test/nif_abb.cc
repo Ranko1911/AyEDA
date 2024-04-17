@@ -35,6 +35,10 @@ int main() {
         abb.insert(nif);
     }
 
+    //insertar manual
+    abb.insert(nif(10000007));
+    abb.insert(nif(20));
+
     std::cout << "Árbol binario de búsqueda:\n " << abb << std::endl;
 
     std::cout << "¿El elemento 10000007 está en el árbol? " << (abb.search(nif(10000007)) ? "Sí" : "No") << std::endl;

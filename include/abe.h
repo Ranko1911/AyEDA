@@ -13,6 +13,11 @@ class ABE : public AB<T> {
   }
 
   NodeB<T>* insertRecursive(NodeB<T>* root, T data) {
+    //si valor ya existe en el arbol, no se inserta
+    if (search(data)) {
+      return root;
+    }
+
     if (root == nullptr) {
       return new NodeB<T>(data);
     }

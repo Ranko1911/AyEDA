@@ -1,6 +1,18 @@
-#include <cstdlib>  // Para std::atoi
+#ifndef MAIN_H
+#define MAIN_H
+
+#include <algorithm>  // Para shuffle
+#include <cstdlib>    // Para rand()
+#include <ctime>      // Para time()
 #include <iostream>
 #include <string>
+#include <vector>  // Para vector
+
+#include "../include/ab.h"
+#include "../include/abb.h"
+#include "../include/abe.h"
+#include "../include/nif.h"
+#include "../include/nodo.h"
 
 // struct DATA que contiene
 struct DATA {
@@ -9,25 +21,6 @@ struct DATA {
   std::string opcion;
   std::string nombreFichero;
 };
-
-// Declaración de funciones
-void trabajarConArbol(const std::string& tipoArbol);
-void introducirDatos(const std::string& metodo, const std::string& opcion = "",
-                     const std::string& nombreFichero = "");
-void mostrarAyuda(const std::string& nombrePrograma);
-
-DATA inputData(int argc, char* argv[]);
-
-int main(int argc, char* argv[]) {
-
-  DATA data = inputData(argc, argv);
-
-  // Ejecutar las funciones correspondientes
-  trabajarConArbol(data.tipoArbol);
-  introducirDatos(data.metodo, data.opcion, data.nombreFichero);
-
-  return 0;
-}
 
 void trabajarConArbol(const std::string& tipoArbol) {
   // Lógica para trabajar con el tipo de árbol especificado
@@ -134,3 +127,35 @@ DATA inputData(int argc, char* argv[]) {
 
   return data;
 }
+
+void randomInsert(AB<int>& abb, int n) {
+  for (int i = 0; i < n; ++i) {
+    int data = rand() % 100000;
+    abb.insert(data);  // Corregido para usar data en lugar de i
+  }
+}
+
+// Función para insertar elementos únicos en un vector de NIFs
+void insertUniqueNifs(std::vector<nif>& nifs, int n) {
+  for (int i = 0; i < n; ++i) {
+    long data =
+        10000000 +
+        rand() % 90000000;  // Generar números aleatorios válidos para un NIF
+    nifs.push_back(nif(data));
+  }
+  // Eliminar duplicados
+  std::sort(nifs.begin(), nifs.end());
+  nifs.erase(std::unique(nifs.begin(), nifs.end()), nifs.end());
+
+  std::random_shuffle(nifs.begin(), nifs.end());
+}
+
+void nif_insert(AB <nif> &abb, int n) {
+    std::vector<nif> nifs;
+    insertUniqueNifs(nifs, n);
+    for(const auto& nif : nifs) {
+        abb.insert(nif);
+    }
+}
+
+#endif  // MAIN_H
