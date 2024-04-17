@@ -12,6 +12,8 @@ void randomInsert(ABB<int> &abb, int n) {
 
 
 int main() {
+
+    std::cout << "Árbol binario de búsqueda funciona correctamente\n";
     ABB<int> abb;
 
     // abb.insert(10);
@@ -24,7 +26,19 @@ int main() {
     // abb.insert(8);
     // abb.insert(24);
 
-    randomInsert(abb, 10);
+    // randomInsert(abb, 10);
+
+    int n;
+    std::cout << "Número de elementos a insertar: ";
+    std::cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        std::cout << "Insertar elemento " << i << ": ";
+        int x;
+        std::cin >> x;
+        abb.insert(x);
+        std::cout << abb << std::endl;
+    }
 
     // for(int i = 0; i < 10; i++) {
     //     abb.insert(i);

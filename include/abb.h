@@ -9,6 +9,12 @@ template <class T>
 class ABB : public AB<T> {
  public:
   void insert(T data) {
+    // si el elemento ya está en el árbol, no lo inserta
+    if (search(data)) {
+      std::cout << "El valor "<< data << " ya está en el árbol, no se puede insertar\n";
+      return;
+    }
+
     NodeB<T>* newNode = new NodeB<T>(data);
     if (AB<T>::root == nullptr) {
       AB<T>::root = newNode;

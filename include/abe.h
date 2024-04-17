@@ -9,32 +9,59 @@ template <class T>
 class ABE : public AB<T> {
  public:
   void insert(T data) override {
-    if (this->root == nullptr) {
-      this->root = new NodeB<T>(data);
-      return;
+    this->root = insertRecursive(this->root, data);
+  }
+
+  NodeB<T>* insertRecursive(NodeB<T>* root, T data) {
+    if (root == nullptr) {
+      return new NodeB<T>(data);
     }
 
-    std::queue<NodeB<T>*> q;
-    q.push(this->root);
+    // Calcula la altura de los subárboles izquierdo y derecho
+    int leftHeight = getHeight(root->getLeft());
+    int rightHeight = getHeight(root->getRight());
 
-    while (!q.empty()) {
-      NodeB<T>* current = q.front();
-      q.pop();
+    // Si la altura del subárbol izquierdo es menor que la del derecho,
+    // intenta insertar en el subárbol izquierdo; de lo contrario, intenta en el
+    // derecho.
 
-      if (current->getLeft() == nullptr) {
-        current->setLeft(new NodeB<T>(data));
-        return;
+    if (leftHeight <= rightHeight) {
+      root->setLeft(insertRecursive(root->getLeft(), data));
+    } else {
+      root->setRight(insertRecursive(root->getRight(), data));
+    }
+
+    // Recalcula la altura después de la inserción y ajusta si es necesario
+    int newLeftHeight = getHeight(root->getLeft());
+    int newRightHeight = getHeight(root->getRight());
+
+    // std::cout << "root: " << root->getData() << std::endl;
+    // std::cout << "data: " << data << std::endl;
+    // std::cout << "newLeftHeight: " << newLeftHeight << std::endl;
+    // std::cout << "newRightHeight: " << newRightHeight << std::endl;
+    // std::cout << "++++++++++++++++++++++++++++++++++\n";
+
+    // Si la diferencia de alturas es mayor que 1, reorganiza el árbol para
+    // equilibrarlo
+    if (std::abs(newLeftHeight - newRightHeight) > 1) {
+      if (newLeftHeight > newRightHeight) {
+        // Reorganiza el árbol rotando hacia la derecha
+        root = rotateRight(root);
       } else {
-        q.push(current->getLeft());
-      }
-
-      if (current->getRight() == nullptr) {
-        current->setRight(new NodeB<T>(data));
-        return;
-      } else {
-        q.push(current->getRight());
+        // Reorganiza el árbol rotando hacia la izquierda
+        root = rotateLeft(root);
       }
     }
+
+    return root;
+  }
+
+  int getHeight(NodeB<T>* node) {
+    if (node == nullptr) {
+      return 0;
+    }
+    return 1 +
+           std::max(getHeight(node->getLeft()), getHeight(node->getRight()));
   }
 
   bool search(T data) override {
@@ -52,6 +79,20 @@ class ABE : public AB<T> {
       }
     }
     return false;
+  }
+
+  NodeB<T>* rotateRight(NodeB<T>* root) {
+    NodeB<T>* newRoot = root->getLeft();
+    root->setLeft(newRoot->getRight());
+    newRoot->setRight(root);
+    return newRoot;
+  }
+
+  NodeB<T>* rotateLeft(NodeB<T>* root) {
+    NodeB<T>* newRoot = root->getRight();
+    root->setRight(newRoot->getLeft());
+    newRoot->setLeft(root);
+    return newRoot;
   }
 
   // void remove(T data) override {
@@ -125,7 +166,6 @@ class ABE : public AB<T> {
   //     }
   //   }
   // }
-  
 };
 
 #endif  // ABE_H

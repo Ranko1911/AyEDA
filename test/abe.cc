@@ -2,6 +2,8 @@
 #include "../include/abe.h"
 
 int main() {
+
+    // std::cout << "La inserción la hace mal, no se puede hacer de manera recursiva\n";
     // Crear un árbol binario de búsqueda ABE de enteros
     ABE<int> abeTree;
 
@@ -13,13 +15,26 @@ int main() {
     // abeTree.insert(50);
     // abeTree.insert(25);
 
-    for (int i = 0; i < 10; i++) {
-        abeTree.insert(rand() % 10);
+    int n;
+    std::cout << "Numero de elementos a insetar: \n";
+    std::cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        // std::cout << "Insertar elemento " << i << " : \n";
+        // int x;
+        // std::cin >> x;
+        abeTree.insert(i+1);
+        std::cout << abeTree << std::endl;
     }
 
+
+    // for (int i = 0; i < 10; i++) {
+    //     abeTree.insert(rand() % 10);
+    // }
+
     // Imprimir el árbol
-    std::cout << "Árbol ABE: \n";
-    std::cout << abeTree << std::endl;
+    // std::cout << "Árbol ABE: \n";
+    // std::cout << abeTree << std::endl;
 
     // Imprimir el árbol en orden
     std::cout << "Árbol ABE en orden: ";

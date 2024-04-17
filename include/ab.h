@@ -9,7 +9,7 @@ template <class T>
 class AB {
  public:
   virtual void insert(T data) = 0;
-//   virtual void remove(T data) = 0;
+  //   virtual void remove(T data) = 0;
   virtual bool search(T data) = 0;
   // virtual void print() = 0;
 
@@ -73,6 +73,9 @@ class AB {
       // imprimiendo niveles
       if (allNull) break;
     }
+
+    // añadir "\n -------------------------------------------- \n a os"
+    // os << "\n--------------------------------------------" << std::endl;
   }
 };
 
