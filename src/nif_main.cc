@@ -56,8 +56,13 @@ int main(int argc, char* argv[]) {
         int clave;
         std::cout << "Introduce la clave a insertar: ";
         std::cin >> clave;
+        if(clave < 10000000 || clave > 99999999) {
+          std::cout << "Clave no válida" << std::endl;
+          break;
+        }
         temp = nif(clave);
         std::cout << "Insertando " << temp << std::endl;
+
         arbol->insert(temp);
         std::cout << *arbol << std::endl;
         break;
