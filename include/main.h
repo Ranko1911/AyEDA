@@ -162,8 +162,10 @@ void nif_insert(AB<nif>& abb, int n) {
 
 void date_insert(AB<date>& abb, int n) {
   for (int i = 0; i < n; ++i) {
-    int data = 10000000 + rand() % 90000000;
-    abb.insert(date(data));
+    int year = 1900 + rand() % 201;
+    int month = 1 + rand() % 12;
+    int day = 1 + rand() % 31;
+    abb.insert(date(day, month, year));
   }
 }
 

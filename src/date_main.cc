@@ -1,5 +1,3 @@
-#include "../include/main.h"
-
 #include <cstdlib>  // Para std::atoi
 #include <iostream>
 #include <string>
@@ -8,6 +6,7 @@
 #include "../include/abb.h"
 #include "../include/abe.h"
 #include "../include/date.h"
+#include "../include/main.h"
 #include "../include/nodo.h"
 
 int main(int argc, char* argv[]) {
@@ -29,18 +28,21 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  if(data.metodo == "random") {
-    //llamar a la funcion dateiInsert
+  if (data.metodo == "random") {
+    // llamar a la funcion dateiInsert
     int numElementos = std::atoi(data.opcion.c_str());
     date_insert(*arbol, numElementos);
   }
 
-  if(data.metodo == "file") {
-    //llamar a la funcion fileInsert
+  if (data.metodo == "file") {
+    // llamar a la funcion fileInsert
     fileInsert(*arbol, data.nombreFichero);
   }
 
   int valor;
+  int dia = 0;
+  int mes = 0;
+  int year = 0;
 
   while (valor != 0) {
     std::cout << "[0] - Salir" << std::endl;
@@ -48,6 +50,7 @@ int main(int argc, char* argv[]) {
     std::cout << "[2] - Buscar Clave" << std::endl;
     std::cout << "[3] - Imprimir Arbol Post" << std::endl;
     std::cout << "[4] - Imprimir Arbol" << std::endl;
+    std::cout << "[5] - Imprimir Arbol Inorden" << std::endl;
     std::cout << "Introduce una opción: ";
     std::cin >> valor;
 
@@ -61,11 +64,15 @@ int main(int argc, char* argv[]) {
         int clave;
         std::cout << "Introduce la clave a insertar: ";
         std::cin >> clave;
-        if(clave < 10000000 || clave > 99999999) {
+        if (clave < 10000000 || clave > 99999999) {
           std::cout << "Clave no válida" << std::endl;
           break;
         }
-        temp = date(clave);
+        // separar la clave en día, mes y año
+         dia = clave % 100;
+         mes = (clave / 100) % 100;
+         year = (clave / 10000) % 10000;
+        temp = date(dia, mes, year);
         std::cout << "Insertando " << temp << std::endl;
 
         arbol->insert(temp);
@@ -76,7 +83,11 @@ int main(int argc, char* argv[]) {
         int claveBuscar;
         std::cout << "Introduce la clave a buscar: ";
         std::cin >> claveBuscar;
-        if (arbol->search(claveBuscar)) {
+         dia = claveBuscar % 100;
+         mes = (claveBuscar / 100) % 100;
+         year = (claveBuscar / 10000) % 10000;
+        temp = date(dia, mes, year);
+        if (arbol->search(temp)) {
           std::cout << claveBuscar << " está presente en el árbol."
                     << std::endl;
         } else {
@@ -94,6 +105,11 @@ int main(int argc, char* argv[]) {
       case 4:
         std::cout << "Árbol:\n " << *arbol << std::endl;
         break;
+
+      case 5:
+        std::cout << "Árbol en inorden: ";
+        arbol->inorden();
+        std::cout << std::endl;
 
       default:
         std::cout << "Opción no válida" << std::endl;
