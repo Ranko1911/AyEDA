@@ -35,6 +35,11 @@ int main(int argc, char* argv[]) {
     randomInsert(*arbol, numElementos);
   }
 
+  if(data.metodo == "file") {
+    //llamar a la funcion fileInsert
+    fileInsert(*arbol, data.nombreFichero);
+  }
+
   int valor;
 
   while (valor != 0) {

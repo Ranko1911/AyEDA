@@ -4,6 +4,7 @@
 #include <algorithm>  // Para shuffle
 #include <cstdlib>    // Para rand()
 #include <ctime>      // Para time()
+#include <fstream>    // Para ifstream
 #include <iostream>
 #include <string>
 #include <vector>  // Para vector
@@ -150,12 +151,34 @@ void insertUniqueNifs(std::vector<nif>& nifs, int n) {
   std::random_shuffle(nifs.begin(), nifs.end());
 }
 
-void nif_insert(AB <nif> &abb, int n) {
-    std::vector<nif> nifs;
-    insertUniqueNifs(nifs, n);
-    for(const auto& nif : nifs) {
-        abb.insert(nif);
-    }
+void nif_insert(AB<nif>& abb, int n) {
+  std::vector<nif> nifs;
+  insertUniqueNifs(nifs, n);
+  for (const auto& nif : nifs) {
+    abb.insert(nif);
+  }
+}
+
+template <typename T>
+void fileInsert(AB<T>& abb, const std::string& nombreFichero) {
+  // añadir la extensión .txt si no se proporciona
+  if (nombreFichero.find(".txt") == std::string::npos) {
+    std::cerr << "El archivo debe tener la extensión .txt" << std::endl;
+    return;
+  }
+
+  // buscar el archivo en el directorio ../files
+  std::ifstream file("files/" + nombreFichero);
+
+  if (!file.is_open()) {
+    std::cerr << "No se pudo abrir el archivo " << nombreFichero << std::endl;
+    return;
+  }
+
+  T data;
+  while (file >> data) {
+    abb.insert(data);
+  }
 }
 
 #endif  // MAIN_H
