@@ -28,6 +28,16 @@ class AB {
     }
   }
 
+  void postorden() { postordenRecursive(AB<T>::root); }
+
+  void postordenRecursive(NodeB<T>* current) {
+    if (current != nullptr) {
+      postordenRecursive(current->getLeft());
+      postordenRecursive(current->getRight());
+      std::cout << current->getData() << " ";
+    }
+  }
+
  protected:
   NodeB<T>* root = nullptr;
 

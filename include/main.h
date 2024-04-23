@@ -14,6 +14,7 @@
 #include "../include/abe.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
+#include "../include/date.h"
 
 // struct DATA que contiene
 struct DATA {
@@ -156,6 +157,13 @@ void nif_insert(AB<nif>& abb, int n) {
   insertUniqueNifs(nifs, n);
   for (const auto& nif : nifs) {
     abb.insert(nif);
+  }
+}
+
+void date_insert(AB<date>& abb, int n) {
+  for (int i = 0; i < n; ++i) {
+    int data = 10000000 + rand() % 90000000;
+    abb.insert(date(data));
   }
 }
 
