@@ -38,3 +38,11 @@ Si se tiene alguna duda sobre el uso del programa se puede ejecutar el siguiente
 ```bash
 ./int_main -h
 ```
+
+Modificacion:
+
+Se ha pedido implementar una clase fecha ( date) y un main que trabaje con ella, además de cambiar la funcion de imprimir inorden por imprimir postorden
+
+Para ello se ha creado la clase date en el archivo date.h, además se ha creado un main especifico para trabajar con la clase date en el archivo date_main.cpp donde el unico cambio es el tipo de dato que se almacena en el arbol, en este caso se almacenan fechas.
+
+Además en el archivo ab.h se implementado la funcion de imprimir postorden.
