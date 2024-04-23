@@ -51,7 +51,11 @@ class nif {
       in >> n.value_;
       // Asegurarse de que la entrada tenga 8 caracteres
       if (n.value_.size() != 8) {
-        std::cout << "El NIF debe tener 8 caracteres. Inténtelo de nuevo: ";
+        //rellenar con ceros a la izquierda si el número no tiene 8 dígitos
+        while (n.value_.size() < 8) {
+          n.value_ = "0" + n.value_;
+        }
+        // std::cout << "El NIF debe tener 8 caracteres. Inténtelo de nuevo: ";
       }
     } while (n.value_.size() != 8);
     return in;
