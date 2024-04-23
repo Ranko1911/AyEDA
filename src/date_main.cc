@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
   while (valor != 0) {
     std::cout << "[0] - Salir" << std::endl;
-    std::cout << "[1] - Insertar Clave" << std::endl;
+    std::cout << "[1] - Insertar Clave - formato de la fecha yearmonthday" << std::endl;
     std::cout << "[2] - Buscar Clave" << std::endl;
     std::cout << "[3] - Imprimir Arbol Post" << std::endl;
     std::cout << "[4] - Imprimir Arbol" << std::endl;
@@ -69,9 +69,12 @@ int main(int argc, char* argv[]) {
           break;
         }
         // separar la clave en día, mes y año
-         dia = clave % 100;
-         mes = (clave / 100) % 100;
-         year = (clave / 10000) % 10000;
+        // sia son los 2 mas significativos
+        dia = clave % 100;
+        mes = (clave / 100) % 100;
+        year = (clave / 10000) % 10000;
+        std::cout << "Dia: " << dia << " Mes: " << mes << " Año: " << year
+                  << std::endl;
         temp = date(dia, mes, year);
         std::cout << "Insertando " << temp << std::endl;
 
@@ -83,9 +86,9 @@ int main(int argc, char* argv[]) {
         int claveBuscar;
         std::cout << "Introduce la clave a buscar: ";
         std::cin >> claveBuscar;
-         dia = claveBuscar % 100;
-         mes = (claveBuscar / 100) % 100;
-         year = (claveBuscar / 10000) % 10000;
+        year = claveBuscar % 100;
+        mes = (claveBuscar / 100) % 100;
+        dia = (claveBuscar / 10000) % 10000;
         temp = date(dia, mes, year);
         if (arbol->search(temp)) {
           std::cout << claveBuscar << " está presente en el árbol."
