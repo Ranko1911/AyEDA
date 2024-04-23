@@ -39,15 +39,19 @@ int main(int argc, char* argv[]) {
     fileInsert(*arbol, data.nombreFichero);
   }
 
-  int valor;
+  int valor = -1;
   int dia = 0;
   int mes = 0;
   int year = 0;
+  std::string claveStr = "";
+  std::string claveBuscarStr = "";
 
   while (valor != 0) {
     std::cout << "[0] - Salir" << std::endl;
-    std::cout << "[1] - Insertar Clave - formato de la fecha yyyymmdd" << std::endl;
-    std::cout << "[2] - Buscar Clave - formato de la fecha yyyymmdd" << std::endl;
+    std::cout << "[1] - Insertar Clave"
+              << std::endl;
+    std::cout << "[2] - Buscar Clave"
+              << std::endl;
     std::cout << "[3] - Imprimir Arbol Post" << std::endl;
     std::cout << "[4] - Imprimir Arbol" << std::endl;
     std::cout << "[5] - Imprimir Arbol Inorden" << std::endl;
@@ -61,42 +65,37 @@ int main(int argc, char* argv[]) {
         break;
 
       case 1:
-        int clave;
+        // int clave;
+        // std::string clave2;
         std::cout << "Introduce la clave a insertar: ";
-        std::cin >> clave;
-        if (clave < 10000000 || clave > 99999999) {
-          std::cout << "Clave no válida" << std::endl;
-          break;
-        }
-        // separar la clave en día, mes y año
-        // sia son los 2 mas significativos
-        dia = clave % 100;
-        mes = (clave / 100) % 100;
-        year = (clave / 10000) % 10000;
-        std::cout << "Dia: " << dia << " Mes: " << mes << " Año: " << year
-                  << std::endl;
-        temp = date(dia, mes, year);
+        std::cin >> claveStr;
+
+        //pasar de clave de int a string
+        // claveStr = std::to_string(clave);
+
+        temp = date(claveStr);
         std::cout << "Insertando " << temp << std::endl;
+        std::cout << "Dia: " << temp.day() << std::endl;
+        std::cout << "Mes: " << temp.month() << std::endl;
+        std::cout << "Año: " << temp.year() << std::endl;
 
         arbol->insert(temp);
         std::cout << *arbol << std::endl;
         break;
 
       case 2:
-        int claveBuscar;
+        // int claveBuscar;
         std::cout << "Introduce la clave a buscar: ";
-        std::cin >> claveBuscar;
-        dia = clave % 100;
-        mes = (clave / 100) % 100;
-        year = (clave / 10000) % 10000;
-        std::cout << "Dia: " << dia << " Mes: " << mes << " Año: " << year
-                  << std::endl;
-        temp = date(dia, mes, year);
+        // std::cin >> claveBuscar;
+        //  claveBuscarStr = std::to_string(claveBuscar);
+        std::cin >> claveBuscarStr;
+
+        temp = date(claveBuscarStr);
         if (arbol->search(temp)) {
-          std::cout << claveBuscar << " está presente en el árbol."
+          std::cout << claveBuscarStr << " está presente en el árbol."
                     << std::endl;
         } else {
-          std::cout << claveBuscar << " no está presente en el árbol."
+          std::cout << claveBuscarStr << " no está presente en el árbol."
                     << std::endl;
         }
         break;

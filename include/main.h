@@ -163,9 +163,25 @@ void nif_insert(AB<nif>& abb, int n) {
 void date_insert(AB<date>& abb, int n) {
   for (int i = 0; i < n; ++i) {
     int year = 1900 + rand() % 201;
+    std::string yearStr = std::to_string(year);
     int month = 1 + rand() % 12;
+    std::string monthStr = std::to_string(month);
     int day = 1 + rand() % 31;
-    abb.insert(date(day, month, year));
+    std::string dayStr = std::to_string(day);
+    if (day < 10) {
+      dayStr = "0" + dayStr;
+    }
+
+    if (month < 10) {
+      monthStr = "0" + monthStr;
+    }
+
+    if (year < 10) {
+      yearStr = "0" + yearStr;
+    }
+
+    std::string dateStr = dayStr + "/" + monthStr + "/" + yearStr;
+    abb.insert(date(dateStr));
   }
 }
 
