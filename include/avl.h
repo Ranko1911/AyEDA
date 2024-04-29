@@ -15,6 +15,14 @@ class AVL : public ABB<T> {
  public:
   AVL(bool traza = false) : traza(traza) {}
 
+  bool getTraza() {
+    return traza;
+  }
+
+  void setTraza(bool traza) {
+    this->traza = traza;
+  }
+
   void insert(T data) {
     // si el elemento ya está en el árbol, no lo inserta
     if (ABB<T>::search(data)) {

@@ -1,5 +1,3 @@
-#include "../include/main.h"
-
 #include <cstdlib>  // Para std::atoi
 #include <iostream>
 #include <string>
@@ -7,6 +5,8 @@
 #include "../include/ab.h"
 #include "../include/abb.h"
 #include "../include/abe.h"
+#include "../include/avl.h"
+#include "../include/main.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
 
@@ -24,19 +24,28 @@ int main(int argc, char* argv[]) {
     arbol = new ABE<int>();
   } else if (data.tipoArbol == "abb") {
     arbol = new ABB<int>();
+  } else if (data.tipoArbol == "avl") {
+    arbol = new AVL<int>(true);
   } else {
+    std::cout << data.tipoArbol << std::endl;
     std::cout << "Tipo de arbol no valido" << std::endl;
     return 0;
   }
 
-  if(data.metodo == "random") {
-    //llamar a la funcion randomInsert
+  if(data.traza == "true" && data.tipoArbol == "avl") {
+    arbol = new AVL<int>(true);
+  } else if (data.traza == "false" && data.tipoArbol == "avl") {
+    arbol = new AVL<int>(false);
+  }
+
+  if (data.metodo == "random") {
+    // llamar a la funcion randomInsert
     int numElementos = std::atoi(data.opcion.c_str());
     randomInsert(*arbol, numElementos);
   }
 
-  if(data.metodo == "file") {
-    //llamar a la funcion fileInsert
+  if (data.metodo == "file") {
+    // llamar a la funcion fileInsert
     fileInsert(*arbol, data.nombreFichero);
   }
 

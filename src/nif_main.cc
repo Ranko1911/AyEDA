@@ -9,6 +9,7 @@
 #include "../include/abe.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
+#include "../include/avl.h"
 
 int main(int argc, char* argv[]) {
   DATA data = inputData(argc, argv);
@@ -24,6 +25,8 @@ int main(int argc, char* argv[]) {
     arbol = new ABE<nif>();
   } else if (data.tipoArbol == "abb") {
     arbol = new ABB<nif>();
+  } else if (data.tipoArbol == "avl") {
+    arbol = new AVL<nif>(false);
   } else {
     std::cout << "Tipo de arbol no valido" << std::endl;
     return 0;
@@ -38,6 +41,10 @@ int main(int argc, char* argv[]) {
   if(data.metodo == "file") {
     //llamar a la funcion fileInsert
     fileInsert(*arbol, data.nombreFichero);
+  }
+  
+  if(data.traza == "true" && data.tipoArbol == "avl") {
+    arbol = new AVL<nif>(true);
   }
 
   int valor;

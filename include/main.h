@@ -14,7 +14,6 @@
 #include "../include/abe.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
-#include "../include/date.h"
 
 // struct DATA que contiene
 struct DATA {
@@ -22,6 +21,7 @@ struct DATA {
   std::string metodo;
   std::string opcion;
   std::string nombreFichero;
+  std::string traza;
 };
 
 void trabajarConArbol(const std::string& tipoArbol) {
@@ -51,10 +51,11 @@ void mostrarAyuda(const std::string& nombrePrograma) {
   std::cout
       << "Uso: " << nombrePrograma << " -ab <abe|abb> -init <i> [s][f]\n\n"
       << "Opciones:\n"
-      << "  -ab <abe|abb>          Especifica el tipo de árbol a utilizar\n"
+      << "  -ab <abe|abb|avl>          Especifica el tipo de árbol a utilizar\n"
       << "  -init <i> [s][f]       Especifica el método de inicialización de "
          "datos\n"
       << "                         i=manual, i=random [s], i=file [s][f]\n"
+      << "  -trace <t>             Especifica si se debe mostrar la traza\n"
       << "  -h, -help              Muestra este mensaje de ayuda\n";
 }
 
@@ -114,6 +115,13 @@ DATA inputData(int argc, char* argv[]) {
             exit(1);
           }
         }
+      } else if (arg == "-trace") {
+        if (i + 1 < argc) {
+          data.traza = argv[++i];
+        } else {
+          std::cerr << "-trace requiere un argumento\n";
+          exit(1);
+        }
       } else {
         std::cerr << "-init requiere un argumento\n";
         exit(1);
@@ -132,7 +140,7 @@ DATA inputData(int argc, char* argv[]) {
 
 void randomInsert(AB<int>& abb, int n) {
   for (int i = 0; i < n; ++i) {
-    int data = rand() % 100000;
+    int data = rand() % 100;
     abb.insert(data);  // Corregido para usar data en lugar de i
   }
 }
@@ -157,31 +165,6 @@ void nif_insert(AB<nif>& abb, int n) {
   insertUniqueNifs(nifs, n);
   for (const auto& nif : nifs) {
     abb.insert(nif);
-  }
-}
-
-void date_insert(AB<date>& abb, int n) {
-  for (int i = 0; i < n; ++i) {
-    int year = 1900 + rand() % 201;
-    std::string yearStr = std::to_string(year);
-    int month = 1 + rand() % 12;
-    std::string monthStr = std::to_string(month);
-    int day = 1 + rand() % 31;
-    std::string dayStr = std::to_string(day);
-    if (day < 10) {
-      dayStr = "0" + dayStr;
-    }
-
-    if (month < 10) {
-      monthStr = "0" + monthStr;
-    }
-
-    if (year < 10) {
-      yearStr = "0" + yearStr;
-    }
-
-    std::string dateStr = dayStr + "/" + monthStr + "/" + yearStr;
-    abb.insert(date(dateStr));
   }
 }
 
