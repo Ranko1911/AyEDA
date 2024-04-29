@@ -1,5 +1,3 @@
-#include "../include/main.h"
-
 #include <cstdlib>  // Para std::atoi
 #include <iostream>
 #include <string>
@@ -7,9 +5,10 @@
 #include "../include/ab.h"
 #include "../include/abb.h"
 #include "../include/abe.h"
+#include "../include/avl.h"
+#include "../include/main.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
-#include "../include/avl.h"
 
 int main(int argc, char* argv[]) {
   DATA data = inputData(argc, argv);
@@ -26,25 +25,28 @@ int main(int argc, char* argv[]) {
   } else if (data.tipoArbol == "abb") {
     arbol = new ABB<nif>();
   } else if (data.tipoArbol == "avl") {
-    arbol = new AVL<nif>(false);
+    arbol = new AVL<nif>(true);
   } else {
+    std::cout << data.tipoArbol << std::endl;
     std::cout << "Tipo de arbol no valido" << std::endl;
     return 0;
   }
 
-  if(data.metodo == "random") {
-    //llamar a la funcion nifiInsert
+  if(data.traza == "true" && data.tipoArbol == "avl") {
+    arbol = new AVL<nif>(true);
+  } else if (data.traza == "false" && data.tipoArbol == "avl") {
+    arbol = new AVL<nif>(false);
+  }
+
+  if (data.metodo == "random") {
+    // llamar a la funcion randomInsert
     int numElementos = std::atoi(data.opcion.c_str());
     nif_insert(*arbol, numElementos);
   }
 
-  if(data.metodo == "file") {
-    //llamar a la funcion fileInsert
+  if (data.metodo == "file") {
+    // llamar a la funcion fileInsert
     fileInsert(*arbol, data.nombreFichero);
-  }
-  
-  if(data.traza == "true" && data.tipoArbol == "avl") {
-    arbol = new AVL<nif>(true);
   }
 
   int valor;
@@ -58,8 +60,6 @@ int main(int argc, char* argv[]) {
     std::cout << "Introduce una opción: ";
     std::cin >> valor;
 
-    nif temp;
-
     switch (valor) {
       case 0:
         break;
@@ -68,14 +68,7 @@ int main(int argc, char* argv[]) {
         int clave;
         std::cout << "Introduce la clave a insertar: ";
         std::cin >> clave;
-        if(clave < 10000000 || clave > 99999999) {
-          std::cout << "Clave no válida" << std::endl;
-          break;
-        }
-        temp = nif(clave);
-        std::cout << "Insertando " << temp << std::endl;
-
-        arbol->insert(temp);
+        arbol->insert(clave);
         std::cout << *arbol << std::endl;
         break;
 
