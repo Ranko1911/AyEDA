@@ -39,6 +39,9 @@ class NodeB {
     int rightHeight = (right != nullptr) ? right->getHeight() : 0;
     height = 1 + std::max(leftHeight, rightHeight);
   }
+  
+  template <class U>
+  friend class AVL;
 
   template <class U>
   friend class ABB;
