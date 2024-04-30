@@ -6,6 +6,7 @@
 # rm ejecutables/nif_abb
 rm int_main
 rm nif_main
+rm personaje_main
 # g++ test/nodo.cc include/nodo.h -o ejecutables/nodo
 # g++ test/abb.cc include/ab.h include/nodo.h -o ejecutables/abb
 # g++ test/abe.cc include/ab.h include/abe.h -o ejecutables/abe
@@ -14,4 +15,4 @@ rm nif_main
 # g++ test/nif_abb.cc include/ab.h include/abe.h include/nif.h include/nodo.h -o ejecutables/nif_abb
 g++ src/int_main.cc include/ab.h include/abe.h include/abb.h include/avl.h include/nif.h include/nodo.h -o int_main
 g++ src/nif_main.cc include/ab.h include/abe.h include/abb.h include/avl.h include/nif.h include/nodo.h -o nif_main
-# g++ src/perso_main.cc include/ab.h include/abe.h include/abb.h include/avl.h include/personaje.h include/nodo.h -o personaje_main
+g++ src/perso_main.cc include/ab.h include/abe.h include/abb.h include/avl.h include/personaje.h include/nodo.h -o personaje_main
