@@ -14,6 +14,8 @@
 #include "../include/abe.h"
 #include "../include/nif.h"
 #include "../include/nodo.h"
+#include "../include/avl.h"
+#include "../include/personaje.h"
 
 // struct DATA que contiene
 struct DATA {
@@ -165,6 +167,29 @@ void nif_insert(AB<nif>& abb, int n) {
   insertUniqueNifs(nifs, n);
   for (const auto& nif : nifs) {
     abb.insert(nif);
+  }
+}
+
+void personaje_random_insert(AB<personaje>& abb, int n) {
+  std::vector<personaje> personajes;
+  int vida, fuerza, destreza, constitucion, inteligencia, sabiduria, carisma, defensa, velocidad;
+  std::string nombre;
+  for (int i = 0; i < n; ++i) {
+    vida = rand() % 100;
+    fuerza = rand() % 20;
+    destreza = rand() % 20;
+    constitucion = rand() % 20;
+    inteligencia = rand() % 20;
+    sabiduria = rand() % 20;
+    carisma = rand() % 20;
+    defensa = rand() % 20;
+    velocidad = rand() % 30;
+    nombre = "Personaje" + std::to_string(i);
+    personaje temp(vida, fuerza, destreza, constitucion, inteligencia, sabiduria, carisma, defensa, velocidad, nombre);
+    personajes.push_back(temp);
+  }
+  for (const auto& personaje : personajes) {
+    abb.insert(personaje);
   }
 }
 
